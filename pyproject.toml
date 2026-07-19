@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kag-pro"
+version = "0.1.0"
+description = "Knowledge-Augmented Generation for Education — 面向全学段教育的知识增强大语言模型智能问答框架"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "KAG-Pro Team"}]
+
+dependencies = [
+    "openai>=1.0",
+    "dashscope>=1.20",
+    "chromadb>=0.5",
+    "langchain-text-splitters>=0.3",
+    "jieba>=0.42",
+    "python-dotenv>=1.0",
+    "pypdf>=5.0",
+]
+
+[project.optional-dependencies]
+local-embed = ["sentence-transformers>=3.0"]
+faiss = ["faiss-cpu>=1.8"]
+dev = ["pytest>=8.0", "pytest-cov>=6.0"]
+all = ["kag-pro[local-embed,faiss,dev]"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
