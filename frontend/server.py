@@ -15,6 +15,7 @@ from typing import Optional, List
 from kag_pro.core.pipeline import RAGPipeline
 from kag_pro.core.paper_generator import KnowledgeTreeExtractor, PaperGenerator
 from kag_pro.core.paper_store import PaperStore
+from kag_pro.core.favorite_store import FavoriteStore
 from kag_pro.core.generator import Generator
 
 app = FastAPI(title="KAG-Pro Chat", version="1.0")
@@ -52,6 +53,7 @@ def _detect_diagnosis(question: str):
 _pipeline: Optional[RAGPipeline] = None
 _knowledge_tree: Optional[KnowledgeTreeExtractor] = None
 _paper_store: Optional[PaperStore] = None
+_favorite_store: Optional[FavoriteStore] = None
 
 
 def get_pipeline() -> RAGPipeline:
@@ -69,6 +71,13 @@ def get_knowledge_tree() -> KnowledgeTreeExtractor:
     if _knowledge_tree is None:
         _knowledge_tree = KnowledgeTreeExtractor()
     return _knowledge_tree
+
+
+def get_favorite_store() -> FavoriteStore:
+    global _favorite_store
+    if _favorite_store is None:
+        _favorite_store = FavoriteStore()
+    return _favorite_store
 
 
 def get_paper_store() -> PaperStore:
@@ -149,6 +158,27 @@ class SavePaperRequest(BaseModel):
     count: int
     questions: list
     created_at: str = ""
+
+# ---- Favorite models ----
+
+class FavoriteSaveRequest(BaseModel):
+    type: str  # "paper", "question", "diagnosis"
+    title: str = ""
+    content: dict = {}
+    subject: str = ""
+    stage: str = ""
+    knowledge_point: str = ""
+
+
+class FavoriteListItem(BaseModel):
+    id: str
+    type: str
+    title: str
+    subject: str
+    stage: str
+    knowledge_point: str
+    created_at: str
+
 
 
 # ---- Existing endpoints ----
@@ -328,6 +358,65 @@ def delete_paper(paper_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/favorites")
+def save_favorite(req: FavoriteSaveRequest):
+    """Save an item to favorites."""
+    try:
+        store = get_favorite_store()
+        item = store.save(req.model_dump())
+        return item
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/favorites")
+def list_favorites(
+    type: Optional[str] = None,
+    subject: Optional[str] = None,
+    knowledge_point: Optional[str] = None,
+):
+    """List favorites with optional filters."""
+    try:
+        store = get_favorite_store()
+        return store.list_all(
+            fav_type=type,
+            subject=subject,
+            knowledge_point=knowledge_point,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/favorites/{item_id}")
+def get_favorite(item_id: str):
+    """Get a single favorite item."""
+    try:
+        store = get_favorite_store()
+        item = store.get(item_id)
+        if item is None:
+            raise HTTPException(status_code=404, detail="Favorite not found")
+        return item
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/favorites/{item_id}")
+def delete_favorite(item_id: str):
+    """Remove a favorite item."""
+    try:
+        store = get_favorite_store()
+        ok = store.delete(item_id)
+        if not ok:
+            raise HTTPException(status_code=404, detail="Favorite not found")
+        return {"status": "deleted"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 
 # ---- Health and static ----

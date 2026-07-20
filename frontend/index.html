@@ -127,6 +127,35 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
 .send-btn svg { width: 16px; height: 16px; }
 .send-btn.active { background: var(--send-active); color: var(--send-active-icon); }
 .send-btn:disabled { opacity: .5; cursor: not-allowed; }
+/* Star / Favorite */
+.star-btn { background: none; border: none; cursor: pointer; padding: 2px; color: var(--text-tertiary); transition: color .15s, transform .15s; flex-shrink: 0; }
+.star-btn:hover { color: #f59e0b; transform: scale(1.15); }
+.star-btn.faved { color: #f59e0b; }
+.star-btn svg { width: 18px; height: 18px; }
+
+/* Library View */
+#libView { flex: 1; overflow-y: auto; display: none; padding: 24px 0; }
+#libView.show { display: flex; flex-direction: column; }
+.lv-wrap { max-width: 48rem; width: 100%; margin: 0 auto; padding: 0 24px; }
+.lv-wrap h3 { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+.lv-filters { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: flex-end; }
+.lv-filters select { width: auto; min-width: 120px; }
+.lv-filters .lv-cnt { font-size: 13px; color: var(--text-secondary); padding: 8px 0; }
+.lib-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--border-subtle); border-radius: 12px; margin-bottom: 8px; background: var(--bg-main); transition: background .15s; }
+.lib-item:hover { background: var(--bg-input); }
+.lib-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+.lib-icon.paper { background: rgba(16,163,127,0.1); color: #10a37f; }
+.lib-icon.question { background: rgba(59,130,246,0.1); color: #3b82f6; }
+.lib-icon.diagnosis { background: rgba(239,68,68,0.1); color: #ef4444; }
+.lib-info { flex: 1; min-width: 0; }
+.lib-info .lib-title { font-size: 14px; font-weight: 500; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lib-info .lib-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.lib-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.lib-actions button { font-size: 12px; padding: 5px 10px; border-radius: 6px; cursor: pointer; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-family: inherit; transition: background .15s; }
+.lib-actions button:hover { background: var(--bg-hover); }
+.lib-actions .l-del { color: #dc2626; border-color: rgba(220,38,38,0.3); }
+.lib-empty { text-align: center; padding: 60px 20px; color: var(--text-secondary); font-size: 15px; }
+
 
 /* Paper & Diagnosis Generic Forms */
 #paperView { flex: 1; overflow-y: auto; display: none; padding: 24px 0; }
@@ -297,6 +326,11 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
       <span class="sb-label">出题练习</span>
     </button>
+
+    <button class="sb-nav-item" data-v="library" onclick="go('library')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+      <span class="sb-label">文件库</span>
+    </button>
   </div>
   <div style="flex:1;"></div>
   <div class="sb-bottom"><span class="sb-user-text">BGE · ChromaDB · DeepSeek</span></div>
@@ -398,7 +432,8 @@ function go(v){
   document.querySelector(`.sb-nav-item[data-v="${v}"]`).classList.add('active');
   document.getElementById('chatView').classList.toggle('hidden',v!=='chat');
   document.getElementById('paperView').classList.toggle('show',v==='paper');
-  if(v==='paper'){ip();shb()}
+  document.getElementById('libView').classList.toggle('show',v==='library');
+  if(v==='paper'){ip();shb()}if(v==='library'){lf()}
 }
 function qa(q){document.getElementById('input').value=q;upBtn();go('chat');send()}
 
@@ -523,7 +558,7 @@ async function doGen(){
 function rp(p){
   const dc={'基础':'d-basic','中等':'d-mid','提高':'d-hard'},qs=p.questions||[];
   const h=qs.map((q,i)=>`<div class="q" id="qi${i}"><div class="q-head" onclick="tq(${i})"><span class="q-num">${i+1}</span><span class="q-typ">${e(q.type||'')}</span><span class="q-prev">${e(String(q.question||'').substring(0,60))}</span><span class="q-diff ${dc[q.difficulty]||'d-mid'}">${e(q.difficulty||'')}</span><span class="q-chev">▾</span></div><div class="q-body" id="qb${i}"><div class="q-text">${e(String(q.question||''))}</div><div class="ans" id="qa${i}"><div class="lbl">答案</div><div class="txt">${e(String(q.answer||''))}</div></div><div class="anal" id="qx${i}"><div class="lbl">解析</div><div class="txt">${e(String(q.analysis||''))}</div></div><div class="q-btns"><button onclick="event.stopPropagation();ta(${i})" id="bta${i}">查看答案</button><button onclick="event.stopPropagation();tx(${i})" id="btx${i}">查看解析</button><button onclick="event.stopPropagation();aq(${i})">追问</button></div></div></div>`).join('');
-  document.getElementById('pr').innerHTML=`<div class="paper-card"><h4>${e(p.title||'练习卷')}</h4><div class="paper-meta"><span>${e(p.stage||'')}</span><span>${e(p.subject||'')}</span><span>${e(p.difficulty||'')}</span><span>${p.count||0}题</span><span>${(p.created_at||'').substring(0,10)}</span></div><div class="paper-actions"><button onclick="prt()">打印试卷</button><button onclick="saa()">全部答案</button><button onclick="sax()">全部解析</button><button class="btn-s" onclick="sv()">保存试卷</button>${p.id?`<button class="btn-d" onclick="dp('${p.id}')">删除试卷</button>`:''}</div>${h}</div>`;
+  document.getElementById('pr').innerHTML=`<div class="paper-card"><h4>${e(p.title||'练习卷')}</h4><div class="paper-meta"><span>${e(p.stage||'')}</span><span>${e(p.subject||'')}</span><span>${e(p.difficulty||'')}</span><span>${p.count||0}题</span><span>${(p.created_at||'').substring(0,10)}</span></div><div class="paper-actions"><button onclick="prt()">打印试卷</button><button onclick="saa()">全部答案</button><button onclick="sax()">全部解析</button><button class="btn-s" onclick="sv()">保存试卷</button> <button class="btn-s" onclick="fp()" style="background:#f59e0b;" title="收藏试卷">★ 收藏</button>${p.id?`<button class="btn-d" onclick="dp('${p.id}')">删除试卷</button>`:''}</div>${h}</div>`;
   document.getElementById('pr').style.display='block';document.getElementById('sp').style.display='none'
 }
 function tq(i){document.getElementById('qb'+i).classList.toggle('open');document.querySelector('#qi'+i+' .q-head').classList.toggle('open')}
@@ -545,6 +580,7 @@ function e(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
 
 // Chat
 function upBtn(){const b=document.getElementById('sbtn'),v=document.getElementById('input').value.trim();b.classList.toggle('active',!!v);b.disabled=!v}
+let _lm={}; // last message metadata per element
 function am(rl,ct,mt){
   const inn=document.getElementById('msgs'),w=document.getElementById('welc');if(w)w.remove();
   const ld=inn.querySelector('.load-row');if(ld)ld.remove();
@@ -553,6 +589,14 @@ function am(rl,ct,mt){
   a.innerHTML=rl==='user'?'':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>';
   const b=document.createElement('div');b.className='msg-body';
   let h='';if(mt&&mt.stage)h+=`<div class="tag">${e(mt.stage)}</div>`;h+=`<p>${ct}</p>`;
+  // Star button for bot messages
+  if(rl==='bot'){
+    const sid='s'+Date.now()+Math.random().toString(36).slice(2,8);
+    h+=`<button class="star-btn" id="${sid}" onclick="tf(event,'${sid}')" title="收藏">`+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+
+      '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></button>';
+    _lm[sid]={question:mt?._q||'', answer:ct, stage:mt?.stage||'', subject:mt?._subject||'', knowledge_point:mt?._kp||''};
+  }
   if(mt?.sources?.length){h+='<div class="msg-src">';mt.sources.forEach(s=>{h+=`<span>📚 ${e(s.source)} (${typeof s.score==='number'?(s.score*100).toFixed(0):'?'}%)</span>`});if(mt.verdict)h+=`<span class="verdict ${mt.verdict.toLowerCase().charAt(0)}">${mt.verdict}</span>`;h+='</div>'}
   b.innerHTML=h;d.appendChild(a);d.appendChild(b);inn.appendChild(d);document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight
 }
@@ -560,8 +604,174 @@ function sl(){const inn=document.getElementById('msgs'),w=document.getElementByI
 function hl(){const e=document.getElementById('ld');if(e)e.remove()}
 async function send(){
   const i=document.getElementById('input'),q=i.value.trim();if(!q)return;i.style.height='auto';i.value='';upBtn();am('user',q);sl();
-  try{const r=await fetch('/api/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});if(!r.ok)throw new Error(await r.text()||'Error');const d=await r.json();hl();am('bot',d.answer||'(无回答)',{stage:d.stage||'',sources:(d.sources||[]).map(s=>({source:s.source||'?',score:typeof s.score==='number'?s.score:0})),verdict:d.verification?.verdict})}catch(e){hl();am('bot','抱歉，服务暂不可用：'+(e.message||''))}
+  try{const r=await fetch('/api/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});if(!r.ok)throw new Error(await r.text()||'Error');const d=await r.json();hl();am('bot',d.answer||'(无回答)',{stage:d.stage||'',sources:(d.sources||[]).map(s=>({source:s.source||'?',score:typeof s.score==='number'?s.score:0})),verdict:d.verification?.verdict,_q:q,_subject:d.analysis?.subject||'','_kp':''})}catch(e){hl();am('bot','抱歉，服务暂不可用：'+(e.message||''))}
 }
+// ── Favorites / Library ─────────────────────────────────────────
+async function tf(ev, sid) {
+  ev.stopPropagation();
+  const btn = document.getElementById(sid);
+  if (!btn || !_lm[sid]) return;
+  if (btn.classList.contains('faved')) {
+    // Unfavorite — need to find the favorite id first
+    btn.classList.remove('faved');
+    return; // For simplicity, skip delete on unstar; they can delete from library
+  }
+  const m = _lm[sid];
+  try {
+    const r = await fetch('/api/favorites', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'question',
+        title: (m.question || '').substring(0, 60),
+        content: { question: m.question, answer: m.answer },
+        subject: m.subject || '',
+        stage: m.stage || '',
+        knowledge_point: m.knowledge_point || ''
+      })
+    });
+    if (r.ok) {
+      btn.classList.add('faved');
+      btn.title = '已收藏';
+    }
+  } catch (e) { /* ignore */ }
+}
+
+async function fp() {
+  if (!cp) return;
+  try {
+    const r = await fetch('/api/favorites', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'paper',
+        title: cp.title || '未命名试卷',
+        content: cp,
+        subject: cp.subject || '',
+        stage: cp.stage || '',
+        knowledge_point: (cp.topics || []).join(',')
+      })
+    });
+    if (r.ok) alert('已收藏到文件库');
+  } catch (e) { alert('收藏失败'); }
+}
+
+async function lf() {
+  const t = document.getElementById('lfType').value;
+  const s = document.getElementById('lfSubj').value;
+  let url = '/api/favorites?';
+  if (t) url += 'type=' + encodeURIComponent(t) + '&';
+  if (s) url += 'subject=' + encodeURIComponent(s) + '&';
+  try {
+    const r = await fetch(url);
+    const items = await r.json();
+    const list = document.getElementById('lfList');
+    const cnt = document.getElementById('lfCnt');
+    cnt.textContent = items.length + ' 项';
+
+    // Also load saved papers
+    let papers = [];
+    if (!t || t === 'paper') {
+      try {
+        const pr = await fetch('/api/papers');
+        papers = await pr.json();
+      } catch (e) { /* ignore */ }
+    }
+
+    // Build unique set of subjects for filter dropdown
+    const subjects = new Set();
+    items.forEach(i => { if (i.subject) subjects.add(i.subject); });
+    const sj = document.getElementById('lfSubj');
+    const curVal = sj.value;
+    sj.innerHTML = '<option value="">全部学科</option>' +
+      [...subjects].sort().map(v => `<option value="${e(v)}">${e(v)}</option>`).join('');
+    sj.value = curVal || '';
+
+    if (!items.length && !papers.length) {
+      list.innerHTML = '<div class="lib-empty">暂无收藏内容<br><span style="font-size:13px;">在聊天中点击 ★ 收藏问答，或在试卷页收藏试卷</span></div>';
+      return;
+    }
+
+    const icons = { paper: '📄', question: '💬', diagnosis: '🔍' };
+    const iconCls = { paper: 'paper', question: 'question', diagnosis: 'diagnosis' };
+    let h = '';
+
+    // Show saved papers (if no type filter or type=paper)
+    if (!t || t === 'paper') {
+      papers.forEach(p => {
+        if (s && (p.subject || '') !== s) return;
+        h += `<div class="lib-item">
+          <div class="lib-icon paper">📄</div>
+          <div class="lib-info">
+            <div class="lib-title">${e(p.title || '未命名试卷')}</div>
+            <div class="lib-meta">${e(p.stage || '')} · ${e(p.subject || '')} · ${p.count || 0}题 · ${(p.created_at||'').substring(0,10)}</div>
+          </div>
+          <div class="lib-actions">
+            <button onclick="lp('${p.id}')">查看</button>
+          </div>
+        </div>`;
+      });
+    }
+
+    // Show favorited items
+    items.forEach(it => {
+      h += `<div class="lib-item">
+        <div class="lib-icon ${iconCls[it.type] || 'question'}">${icons[it.type] || '💬'}</div>
+        <div class="lib-info">
+          <div class="lib-title">${e(it.title || '未命名')}</div>
+          <div class="lib-meta">${e(it.stage || '')} · ${e(it.subject || '')} · ${(it.created_at||'').substring(0,10)}</div>
+        </div>
+        <div class="lib-actions">
+          <button onclick="lv('${it.id}')">查看</button>
+          <button class="l-del" onclick="ldel('${it.id}')">删除</button>
+        </div>
+      </div>`;
+    });
+
+    list.innerHTML = h || '<div class="lib-empty">暂无匹配内容</div>';
+  } catch (e) {
+    document.getElementById('lfList').innerHTML = '<div class="lib-empty">加载失败</div>';
+  }
+}
+
+async function lv(id) {
+  try {
+    const r = await fetch('/api/favorites/' + id);
+    if (!r.ok) throw new Error('Not found');
+    const item = await r.json();
+    const content = item.content || {};
+    let txt = '';
+    if (item.type === 'question') {
+      txt = '题目：' + (content.question || '') + '\n\n回答：' + (content.answer || '');
+    } else if (item.type === 'diagnosis') {
+      txt = (content.feedback || '') + '\n\n知识点：' + (content.knowledge_point || '');
+    } else if (item.type === 'paper') {
+      // Load paper view
+      cp = content;
+      rp(content);
+      go('paper');
+      ptab('gen');
+      return;
+    }
+    alert(txt.substring(0, 500));
+  } catch (e) {
+    // Maybe it's a saved paper
+    try {
+      await lp(id);
+      go('paper');
+      ptab('gen');
+    } catch (e2) {
+      alert('无法加载该项目');
+    }
+  }
+}
+
+async function ldel(id) {
+  if (!confirm('确认删除？')) return;
+  try {
+    await fetch('/api/favorites/' + id, { method: 'DELETE' });
+    lf();
+  } catch (e) { alert('删除失败'); }
+}
+
 </script>
 </body>
 </html>
