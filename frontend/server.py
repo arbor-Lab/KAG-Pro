@@ -33,11 +33,22 @@ class QueryRequest(BaseModel):
     question: str
 
 
+class SourceItem(BaseModel):
+    text: str = ""
+    source: str = ""
+    score: float = 0.0
+
+class VerificationInfo(BaseModel):
+    faith_score: float = 1.0
+    verdict: str = "HIGH"
+    details: str = ""
+
 class QueryResponse(BaseModel):
     question: str
     answer: str
     stage: str
-    sources: list
+    sources: list[SourceItem] = []
+    verification: Optional[VerificationInfo] = None
 
 
 class DiagnosisRequest(BaseModel):
@@ -58,11 +69,27 @@ def query(req: QueryRequest):
     try:
         pipeline = get_pipeline()
         result = pipeline.query(req.question, verify=True)
+        sources = []
+        for s in result.get("sources", [])[:3]:
+            sources.append(SourceItem(
+                text=s.get("text", ""),
+                source=s.get("source", ""),
+                score=s.get("score", 0),
+            ))
+        verification = None
+        if result.get("verification"):
+            v = result["verification"]
+            verification = VerificationInfo(
+                faith_score=v.get("faith_score", 1.0),
+                verdict=v.get("verdict", "HIGH"),
+                details=v.get("details", ""),
+            )
         return QueryResponse(
             question=result["question"],
             answer=result["answer"],
             stage=result["stage"],
-            sources=result["sources"][:3],
+            sources=sources,
+            verification=verification,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

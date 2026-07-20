@@ -150,7 +150,8 @@ function addMessage(role, content, meta) {
       const srcDiv = document.createElement('div');
       srcDiv.className = 'source';
       meta.sources.forEach(s => {
-        srcDiv.innerHTML += `<span>📚 ${s.source} (${(s.score*100).toFixed(0)}%)</span>`;
+        const pct = typeof s.score === 'number' ? (s.score*100).toFixed(0) : '?';
+        srcDiv.innerHTML += `<span>📚 ${s.source} (${pct}%)</span>`;
       });
       if (meta.verdict) {
         srcDiv.innerHTML += `<span class="verdict ${meta.verdict}">Faith: ${meta.verdict}</span>`;
@@ -196,16 +197,23 @@ async function send() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({question: q}),
     });
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText || 'Server error');
+    }
     const data = await res.json();
     hideLoading();
-    addMessage('bot', data.answer, {
-      stage: data.stage,
-      sources: data.sources,
-      verdict: data.verification?.verdict,
-    });
+    const answer = data.answer || '(no answer)';
+    const stage = data.stage || '未知';
+    const sources = (data.sources || []).map(s => ({
+      source: s.source || '?',
+      score: typeof s.score === 'number' ? s.score : 0,
+    }));
+    const verdict = data.verification ? data.verification.verdict : null;
+    addMessage('bot', answer, { stage, sources, verdict });
   } catch (e) {
     hideLoading();
-    addMessage('bot', '抱歉，服务暂时不可用。请稍后再试。');
+    addMessage('bot', '抱歉，服务暂时不可用：' + (e.message || '未知错误'));
   }
   document.getElementById('sendBtn').disabled = false;
 }
