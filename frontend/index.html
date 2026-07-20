@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAG-Pro — 智能学习助手</title>
+<style>
+:root {
+  --bg: #212121;
+  --surface: #2f2f2f;
+  --text: #ececec;
+  --text-secondary: #b4b4b4;
+  --accent: #10a37f;
+  --accent-hover: #0d8c6d;
+  --border: #424242;
+  --user-bubble: #2f2f2f;
+  --bot-bubble: #212121;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--text); height:100vh; display:flex; flex-direction:column; }
+header { background:var(--surface); border-bottom:1px solid var(--border); padding:12px 20px; display:flex; align-items:center; gap:10px; }
+header h1 { font-size:16px; font-weight:600; color:var(--text); }
+header .badge { font-size:11px; background:var(--accent); color:#fff; padding:2px 8px; border-radius:10px; }
+.sidebar { width:260px; background:var(--surface); border-right:1px solid var(--border); padding:16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.sidebar button { width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; background:transparent; color:var(--text); cursor:pointer; font-size:13px; text-align:left; transition:background .15s; }
+.sidebar button:hover { background:#3a3a3a; }
+.sidebar button.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+.main { flex:1; display:flex; overflow:hidden; }
+.chat { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+.messages { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:16px; }
+.message { display:flex; gap:12px; max-width:800px; width:100%; margin:0 auto; }
+.message.user { flex-direction:row-reverse; }
+.avatar { width:32px; height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.avatar.bot { background:#10a37f; color:#fff; }
+.avatar.user { background:#5436da; color:#fff; }
+.bubble { padding:12px 16px; border-radius:12px; font-size:14px; line-height:1.6; }
+.bubble.bot { background:var(--bot-bubble); border:1px solid var(--border); }
+.bubble.user { background:var(--user-bubble); border:1px solid var(--border); }
+.bubble .stage-tag { display:inline-block; font-size:10px; background:#333; color:var(--accent); padding:1px 6px; border-radius:4px; margin-bottom:6px; }
+.bubble .source { margin-top:8px; padding-top:8px; border-top:1px solid var(--border); font-size:11px; color:var(--text-secondary); }
+.bubble .source span { display:block; }
+.bubble .verdict { font-size:10px; padding:2px 6px; border-radius:3px; margin-left:6px; }
+.verdict.HIGH { background:#0d5c3b; color:#4ade80; }
+.verdict.MEDIUM { background:#5c4a0d; color:#facc15; }
+.verdict.LOW { background:#5c0d0d; color:#f87171; }
+.input-area { padding:16px 20px; border-top:1px solid var(--border); background:var(--surface); }
+.input-row { display:flex; gap:8px; max-width:800px; margin:0 auto; }
+.input-row textarea { flex:1; padding:12px 16px; border:1px solid var(--border); border-radius:10px; background:var(--bg); color:var(--text); font-size:14px; resize:none; outline:none; font-family:inherit; }
+.input-row textarea:focus { border-color:var(--accent); }
+.input-row button { padding:10px 20px; background:var(--accent); color:#fff; border:none; border-radius:10px; cursor:pointer; font-size:14px; font-weight:500; transition:background .15s; }
+.input-row button:hover { background:var(--accent-hover); }
+.input-row button:disabled { opacity:.5; cursor:not-allowed; }
+.diag-panel { width:320px; border-left:1px solid var(--border); background:var(--surface); padding:16px; overflow-y:auto; flex-shrink:0; }
+.diag-panel h3 { font-size:14px; margin-bottom:12px; color:var(--text-secondary); }
+.diag-panel .field { margin-bottom:12px; }
+.diag-panel label { display:block; font-size:11px; color:var(--text-secondary); margin-bottom:4px; }
+.diag-panel input, .diag-panel textarea { width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; background:var(--bg); color:var(--text); font-size:13px; font-family:inherit; }
+.diag-panel textarea { height:60px; resize:vertical; }
+.diag-panel button { width:100%; padding:8px; margin-top:8px; background:var(--accent); color:#fff; border:none; border-radius:6px; cursor:pointer; }
+.diag-result { margin-top:12px; padding:12px; background:var(--bg); border-radius:8px; font-size:12px; line-height:1.5; display:none; }
+.loading { display:flex; align-items:center; gap:8px; color:var(--text-secondary); font-size:13px; padding:12px; }
+.loading .dot { width:6px; height:6px; background:var(--accent); border-radius:50%; animation:bounce 1.4s infinite; }
+.loading .dot:nth-child(2) { animation-delay:.2s; }
+.loading .dot:nth-child(3) { animation-delay:.4s; }
+@keyframes bounce { 0%,80%,100% { transform:scale(0); } 40% { transform:scale(1); } }
+.empty { text-align:center; color:var(--text-secondary); padding:60px 20px; }
+.empty h2 { font-size:20px; margin-bottom:8px; color:var(--text); }
+.empty p { font-size:14px; }
+@media (max-width:768px) { .sidebar, .diag-panel { display:none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>KAG-Pro</h1>
+  <span class="badge">DeepSeek</span>
+</header>
+
+<div class="main">
+  <aside class="sidebar">
+    <button class="active" onclick="switchMode('chat')">💬 智能问答</button>
+    <button onclick="switchMode('diagnosis')">🔍 错题诊断</button>
+    <button onclick="clearChat()">🗑 清空对话</button>
+    <div style="margin-top:auto;font-size:11px;color:var(--text-secondary);">
+      BGE · ChromaDB · KG
+    </div>
+  </aside>
+
+  <div class="chat">
+    <div class="messages" id="messages">
+      <div class="empty">
+        <h2>KAG-Pro 智能学习助手</h2>
+        <p>覆盖小学·初中·高中·大学四学段，基于教材知识库回答</p>
+      </div>
+    </div>
+    <div class="input-area">
+      <div class="input-row">
+        <textarea id="input" rows="1" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
+        <button onclick="send()" id="sendBtn">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="diag-panel" id="diagPanel" style="display:none">
+    <h3>错题诊断</h3>
+    <div class="field">
+      <label>原题</label>
+      <textarea id="diagQuestion" placeholder="输入题目..."></textarea>
+    </div>
+    <div class="field">
+      <label>学生答案</label>
+      <textarea id="diagStudent" placeholder="输入学生的错误答案..."></textarea>
+    </div>
+    <div class="field">
+      <label>正确答案</label>
+      <textarea id="diagCorrect" placeholder="输入正确答案..."></textarea>
+    </div>
+    <button onclick="diagnose()">开始诊断</button>
+    <div class="diag-result" id="diagResult"></div>
+  </aside>
+</div>
+
+<script>
+let currentMode = 'chat';
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.sidebar button[onclick*="${mode}"]`).classList.add('active');
+  document.getElementById('diagPanel').style.display = mode === 'diagnosis' ? 'block' : 'none';
+}
+
+function clearChat() {
+  document.getElementById('messages').innerHTML = '<div class="empty"><h2>KAG-Pro 智能学习助手</h2><p>覆盖小学·初中·高中·大学四学段</p></div>';
+}
+
+function addMessage(role, content, meta) {
+  const msgs = document.getElementById('messages');
+  if (msgs.querySelector('.empty')) msgs.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = `message ${role}`;
+  const avatar = document.createElement('div');
+  avatar.className = `avatar ${role}`;
+  avatar.textContent = role === 'user' ? 'U' : 'K';
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${role}`;
+  if (meta) {
+    bubble.innerHTML = `<div class="stage-tag">${meta.stage}</div>${content}`;
+    if (meta.sources && meta.sources.length) {
+      const srcDiv = document.createElement('div');
+      srcDiv.className = 'source';
+      meta.sources.forEach(s => {
+        srcDiv.innerHTML += `<span>📚 ${s.source} (${(s.score*100).toFixed(0)}%)</span>`;
+      });
+      if (meta.verdict) {
+        srcDiv.innerHTML += `<span class="verdict ${meta.verdict}">Faith: ${meta.verdict}</span>`;
+      }
+      bubble.appendChild(srcDiv);
+    }
+  } else {
+    bubble.textContent = content;
+  }
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showLoading() {
+  const msgs = document.getElementById('messages');
+  if (msgs.querySelector('.empty')) msgs.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = 'loading';
+  div.id = 'loading';
+  div.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div> 思考中...';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function hideLoading() {
+  const el = document.getElementById('loading');
+  if (el) el.remove();
+}
+
+async function send() {
+  const input = document.getElementById('input');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  document.getElementById('sendBtn').disabled = true;
+  addMessage('user', q);
+  showLoading();
+  try {
+    const res = await fetch('/api/query', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({question: q}),
+    });
+    const data = await res.json();
+    hideLoading();
+    addMessage('bot', data.answer, {
+      stage: data.stage,
+      sources: data.sources,
+      verdict: data.verification?.verdict,
+    });
+  } catch (e) {
+    hideLoading();
+    addMessage('bot', '抱歉，服务暂时不可用。请稍后再试。');
+  }
+  document.getElementById('sendBtn').disabled = false;
+}
+
+async function diagnose() {
+  const q = document.getElementById('diagQuestion').value.trim();
+  const s = document.getElementById('diagStudent').value.trim();
+  const c = document.getElementById('diagCorrect').value.trim();
+  if (!q || !s || !c) return;
+  const result = document.getElementById('diagResult');
+  result.style.display = 'block';
+  result.innerHTML = '诊断中...';
+  try {
+    const res = await fetch('/api/diagnose', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({question: q, student_answer: s, correct_answer: c}),
+    });
+    const data = await res.json();
+    result.innerHTML = `
+      <div style="color:var(--accent);font-weight:600;margin-bottom:6px;">${data.error_type}</div>
+      <div style="margin-bottom:4px;">📖 ${data.knowledge_point}</div>
+      <div style="margin-bottom:8px;color:var(--text-secondary);">💡 ${data.hint}</div>
+      <div>${data.feedback}</div>
+    `;
+  } catch (e) {
+    result.innerHTML = '诊断失败';
+  }
+}
+</script>
+</body>
+</html>
