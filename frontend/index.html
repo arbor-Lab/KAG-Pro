@@ -3,248 +3,564 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KAG-Pro — 智能学习助手</title>
+<title>KAG-Pro</title>
 <style>
 :root {
-  --bg: #212121;
-  --surface: #2f2f2f;
-  --text: #ececec;
-  --text-secondary: #b4b4b4;
+  color-scheme: light;
+  --bg-main: #ffffff;
+  --bg-sidebar: #f9f9f9;
+  --bg-input: #f4f4f4;
+  --bg-user-msg: #f4f4f4;
+  --bg-hover: #ececec;
+  --bg-active: #e5e5e5;
+  --border-subtle: rgba(0,0,0,0.1);
+  --border-normal: rgba(0,0,0,0.2);
+  --text-primary: #0d0d0d;
+  --text-secondary: #676767;
+  --text-tertiary: #8e8e8e;
   --accent: #10a37f;
-  --accent-hover: #0d8c6d;
-  --border: #424242;
-  --user-bubble: #2f2f2f;
-  --bot-bubble: #212121;
+  --send-active: #000000;
+  --send-active-icon: #ffffff;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--text); height:100vh; display:flex; flex-direction:column; }
-header { background:var(--surface); border-bottom:1px solid var(--border); padding:12px 20px; display:flex; align-items:center; gap:10px; }
-header h1 { font-size:16px; font-weight:600; color:var(--text); }
-header .badge { font-size:11px; background:var(--accent); color:#fff; padding:2px 8px; border-radius:10px; }
-.sidebar { width:260px; background:var(--surface); border-right:1px solid var(--border); padding:16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
-.sidebar button { width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; background:transparent; color:var(--text); cursor:pointer; font-size:13px; text-align:left; transition:background .15s; }
-.sidebar button:hover { background:#3a3a3a; }
-.sidebar button.active { background:var(--accent); border-color:var(--accent); color:#fff; }
-.main { flex:1; display:flex; overflow:hidden; }
-.chat { flex:1; display:flex; flex-direction:column; overflow:hidden; }
-.messages { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:16px; }
-.message { display:flex; gap:12px; max-width:800px; width:100%; margin:0 auto; }
-.message.user { flex-direction:row-reverse; }
-.avatar { width:32px; height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
-.avatar.bot { background:#10a37f; color:#fff; }
-.avatar.user { background:#5436da; color:#fff; }
-.bubble { padding:12px 16px; border-radius:12px; font-size:14px; line-height:1.6; }
-.bubble.bot { background:var(--bot-bubble); border:1px solid var(--border); }
-.bubble.user { background:var(--user-bubble); border:1px solid var(--border); }
-.bubble .stage-tag { display:inline-block; font-size:10px; background:#333; color:var(--accent); padding:1px 6px; border-radius:4px; margin-bottom:6px; }
-.bubble .source { margin-top:8px; padding-top:8px; border-top:1px solid var(--border); font-size:11px; color:var(--text-secondary); }
-.bubble .source span { display:block; }
-.bubble .verdict { font-size:10px; padding:2px 6px; border-radius:3px; margin-left:6px; }
-.verdict.HIGH { background:#0d5c3b; color:#4ade80; }
-.verdict.MEDIUM { background:#5c4a0d; color:#facc15; }
-.verdict.LOW { background:#5c0d0d; color:#f87171; }
-.input-area { padding:16px 20px; border-top:1px solid var(--border); background:var(--surface); }
-.input-row { display:flex; gap:8px; max-width:800px; margin:0 auto; }
-.input-row textarea { flex:1; padding:12px 16px; border:1px solid var(--border); border-radius:10px; background:var(--bg); color:var(--text); font-size:14px; resize:none; outline:none; font-family:inherit; }
-.input-row textarea:focus { border-color:var(--accent); }
-.input-row button { padding:10px 20px; background:var(--accent); color:#fff; border:none; border-radius:10px; cursor:pointer; font-size:14px; font-weight:500; transition:background .15s; }
-.input-row button:hover { background:var(--accent-hover); }
-.input-row button:disabled { opacity:.5; cursor:not-allowed; }
-.diag-panel { width:320px; border-left:1px solid var(--border); background:var(--surface); padding:16px; overflow-y:auto; flex-shrink:0; }
-.diag-panel h3 { font-size:14px; margin-bottom:12px; color:var(--text-secondary); }
-.diag-panel .field { margin-bottom:12px; }
-.diag-panel label { display:block; font-size:11px; color:var(--text-secondary); margin-bottom:4px; }
-.diag-panel input, .diag-panel textarea { width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; background:var(--bg); color:var(--text); font-size:13px; font-family:inherit; }
-.diag-panel textarea { height:60px; resize:vertical; }
-.diag-panel button { width:100%; padding:8px; margin-top:8px; background:var(--accent); color:#fff; border:none; border-radius:6px; cursor:pointer; }
-.diag-result { margin-top:12px; padding:12px; background:var(--bg); border-radius:8px; font-size:12px; line-height:1.5; display:none; }
-.loading { display:flex; align-items:center; gap:8px; color:var(--text-secondary); font-size:13px; padding:12px; }
-.loading .dot { width:6px; height:6px; background:var(--accent); border-radius:50%; animation:bounce 1.4s infinite; }
-.loading .dot:nth-child(2) { animation-delay:.2s; }
-.loading .dot:nth-child(3) { animation-delay:.4s; }
-@keyframes bounce { 0%,80%,100% { transform:scale(0); } 40% { transform:scale(1); } }
-.empty { text-align:center; color:var(--text-secondary); padding:60px 20px; }
-.empty h2 { font-size:20px; margin-bottom:8px; color:var(--text); }
-.empty p { font-size:14px; }
-@media (max-width:768px) { .sidebar, .diag-panel { display:none; } }
+body {
+  font-family: Söhne, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, "Helvetica Neue", Arial;
+  background: var(--bg-main); color: var(--text-primary); height: 100vh; display: flex;
+  overflow: hidden; -webkit-font-smoothing: antialiased; font-size: 15px; line-height: 1.6;
+}
+
+/* Sidebar */
+#sidebar { width: 260px; background: var(--bg-sidebar); display: flex; flex-direction: column; flex-shrink: 0; transition: width .2s ease; overflow: hidden; padding: 12px; }
+#sidebar.folded { width: 60px; padding: 12px 8px; }
+#sidebar.folded .sb-label, #sidebar.folded .sb-user-text { display: none; }
+#sidebar.folded .sb-nav-item { justify-content: center; padding: 12px; }
+#sidebar.folded .sb-nav-item svg { margin: 0; }
+
+.sb-top { padding: 4px 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-shrink: 0; }
+.sb-brand-text { font-size: 15px; font-weight: 600; white-space: nowrap; padding-left: 4px; }
+.sb-brand-icon { display: none; align-items: center; justify-content: center; flex-shrink: 0; }
+.sb-brand-icon svg { width: 28px; height: 28px; }
+.sb-brand-icon .icon-hover { display: none; }
+#sidebar.folded .sb-brand-text { display: none; }
+#sidebar.folded .sb-brand-icon { display: flex; }
+#sidebar.folded .sb-top { cursor: pointer; }
+#sidebar.folded .sb-top:hover .sb-brand-icon .icon-default { display: none; }
+#sidebar.folded .sb-top:hover .sb-brand-icon .icon-hover { display: flex; }
+.sb-fold { width: 36px; height: 36px; border-radius: 8px; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .2s; }
+.sb-fold:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+.sb-nav { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; overflow-y: auto; }
+.sb-nav-item {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: none; border-radius: 8px;
+  background: transparent; color: var(--text-primary); cursor: pointer; font-size: 14px; font-weight: 500;
+  text-align: left; width: 100%; transition: background .15s; font-family: inherit;
+}
+.sb-nav-item:hover { background: var(--bg-hover); }
+.sb-nav-item.active { background: var(--bg-active); }
+.sb-nav-item svg { flex-shrink: 0; color: var(--text-primary); }
+
+.sb-bottom { padding: 12px 8px; flex-shrink: 0; font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+
+/* Main */
+main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; position: relative; }
+
+/* Chat */
+#chatView { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+#chatView.hidden { display: none; }
+
+.scroll-area { flex: 1; overflow-y: auto; padding: 24px 0 0; }
+.scroll-inner { max-width: 48rem; margin: 0 auto; padding: 0 24px 40px; }
+
+.welcome { text-align: center; padding: 80px 20px 40px; display: flex; flex-direction: column; align-items: center; }
+.welcome h2 { font-size: 28px; font-weight: 600; margin-bottom: 12px; letter-spacing: -0.02em; }
+.welcome p { font-size: 15px; color: var(--text-secondary); margin-bottom: 32px; }
+.welcome .chips { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 600px; width: 100%; }
+.welcome .chips button {
+  padding: 14px 16px; border: 1px solid var(--border-subtle); border-radius: 12px; text-align: left;
+  background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 14px;
+  font-family: inherit; transition: all .2s ease;
+}
+.welcome .chips button:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+.msg { display: flex; gap: 16px; padding: 24px 0; align-items: flex-start; }
+.msg.user { flex-direction: row-reverse; padding: 16px 0; }
+.msg-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+.msg-av.bot { background: #fff; color: #0d0d0d; border: 1px solid var(--border-subtle); }
+.msg.user .msg-av { display: none; }
+.msg-body { min-width: 0; max-width: 85%; }
+.msg.user .msg-body { background: var(--bg-user-msg); padding: 12px 20px; border-radius: 24px; color: var(--text-primary); max-width: 70%; }
+.msg.bot .msg-body { padding-top: 4px; }
+.msg-body .tag { display: inline-block; font-size: 11px; color: var(--text-primary); background: rgba(0,0,0,0.05); padding: 2px 8px; border-radius: 6px; margin-bottom: 8px; font-weight: 500; }
+.msg-body p { white-space: pre-wrap; line-height: 1.6; margin-bottom: 8px; }
+.msg-body p:last-child { margin-bottom: 0; }
+.msg-src { margin-top: 16px; padding-top: 12px; font-size: 12px; color: var(--text-secondary); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.msg-src span { display: inline-block; background: var(--bg-sidebar); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-subtle); }
+.verdict { font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: 500; }
+.verdict.h { background: rgba(74,222,128,0.1); color: #15803d; border: 1px solid rgba(74,222,128,0.3); }
+.verdict.m { background: rgba(250,204,21,0.1); color: #b45309; border: 1px solid rgba(250,204,21,0.3); }
+.verdict.l { background: rgba(248,113,113,0.1); color: #b91c1c; border: 1px solid rgba(248,113,113,0.3); }
+
+.load-row { display: flex; align-items: center; gap: 6px; padding: 24px 0 24px 48px; }
+.load-dot { width: 6px; height: 6px; background: var(--text-secondary); border-radius: 50%; animation: bounce 1.4s infinite; }
+.load-dot:nth-child(2) { animation-delay: .2s; }
+.load-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes bounce { 0%,80%,100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+
+/* Composer */
+.composer { padding: 0 16px 24px; flex-shrink: 0; position: relative; }
+.composer::before { content: ''; position: absolute; bottom: 100%; left: 0; right: 0; height: 40px; background: linear-gradient(transparent, var(--bg-main)); pointer-events: none; }
+.composer-inner {
+  max-width: 48rem; margin: 0 auto; display: flex; align-items: flex-end; gap: 12px;
+  background: var(--bg-input); border-radius: 26px; padding: 12px 14px 12px 20px; 
+}
+.composer-inner textarea {
+  flex: 1; border: none; background: transparent; color: var(--text-primary);
+  font-size: 15px; resize: none; outline: none; font-family: inherit;
+  max-height: 200px; padding: 2px 0; line-height: 1.5;
+}
+.composer-inner textarea::placeholder { color: var(--text-secondary); }
+.send-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: none; display: flex;
+  align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+  background: #d1d5db; color: var(--bg-main); transition: all .15s;
+}
+.send-btn svg { width: 16px; height: 16px; }
+.send-btn.active { background: var(--send-active); color: var(--send-active-icon); }
+.send-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Paper & Diagnosis Generic Forms */
+#paperView { flex: 1; overflow-y: auto; display: none; padding: 24px 0; }
+#paperView.show { display: flex; flex-direction: column; }
+.pv-wrap, .dv-wrap { max-width: 48rem; width: 100%; margin: 0 auto; padding: 0 24px; }
+.dv-wrap h3 { font-size: 20px; font-weight: 600; margin-bottom: 24px; }
+
+.pv-tabs { display: flex; gap: 8px; margin-bottom: 24px; background: var(--bg-input); padding: 6px; border-radius: 12px; width: fit-content; }
+.pv-tabs button {
+  padding: 8px 16px; border: none; border-radius: 8px; background: transparent;
+  color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; font-family: inherit; transition: all .2s;
+}
+.pv-tabs button:hover { color: var(--text-primary); }
+.pv-tabs button.active { color: var(--text-primary); background: var(--bg-main); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+.f-group { margin-bottom: 20px; }
+.f-label { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; }
+input[type="text"], input[type="number"], select, textarea {
+  width: 100%; padding: 12px 16px; border: 1px solid var(--border-subtle); border-radius: 12px;
+  background: var(--bg-main); color: var(--text-primary); font-size: 15px; font-family: inherit;
+  outline: none; transition: border-color .15s, box-shadow .15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--text-primary); }
+select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cursor: not-allowed; }
+
+.tgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; max-height: 200px; overflow-y: auto; padding: 8px; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--border-subtle); }
+.tgrid label { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; padding: 8px 12px; border-radius: 8px; color: var(--text-primary); transition: background .15s; }
+.tgrid label:hover { background: var(--bg-hover); }
+.tgrid input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--text-primary); flex-shrink: 0; }
+.tact { display: flex; gap: 8px; margin-top: 8px; }
+.tact button { font-size: 13px; padding: 6px 12px; background: var(--bg-input); border: none; color: var(--text-primary); border-radius: 8px; cursor: pointer; font-family: inherit; transition: background .15s; }
+.tact button:hover { background: var(--bg-hover); }
+
+.qtype-list { display: flex; flex-direction: column; gap: 8px; }
+.qtype-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-main); }
+.qtype-row label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+.qtype-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--text-primary); }
+.qtype-row input[type="number"] { width: 60px; padding: 6px 8px; font-size: 14px; text-align: center; border-radius: 8px; }
+
+.dgrp { display: flex; gap: 8px; flex-wrap: wrap; }
+.dgrp label { display: flex; align-items: center; gap: 4px; padding: 8px 16px; border: 1px solid var(--border-subtle); border-radius: 8px; cursor: pointer; font-size: 14px; color: var(--text-secondary); transition: all .15s; }
+.dgrp label:hover { background: var(--bg-hover); color: var(--text-primary); }
+.dgrp input[type="radio"] { display: none; }
+.dgrp input:checked + span { color: var(--bg-main); font-weight: 500; }
+.dgrp label:has(input:checked) { border-color: var(--text-primary); background: var(--text-primary); }
+
+.row2 { display: flex; gap: 16px; }
+.row2 > div { flex: 1; }
+
+
+.alloc-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--bg-main); }
+.alloc-topic { font-size: 13px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.alloc-types { display: flex; gap: 6px; flex-shrink: 0; }
+.alloc-types input { width: 40px; padding: 4px; border: 1px solid var(--border-subtle); border-radius: 6px; background: var(--bg-input); color: var(--text-primary); font-size: 12px; text-align: center; font-family: inherit; }
+.alloc-types label { font-size: 11px; color: var(--text-tertiary); display: flex; align-items: center; gap: 3px; }
+.btn-primary { display: block; width: 100%; padding: 14px; background: var(--text-primary); color: var(--bg-main); border: none; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 500; font-family: inherit; transition: opacity .15s; }
+.btn-primary:hover { opacity: .85; }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+.hist-banner { padding: 12px 16px; background: rgba(0,0,0,0.03); border: 1px solid var(--border-subtle); border-radius: 12px; margin-bottom: 24px; font-size: 14px; color: var(--text-primary); display: flex; justify-content: space-between; align-items: center; }
+.hist-banner button { background: var(--bg-input); padding: 6px 12px; border-radius: 6px; border: none; color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; font-family: inherit; }
+.hist-banner button:hover { background: var(--bg-hover); }
+
+.paper-card { background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.paper-card h4 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+.paper-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+.paper-meta span { background: var(--bg-input); padding: 4px 10px; border-radius: 6px; }
+.paper-actions { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.paper-actions button { font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-weight: 500; font-family: inherit; transition: background .15s; }
+.paper-actions button:hover { background: var(--bg-hover); }
+.paper-actions .btn-s { background: var(--text-primary); color: var(--bg-main); border: none; }
+.paper-actions .btn-s:hover { background: #333333; }
+.paper-actions .btn-d { color: #dc2626; border-color: rgba(220,38,38,0.3); }
+
+.q { border-bottom: 1px solid var(--border-subtle); margin-bottom: 8px; overflow: hidden; padding-bottom: 8px; }
+.q:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.q-head { padding: 16px 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 14px; border-radius: 8px; transition: background .15s; }
+.q-head:hover { background: var(--bg-hover); }
+.q-num { font-weight: 600; color: var(--text-primary); width: 24px; flex-shrink: 0; }
+.q-typ { font-size: 11px; padding: 3px 8px; border-radius: 6px; background: var(--bg-input); color: var(--text-secondary); flex-shrink: 0; }
+.q-prev { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-primary); font-weight: 500; }
+.q-diff { font-size: 11px; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; }
+.q-chev { font-size: 14px; color: var(--text-secondary); flex-shrink: 0; transition: transform .2s; }
+.q-head.open .q-chev { transform: rotate(180deg); }
+.q-body { display: none; padding: 8px 8px 24px 44px; font-size: 15px; line-height: 1.7; }
+.q-body.open { display: block; }
+.q-body .q-text { white-space: pre-wrap; margin-bottom: 16px; }
+.ans, .anal { margin-top: 12px; padding: 16px; border-radius: 12px; display: none; }
+.ans { background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06); }
+.anal { background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06); }
+.ans.show, .anal.show { display: block; }
+.ans .lbl, .anal .lbl { font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px; }
+.ans .txt, .anal .txt { color: var(--text-primary); }
+.q-btns { display: flex; gap: 10px; margin-top: 16px; }
+.q-btns button { font-size: 13px; padding: 6px 12px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border-subtle); background: transparent; color: var(--text-primary); font-family: inherit; transition: background .15s; }
+.q-btns button:hover { background: var(--bg-hover); }
+
+.d-basic { background: rgba(74,222,128,0.15); color: #166534; }
+.d-mid { background: rgba(250,204,21,0.15); color: #854d0e; }
+.d-hard { background: rgba(248,113,113,0.15); color: #991b1b; }
+
+.saved-item { padding: 16px; border: 1px solid var(--border-subtle); border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; transition: background .15s; background: var(--bg-main); }
+.saved-item:hover { background: var(--bg-input); }
+.si-left { flex: 1; min-width: 0; }
+.si-title { font-size: 15px; font-weight: 500; margin-bottom: 4px; color: var(--text-primary); }
+.si-meta { font-size: 13px; color: var(--text-secondary); }
+.si-right { display: flex; gap: 8px; flex-shrink: 0; }
+.si-right button { font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border-subtle); font-family: inherit; font-weight: 500; background: var(--bg-main); color: var(--text-primary); transition: background .15s; }
+.si-right button:hover { background: var(--bg-hover); }
+.si-load { background: var(--text-primary) !important; color: var(--bg-main) !important; border: none !important; }
+.si-del { color: #dc2626 !important; border-color: rgba(220,38,38,0.3) !important; }
+
+/* Diagnosis Result */
+.diag-result { margin-top: 24px; padding: 20px; background: rgba(0,0,0,0.02); border: 1px solid var(--border-subtle); border-radius: 16px; font-size: 15px; line-height: 1.7; display: none; }
+
+@media print {
+  body { background: #fff; color: #000; }
+  #sidebar, .composer, .pv-tabs, #paperForm, .paper-actions, .q-btns, .hist-banner,
+  .saved-item, .welcome .chips .f-group, .row2, 
+.alloc-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--bg-main); }
+.alloc-topic { font-size: 13px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.alloc-types { display: flex; gap: 6px; flex-shrink: 0; }
+.alloc-types input { width: 40px; padding: 4px; border: 1px solid var(--border-subtle); border-radius: 6px; background: var(--bg-input); color: var(--text-primary); font-size: 12px; text-align: center; font-family: inherit; }
+.alloc-types label { font-size: 11px; color: var(--text-tertiary); display: flex; align-items: center; gap: 3px; }
+.btn-primary { display: none !important; }
+  main { overflow: visible; }
+  #paperView { display: block !important; overflow: visible; padding: 0; }
+  .pv-wrap { max-width: none; }
+  .paper-card { border: none; background: #fff; padding: 0; box-shadow: none; }
+  .paper-card h4 { font-size: 20px; color: #000; }
+  .paper-meta span { background: #f3f4f6; color: #374151; }
+  .q { border-bottom: 1px solid #e5e7eb; break-inside: avoid; background: #fff; }
+  .q-body { display: block !important; padding-left: 0; }
+  .ans, .anal { display: none !important; }
+  .d-basic, .d-mid, .d-hard { background: #f3f4f6; color: #374151; }
+  .q-chev { display: none; }
+  .q-head { cursor: default; }
+  .q-typ, .q-diff { border: 1px solid #d1d5db; }
+}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>KAG-Pro</h1>
-  <span class="badge">DeepSeek</span>
-</header>
+<aside id="sidebar">
+  <div class="sb-top">
+    <span class="sb-brand-text">KAG-PRO</span>
+    <span class="sb-brand-icon" onclick="toggleSb()" title="展开侧边栏">
+      <svg class="icon-default" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#10a37f"/>
+        <text x="16" y="22" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="-apple-system,BlinkMacSystemFont,sans-serif">K</text>
+      </svg>
+      <svg class="icon-hover" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <button class="sb-fold" onclick="toggleSb()" title="收起侧边栏">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+  <div class="sb-nav">
+    <button class="sb-nav-item active" data-v="chat" onclick="go('chat')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <span class="sb-label">智能问答</span>
+    </button>
+    <button class="sb-nav-item" data-v="paper" onclick="go('paper')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      <span class="sb-label">出题练习</span>
+    </button>
+  </div>
+  <div style="flex:1;"></div>
+  <div class="sb-bottom"><span class="sb-user-text">BGE · ChromaDB · DeepSeek</span></div>
+</aside>
 
-<div class="main">
-  <aside class="sidebar">
-    <button class="active" onclick="switchMode('chat')">💬 智能问答</button>
-    <button onclick="switchMode('diagnosis')">🔍 错题诊断</button>
-    <button onclick="clearChat()">🗑 清空对话</button>
-    <div style="margin-top:auto;font-size:11px;color:var(--text-secondary);">
-      BGE · ChromaDB · KG
-    </div>
-  </aside>
-
-  <div class="chat">
-    <div class="messages" id="messages">
-      <div class="empty">
-        <h2>KAG-Pro 智能学习助手</h2>
-        <p>覆盖小学·初中·高中·大学四学段，基于教材知识库回答</p>
+<main>
+  <!-- Chat -->
+  <div id="chatView">
+    <div class="scroll-area" id="scroll">
+      <div class="scroll-inner" id="msgs">
+        <div class="welcome" id="welc">
+          <h2>KAG-Pro</h2>
+          <p>智能学习助手，基于教材知识库精准回答</p>
+          <div class="chips">
+            <button onclick="qa('分数的通分和约分是什么？')">分数的通分和约分</button>
+            <button onclick="qa('一元二次方程的求根公式')">一元二次方程求根</button>
+            <button onclick="qa('牛顿第二定律 F=ma 的含义')">牛顿第二定律</button>
+            <button onclick="qa('什么是氧化还原反应？')">氧化还原反应</button>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="input-area">
-      <div class="input-row">
-        <textarea id="input" rows="1" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
-        <button onclick="send()" id="sendBtn">发送</button>
+    <div class="composer">
+      <div class="composer-inner">
+        <textarea id="input" rows="1" placeholder="给“KAG-Pro”发送消息" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="upBtn()"></textarea>
+        <button class="send-btn" id="sbtn" onclick="send()" disabled>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21L12 3M12 3L19 10M12 3L5 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
 
-  <aside class="diag-panel" id="diagPanel" style="display:none">
-    <h3>错题诊断</h3>
-    <div class="field">
-      <label>原题</label>
-      <textarea id="diagQuestion" placeholder="输入题目..."></textarea>
+  <!-- Paper -->
+  <div id="paperView">
+    <div class="pv-wrap">
+      <div class="pv-tabs">
+        <button class="active" onclick="ptab('gen')">出题设置</button>
+        <button onclick="ptab('saved')">已保存试卷</button>
+      </div>
+      <div id="pf">
+        <div class="f-group"><div class="f-label">学段</div><select id="ps" onchange="onSC()"><option value="">请选择学段</option></select></div>
+        <div class="f-group"><div class="f-label">学科</div><select id="pj" onchange="onSJ()" disabled><option value="">请先选择学段</option></select></div>
+        <div class="f-group">
+          <div class="f-label">知识点（可多选）</div>
+          <div class="tgrid" id="tg"><span style="font-size:14px;color:var(--text-tertiary);padding:8px;">请先选择学科</span></div>
+          <div class="tact"><button onclick="sa()">全选</button><button onclick="da()">取消</button></div>
+        </div>
+        <div class="f-group">
+          <div class="f-label">题型与数量</div>
+          <div class="qtype-list">
+            <div class="qtype-row"><label><input type="checkbox" value="选择题" class="qt-cb" checked onchange="ut()"> 选择题</label><span style="font-size:13px;color:var(--text-secondary);flex:1;text-align:right;">数量</span><input type="number" class="qt-n" value="2" min="1" max="10" oninput="ut()"></div>
+            <div class="qtype-row"><label><input type="checkbox" value="填空题" class="qt-cb" onchange="ut()"> 填空题</label><span style="font-size:13px;color:var(--text-secondary);flex:1;text-align:right;">数量</span><input type="number" class="qt-n" value="2" min="1" max="10" oninput="ut()"></div>
+            <div class="qtype-row"><label><input type="checkbox" value="简答题" class="qt-cb" onchange="ut()"> 简答题</label><span style="font-size:13px;color:var(--text-secondary);flex:1;text-align:right;">数量</span><input type="number" class="qt-n" value="1" min="1" max="10" oninput="ut()"></div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="f-group"><div class="f-label">总题数</div><input type="text" id="pc" value="5" readonly style="color:var(--text-primary);font-weight:600;"></div>
+          <div class="f-group">
+            <div class="f-label">难度</div>
+            <div class="dgrp">
+              <label><input type="radio" name="diff" value="基础" checked><span>基础</span></label>
+              <label><input type="radio" name="diff" value="中等"><span>中等</span></label>
+              <label><input type="radio" name="diff" value="提高"><span>提高</span></label>
+              <label><input type="radio" name="diff" value="混合"><span>混合</span></label>
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="previewAlloc()" id="gb">预览分配</button>
+        <div id="allocPreview" style="display:none;margin-top:16px;background:var(--bg-sidebar);border:1px solid var(--border-subtle);border-radius:14px;padding:20px;">
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px;">题目分配预览</div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px;">每个知识点的题型数量，可修改后确认生成</div>
+          <div id="allocGrid" style="display:flex;flex-direction:column;gap:10px;"></div>
+          <div style="display:flex;gap:8px;margin-top:16px;">
+            <button class="btn-primary" onclick="doGen()" style="flex:1;">确认生成</button>
+            <button onclick="cancelAlloc()" style="padding:11px 20px;background:transparent;border:1px solid var(--border-subtle);border-radius:10px;color:var(--text-secondary);cursor:pointer;font-size:14px;font-family:inherit;">取消</button>
+          </div>
+        </div>
+        <div class="load-row" id="gl" style="display:none;justify-content:center;padding:16px 0;"><div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div></div>
+      </div>
+      <div class="hist-banner" id="hb" style="display:none">有未保存的出题记录 <button onclick="rh()">恢复草稿</button></div>
+      <div id="pr" style="display:none"></div>
+      <div id="sp" style="display:none">
+        <button class="btn-primary" onclick="ls()" style="margin-bottom:24px;width:auto;padding:10px 20px;">刷新列表</button>
+        <div id="sl"></div>
+      </div>
     </div>
-    <div class="field">
-      <label>学生答案</label>
-      <textarea id="diagStudent" placeholder="输入学生的错误答案..."></textarea>
-    </div>
-    <div class="field">
-      <label>正确答案</label>
-      <textarea id="diagCorrect" placeholder="输入正确答案..."></textarea>
-    </div>
-    <button onclick="diagnose()">开始诊断</button>
-    <div class="diag-result" id="diagResult"></div>
-    <button id="exerciseBtn" onclick="getExercises()" style="display:none;margin-top:8px;background:#5436da;">相似题目练习</button>
-    <div class="diag-result" id="exerciseResult" style="display:none;"></div>
-  </aside>
-</div>
+  </div>
+
+</main>
 
 <script>
-let currentMode = 'chat';
+let cv='chat',ct='gen',kt=null,cp=null,ph=[],_ld=null;
 
-function switchMode(mode) {
-  currentMode = mode;
-  document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.sidebar button[onclick*="${mode}"]`).classList.add('active');
-  document.getElementById('diagPanel').style.display = mode === 'diagnosis' ? 'block' : 'none';
+function toggleSb(){document.getElementById('sidebar').classList.toggle('folded')}
+function go(v){
+  cv=v;document.querySelectorAll('.sb-nav-item').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.sb-nav-item[data-v="${v}"]`).classList.add('active');
+  document.getElementById('chatView').classList.toggle('hidden',v!=='chat');
+  document.getElementById('paperView').classList.toggle('show',v==='paper');
+  if(v==='paper'){ip();shb()}
 }
+function qa(q){document.getElementById('input').value=q;upBtn();go('chat');send()}
 
-function clearChat() {
-  document.getElementById('messages').innerHTML = '<div class="empty"><h2>KAG-Pro 智能学习助手</h2><p>覆盖小学·初中·高中·大学四学段</p></div>';
+function ptab(t){
+  ct=t;document.querySelectorAll('.pv-tabs button').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.pv-tabs button[onclick*="${t}"]`).classList.add('active');
+  document.getElementById('pf').style.display=t==='gen'?'block':'none';
+  document.getElementById('pr').style.display='none';document.getElementById('sp').style.display=t==='saved'?'block':'none';
+  document.getElementById('hb').style.display='none';if(t==='saved')ls();if(t==='gen')shb();
 }
+function shb(){document.getElementById('hb').style.display=(ph.length&&ct==='gen')?'flex':'none'}
+function rh(){if(ph.length){cp=ph[ph.length-1];rp(cp)}}
 
-function addMessage(role, content, meta) {
-  const msgs = document.getElementById('messages');
-  if (msgs.querySelector('.empty')) msgs.innerHTML = '';
-  const div = document.createElement('div');
-  div.className = `message ${role}`;
-  const avatar = document.createElement('div');
-  avatar.className = `avatar ${role}`;
-  avatar.textContent = role === 'user' ? 'U' : 'K';
-  const bubble = document.createElement('div');
-  bubble.className = `bubble ${role}`;
-  if (meta) {
-    bubble.innerHTML = `<div class="stage-tag">${meta.stage}</div>${content}`;
-    if (meta.sources && meta.sources.length) {
-      const srcDiv = document.createElement('div');
-      srcDiv.className = 'source';
-      meta.sources.forEach(s => {
-        const pct = typeof s.score === 'number' ? (s.score*100).toFixed(0) : '?';
-        srcDiv.innerHTML += `<span>📚 ${s.source} (${pct}%)</span>`;
-      });
-      if (meta.verdict) {
-        srcDiv.innerHTML += `<span class="verdict ${meta.verdict}">Faith: ${meta.verdict}</span>`;
+async function ip(){
+  if(!kt){try{kt=await(await fetch('/api/knowledge-tree')).json()}catch(e){kt={}}}
+  const s=document.getElementById('ps');if(s.options.length<=1){s.innerHTML='<option value="">请选择学段</option>';Object.keys(kt).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o)})}
+}
+function onSC(){
+  const s=document.getElementById('ps').value,j=document.getElementById('pj');j.innerHTML='<option value="">请选择学科</option>';j.disabled=!s;
+  document.getElementById('tg').innerHTML='<span style="font-size:14px;color:var(--text-tertiary);padding:8px;">请先选择学科</span>';
+  if(s&&kt?.[s])Object.keys(kt[s]).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;j.appendChild(o)})
+}
+function onSJ(){
+  const s=document.getElementById('ps').value,j=document.getElementById('pj').value,g=document.getElementById('tg');
+  if(!s||!j||!kt){g.innerHTML='<span style="font-size:14px;color:var(--text-tertiary);padding:8px;">请先选择学科</span>';return}
+  const ts=kt[s]?.[j]||[];g.innerHTML=ts.length?ts.map(t=>`<label><input type="checkbox" value="${t.replace(/"/g,'&quot;')}" class="tc">${t}</label>`).join(''):'<span style="font-size:14px;color:var(--text-tertiary);padding:8px;">暂无知识点</span>'
+}
+function sa(){document.querySelectorAll('.tc').forEach(c=>c.checked=true)}
+function da(){document.querySelectorAll('.tc').forEach(c=>c.checked=false)}
+function gt(){return Array.from(document.querySelectorAll('.tc:checked')).map(c=>c.value)}
+function gd(){const s=document.querySelector('input[name="diff"]:checked');return s?s.value:'基础'}
+function ut(){let t=0;document.querySelectorAll('.qtype-row').forEach(r=>{const c=r.querySelector('.qt-cb'),n=r.querySelector('.qt-n');n.disabled=!c.checked;n.style.opacity=c.checked?'':'0.4';if(c.checked)t+=parseInt(n.value)||0});document.getElementById('pc').value=t}
+ut();
+function gq(){const r=[];document.querySelectorAll('.qtype-row').forEach(ri=>{const c=ri.querySelector('.qt-cb'),n=ri.querySelector('.qt-n');if(c.checked)r.push({type:c.value,count:parseInt(n.value)||1})});return r}
+
+function previewAlloc(){
+  const s=document.getElementById('ps').value,j=document.getElementById('pj').value,ts=gt(),qs=gq(),t=parseInt(document.getElementById('pc').value)||5,d=gd();
+  if(!s||!j||!ts.length)return alert('请选择学段、学科和至少一个知识点');
+  if(!qs.length)return alert('请至少选择一种题型');
+  if(t<ts.length)return alert('总题数('+t+')少于知识点数('+ts.length+')，请增加题目或减少知识点');
+  const tp=ts.length,grid=document.getElementById('allocGrid');
+  // Step 1: per-type floor distribution
+  const alloc=ts.map(()=>qs.map(()=>0));
+  qs.forEach((qt,ti)=>{
+    const base=Math.floor(qt.count/tp),rem=qt.count%tp;
+    for(let i=0;i<tp;i++)alloc[i][ti]=i<rem?base+1:base;
+  });
+  // Step 2: ensure every topic has at least 1 question
+  for(let attempt=0;attempt<tp;attempt++){
+    let changed=false;
+    for(let i=0;i<tp;i++){
+      const sum=alloc[i].reduce((s,v)=>s+v,0);
+      if(sum>0)continue;
+      // Find topic with max total to steal from
+      let maxSum=-1,donor=-1,donorType=-1;
+      for(let di=0;di<tp;di++){
+        if(di===i)continue;
+        for(let dt=0;dt<qs.length;dt++){
+          if(alloc[di][dt]>0){
+            const ds=alloc[di].reduce((s,v)=>s+v,0);
+            if(ds>maxSum){maxSum=ds;donor=di;donorType=dt;}
+          }
+        }
       }
-      bubble.appendChild(srcDiv);
+      if(donor>=0&&donorType>=0){
+        alloc[donor][donorType]--;
+        // Give to uncovered topic with most suitable type (prefer 选择题 > 填空题 > 简答题)
+        const typePriority=[...qs.keys()].sort((a,b)=>{
+          const o={'选择题':0,'填空题':1,'简答题':2};
+          return (o[qs[a].type]||9)-(o[qs[b].type]||9);
+        });
+        alloc[i][typePriority[0]]++;
+        changed=true;
+      }
     }
-  } else {
-    bubble.textContent = content;
+    if(!changed)break;
   }
-  div.appendChild(avatar);
-  div.appendChild(bubble);
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function showLoading() {
-  const msgs = document.getElementById('messages');
-  if (msgs.querySelector('.empty')) msgs.innerHTML = '';
-  const div = document.createElement('div');
-  div.className = 'loading';
-  div.id = 'loading';
-  div.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div> 思考中...';
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function hideLoading() {
-  const el = document.getElementById('loading');
-  if (el) el.remove();
-}
-
-async function send() {
-  const input = document.getElementById('input');
-  const q = input.value.trim();
-  if (!q) return;
-  input.value = '';
-  document.getElementById('sendBtn').disabled = true;
-  addMessage('user', q);
-  showLoading();
-  try {
-    const res = await fetch('/api/query', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({question: q}),
+  // Step 3: validate - warn if any topic still uncovered
+  let hasUncovered=false;
+  for(let i=0;i<tp;i++)if(alloc[i].reduce((s,v)=>s+v,0)===0)hasUncovered=true;
+  // Render
+  let rows='';
+  ts.forEach((topic,i)=>{
+    let typeInputs='';
+    qs.forEach((qt,ti)=>{
+      typeInputs+=`<label>${qt.type}<input type="number" class="alloc-cnt" data-topic="${i}" data-type="${qt.type}" value="${alloc[i][ti]}" min="0" max="20" oninput="checkAllocSum()"></label>`;
     });
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(errText || 'Server error');
-    }
-    const data = await res.json();
-    hideLoading();
-    const answer = data.answer || '(no answer)';
-    const stage = data.stage || '未知';
-    const sources = (data.sources || []).map(s => ({
-      source: s.source || '?',
-      score: typeof s.score === 'number' ? s.score : 0,
-    }));
-    const verdict = data.verification ? data.verification.verdict : null;
-    addMessage('bot', answer, { stage, sources, verdict });
-  } catch (e) {
-    hideLoading();
-    addMessage('bot', '抱歉，服务暂时不可用：' + (e.message || '未知错误'));
-  }
-  document.getElementById('sendBtn').disabled = false;
+    const rowSum=alloc[i].reduce((s,v)=>s+v,0);
+    rows+=`<div class="alloc-row"><span class="alloc-topic">${e(topic)}</span><span style="font-size:12px;color:var(--text-tertiary);min-width:20px;text-align:center;">${rowSum}</span><div class="alloc-types">${typeInputs}</div></div>`;
+  });
+  const warnHtml=hasUncovered?'<span style="color:#e04848;margin-left:8px;">⚠ 部分知识点无题，请手动调整</span>':'';
+  grid.innerHTML=rows+'<div style="display:flex;align-items:center;gap:8px;margin-top:4px;font-size:13px;color:var(--text-secondary);">当前分配 <span id="allocSum" style="font-weight:600;color:var(--text-primary);">'+t+'</span> / 目标 <span style="font-weight:600;">'+t+'</span> 题'+warnHtml+'</div>';
+  document.getElementById('allocPreview').style.display='block';
+  document.getElementById('gl').style.display='none';
+  window._allocState={stage:s,subject:j,topics:ts,types:qs,difficulty:d,total:t};
 }
 
-async function diagnose() {
-  const q = document.getElementById('diagQuestion').value.trim();
-  const s = document.getElementById('diagStudent').value.trim();
-  const c = document.getElementById('diagCorrect').value.trim();
-  _lastDiag = {q, s, c};
-  if (!q || !s || !c) return;
-  const result = document.getElementById('diagResult');
-  result.style.display = 'block';
-  result.innerHTML = '诊断中...';
-  try {
-    const res = await fetch('/api/diagnose', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({question: q, student_answer: s, correct_answer: c}),
-    });
-    const data = await res.json();
-    result.innerHTML = `
-      <div style="color:var(--accent);font-weight:600;margin-bottom:6px;">${data.error_type}</div>
-      <div style="margin-bottom:4px;">📖 ${data.knowledge_point}</div>
-      <div style="margin-bottom:8px;color:var(--text-secondary);">💡 ${data.hint}</div>
-      <div>${data.feedback}</div>
-    `;
-  } catch (e) {
-    result.innerHTML = '诊断失败';
-  }
+function checkAllocSum(){
+  const sum=Array.from(document.querySelectorAll('.alloc-cnt')).reduce((s,inp)=>s+(parseInt(inp.value)||0),0);
+  document.getElementById('allocSum').textContent=sum;
+  const warn=document.getElementById('allocWarn');
+  if(warn)warn.style.display=sum===window._allocState.total?'none':'inline';
+}
+
+function cancelAlloc(){document.getElementById('allocPreview').style.display='none'}
+
+async function doGen(){
+  const st=window._allocState;if(!st)return;
+  const allocs=Array.from(document.querySelectorAll('.alloc-cnt')).map(inp=>({topic:parseInt(inp.dataset.topic),type:inp.dataset.type,count:parseInt(inp.value)||0}));
+  const sum=allocs.reduce((s,a)=>s+a.count,0);
+  if(sum!==st.total)return alert('分配题数('+sum+')与总题数('+st.total+')不匹配，请调整或点击取消重新设置');
+  document.getElementById('gl').style.display='flex';document.getElementById('gb').disabled=true;
+  document.getElementById('allocPreview').style.display='none';
+  document.getElementById('pr').style.display='none';document.getElementById('hb').style.display='none';
+  try{
+    const r=await fetch('/api/generate-paper',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stage:st.stage,subject:st.subject,topics:st.topics,count:allocs.reduce((s,a)=>s+a.count,0),difficulty:st.difficulty,question_types:st.types,allocations:allocs})});
+    if(!r.ok)throw new Error(await r.text());cp=await r.json();ph.push(cp);rp(cp)
+  }catch(e){alert('生成失败：'+(e.message||''))}
+  document.getElementById('gl').style.display='none';document.getElementById('gb').disabled=false
+}
+
+function rp(p){
+  const dc={'基础':'d-basic','中等':'d-mid','提高':'d-hard'},qs=p.questions||[];
+  const h=qs.map((q,i)=>`<div class="q" id="qi${i}"><div class="q-head" onclick="tq(${i})"><span class="q-num">${i+1}</span><span class="q-typ">${e(q.type||'')}</span><span class="q-prev">${e(String(q.question||'').substring(0,60))}</span><span class="q-diff ${dc[q.difficulty]||'d-mid'}">${e(q.difficulty||'')}</span><span class="q-chev">▾</span></div><div class="q-body" id="qb${i}"><div class="q-text">${e(String(q.question||''))}</div><div class="ans" id="qa${i}"><div class="lbl">答案</div><div class="txt">${e(String(q.answer||''))}</div></div><div class="anal" id="qx${i}"><div class="lbl">解析</div><div class="txt">${e(String(q.analysis||''))}</div></div><div class="q-btns"><button onclick="event.stopPropagation();ta(${i})" id="bta${i}">查看答案</button><button onclick="event.stopPropagation();tx(${i})" id="btx${i}">查看解析</button><button onclick="event.stopPropagation();aq(${i})">追问</button></div></div></div>`).join('');
+  document.getElementById('pr').innerHTML=`<div class="paper-card"><h4>${e(p.title||'练习卷')}</h4><div class="paper-meta"><span>${e(p.stage||'')}</span><span>${e(p.subject||'')}</span><span>${e(p.difficulty||'')}</span><span>${p.count||0}题</span><span>${(p.created_at||'').substring(0,10)}</span></div><div class="paper-actions"><button onclick="prt()">打印试卷</button><button onclick="saa()">全部答案</button><button onclick="sax()">全部解析</button><button class="btn-s" onclick="sv()">保存试卷</button>${p.id?`<button class="btn-d" onclick="dp('${p.id}')">删除试卷</button>`:''}</div>${h}</div>`;
+  document.getElementById('pr').style.display='block';document.getElementById('sp').style.display='none'
+}
+function tq(i){document.getElementById('qb'+i).classList.toggle('open');document.querySelector('#qi'+i+' .q-head').classList.toggle('open')}
+function ta(i){const a=document.getElementById('qa'+i),b=document.getElementById('bta'+i),s=a.classList.toggle('show');b.textContent=s?'隐藏答案':'查看答案'}
+function tx(i){const a=document.getElementById('qx'+i),b=document.getElementById('btx'+i),s=a.classList.toggle('show');b.textContent=s?'隐藏解析':'查看解析'}
+function saa(){(cp?.questions||[]).forEach((_,i)=>{document.getElementById('qa'+i).classList.add('show');document.getElementById('bta'+i).textContent='隐藏答案'})}
+function sax(){(cp?.questions||[]).forEach((_,i)=>{document.getElementById('qx'+i).classList.add('show');document.getElementById('btx'+i).textContent='隐藏解析'})}
+function aq(i){if(!cp?.questions)return;const q=cp.questions[i];document.getElementById('input').value=`关于下面这道题目：\n\n${q.question}\n\n答案：${q.answer}\n\n解析：${q.analysis}\n\n我想进一步了解：`;upBtn();go('chat')}
+function prt(){document.querySelectorAll('.q-body').forEach(b=>b.classList.add('open'));document.querySelectorAll('.q-head').forEach(h=>h.classList.add('open'));window.print()}
+
+async function sv(){
+  if(!cp)return;try{const r=await fetch('/api/papers',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:cp.id||null,title:cp.title||'',stage:cp.stage||'',subject:cp.subject||'',topics:cp.topics||[],difficulty:cp.difficulty||'',question_types:cp.question_types||[],count:cp.count||0,questions:cp.questions||[],created_at:cp.created_at||''})});if(!r.ok)throw new Error(await r.text());cp=await r.json();ph[ph.length-1]=cp;rp(cp)}catch(e){alert('保存失败')}
+}
+async function ls(){try{const r=await fetch('/api/papers'),ps=await r.json(),l=document.getElementById('sl');l.innerHTML=ps.length?ps.map(p=>`<div class="saved-item"><div class="si-left"><div class="si-title">${e(p.title||'未命名试卷')}</div><div class="si-meta">${e(p.stage||'')} · ${e(p.subject||'')} · ${p.count||0}题 · ${(p.created_at||'').substring(0,10)}</div></div><div class="si-right"><button class="si-load" onclick="lp('${p.id}')">加载</button><button class="si-del" onclick="dp('${p.id}')">删除</button></div></div>`).join(''):'<div style="color:var(--text-secondary);text-align:center;padding:40px;font-size:15px;">暂无保存的试卷</div>'}catch(e){l.innerHTML='<div style="color:#ef4444;padding:20px;">加载失败</div>'}}
+async function lp(id){try{const r=await fetch('/api/papers/'+id);if(!r.ok)throw new Error('');cp=await r.json();rp(cp)}catch(e){alert('加载失败')}}
+async function dp(id){if(!confirm('确认删除？'))return;try{await fetch('/api/papers/'+id,{method:'DELETE'});if(cp?.id===id){cp=null;document.getElementById('pr').style.display='none'}ls()}catch(e){alert('删除失败')}}
+
+function e(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// Chat
+function upBtn(){const b=document.getElementById('sbtn'),v=document.getElementById('input').value.trim();b.classList.toggle('active',!!v);b.disabled=!v}
+function am(rl,ct,mt){
+  const inn=document.getElementById('msgs'),w=document.getElementById('welc');if(w)w.remove();
+  const ld=inn.querySelector('.load-row');if(ld)ld.remove();
+  const d=document.createElement('div');d.className='msg '+rl;
+  const a=document.createElement('div');a.className='msg-av '+rl;
+  a.innerHTML=rl==='user'?'':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>';
+  const b=document.createElement('div');b.className='msg-body';
+  let h='';if(mt&&mt.stage)h+=`<div class="tag">${e(mt.stage)}</div>`;h+=`<p>${ct}</p>`;
+  if(mt?.sources?.length){h+='<div class="msg-src">';mt.sources.forEach(s=>{h+=`<span>📚 ${e(s.source)} (${typeof s.score==='number'?(s.score*100).toFixed(0):'?'}%)</span>`});if(mt.verdict)h+=`<span class="verdict ${mt.verdict.toLowerCase().charAt(0)}">${mt.verdict}</span>`;h+='</div>'}
+  b.innerHTML=h;d.appendChild(a);d.appendChild(b);inn.appendChild(d);document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight
+}
+function sl(){const inn=document.getElementById('msgs'),w=document.getElementById('welc');if(w)w.remove();const d=document.createElement('div');d.className='load-row';d.id='ld';d.innerHTML='<div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div>';inn.appendChild(d);document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight}
+function hl(){const e=document.getElementById('ld');if(e)e.remove()}
+async function send(){
+  const i=document.getElementById('input'),q=i.value.trim();if(!q)return;i.style.height='auto';i.value='';upBtn();am('user',q);sl();
+  try{const r=await fetch('/api/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});if(!r.ok)throw new Error(await r.text()||'Error');const d=await r.json();hl();am('bot',d.answer||'(无回答)',{stage:d.stage||'',sources:(d.sources||[]).map(s=>({source:s.source||'?',score:typeof s.score==='number'?s.score:0})),verdict:d.verification?.verdict})}catch(e){hl();am('bot','抱歉，服务暂不可用：'+(e.message||''))}
 }
 </script>
 </body>
