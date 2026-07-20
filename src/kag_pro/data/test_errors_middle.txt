@@ -1,0 +1,29 @@
+# 初中错题测试集 v2
+# 格式：问题 || 学生错误答案 || 正确答案 || 预期错误类型
+
+# --- missing_root (only for quadratic equations) ---
+解方程 x² - 9 = 0 || x=3 || x=3 或 x=-3 || missing_root
+解方程 x² - 5x + 6 = 0 || x=2 || x=2 或 x=3 || missing_root
+解方程 2x² - 8 = 0 || x=2 || x=2 或 x=-2 || missing_root
+用求根公式解 x² - 4x + 3 = 0 || x=1 || x=1 或 x=3 || missing_root
+
+# --- discriminant_error ---
+已知方程 x² + x + 1 = 0，求判别式的值并判断根的情况 || Δ=1-4=-3，无实根 || Δ=1-4=-3<0，无实数根 || discriminant_error
+
+# --- calculation_error ---
+移项解方程 3x - 7 = 2x + 5 || 3x+2x=5-7, 5x=-2, x=-0.4 || 3x-2x=5+7, x=12 || calculation_error
+
+# --- force_mass_confusion ---
+一个物体质量是50kg，它的重力是多少？ || 50N || 500N || force_mass_confusion
+
+# --- equation_not_balanced ---
+配平化学方程式: H₂ + O₂ → H₂O || H₂ + O₂ → H₂O || 2H₂ + O₂ → 2H₂O || equation_not_balanced
+
+# --- distribution_error ---
+解方程 2(x+3) = 10 || 2x+3=10, 2x=7, x=3.5 || 2x+6=10, 2x=4, x=2 || distribution_error
+
+# --- incomplete_factorization ---
+因式分解 x² - 4 || (x-2)² || (x+2)(x-2) || incomplete_factorization
+
+# --- formula_misapplication ---
+计算压强: 已知F=10N, S=0.5m²，求p || p=5Pa || p=20Pa || formula_misapplication

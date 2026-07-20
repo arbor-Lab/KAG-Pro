@@ -18,6 +18,8 @@ def get_config() -> dict:
         "dashscope_api_key": os.getenv("DASHSCOPE_API_KEY", ""),
         "llm_model": os.getenv("LLM_MODEL", "gpt-4o"),
         "embedding_model": os.getenv("EMBEDDING_MODEL", "text-embedding-3-small"),
+        "embedding_base_url": os.getenv("EMBEDDING_BASE_URL", ""),
+        "embedding_api_key": os.getenv("EMBEDDING_API_KEY", ""),
         "retrieval_top_k": int(os.getenv("RETRIEVAL_TOP_K", "5")),
         "retrieval_threshold": float(os.getenv("RETRIEVAL_THRESHOLD", "0.3")),
         "chroma_persist_dir": os.getenv("CHROMA_PERSIST_DIR", "data/chroma_db"),

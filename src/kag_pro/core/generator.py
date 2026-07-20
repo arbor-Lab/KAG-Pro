@@ -1,4 +1,4 @@
-"""LLM answer generation using OpenAI GPT-4o."""
+"""LLM answer generation via DeepSeek (OpenAI-compatible API)."""
 
 from typing import List
 
