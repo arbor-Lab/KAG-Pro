@@ -45,18 +45,28 @@ class RAGPipeline:
     def query(self, question: str, verify: bool = False) -> dict:
         from kag_pro.stage.detector import StageDetector
 
-        stage_enum = StageDetector.detect(question)
+        stage_enum = StageDetector.robust_detect(question)
         stage_name = StageDetector.get_stage_name(stage_enum)
+
+        # LLM knowledge module analysis (stage + subject)
+        analysis = StageDetector.analyze(question)
+        detected_subject = analysis.get("subject", "unknown")
+        stage_name = analysis.get("stage", stage_name)
+        if "小学" in stage_name: stage_name = "小学"
+        elif "高中" in stage_name: stage_name = "高中"
+        elif "大学" in stage_name: stage_name = "大学"
+        else: stage_name = "初中"
 
         if self._kg_retriever:
             hits = self._kg_retriever.retrieve(question)
             enrichment = self._kg_retriever.get_enrichment(question)
         else:
-            hits = self._retriever.retrieve(question, stage=stage_enum.value)
+            hits = self._retriever.retrieve(question, stage=stage_enum.value, subject=detected_subject)
             enrichment = {}
 
         answer = self._generator.generate(question, hits)
 
+        # Include analysis in sources for debugging
         sources = [
             {
                 "text": h["text"][:200] + ("..." if len(h["text"]) > 200 else ""),
@@ -74,6 +84,7 @@ class RAGPipeline:
             "stage": stage_name,
             "sources": sources,
         }
+        result["analysis"] = analysis
         if enrichment:
             result["kg_enrichment"] = enrichment
 

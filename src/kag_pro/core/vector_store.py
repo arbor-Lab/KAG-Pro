@@ -43,7 +43,7 @@ class VectorStore:
             ids=ids, embeddings=embeddings, documents=texts, metadatas=metadatas
         )
 
-    def search(self, query: str, top_k: int = 5, threshold: float = 0.0, stage_filter: str | None = None) -> List[dict]:
+    def search(self, query: str, top_k: int = 5, threshold: float = 0.0, stage_filter: str | None = None, subject_filter: str | None = None) -> List[dict]:
         query_embedding = self._embedder.embed(query)
         results = self._collection.query(
             query_embeddings=[query_embedding],
@@ -61,15 +61,23 @@ class VectorStore:
             metadata = results["metadatas"][0][i]
             doc_stage = metadata.get("stage", "unknown")
             stage_boost = 1.0
+            doc_subject = metadata.get("subject", "unknown")
+            subject_boost = 1.0
             if stage_filter and stage_filter != "unknown":
                 if doc_stage == stage_filter:
                     stage_boost = 1.15
                 elif doc_stage != "unknown":
                     stage_boost = 0.85
+            if subject_filter and subject_filter != "unknown":
+                if doc_subject == subject_filter:
+                    subject_boost = 1.2
+                elif doc_subject != "unknown":
+                    subject_boost = 0.75
             hits.append({
                 "text": results["documents"][0][i],
                 "metadata": metadata,
-                "score": round(similarity * stage_boost, 4),
+                "score": round(similarity * stage_boost * subject_boost, 4),
+                "subject_boost": round(subject_boost, 2),
                 "raw_score": round(similarity, 4),
                 "stage_boost": round(stage_boost, 2),
             })

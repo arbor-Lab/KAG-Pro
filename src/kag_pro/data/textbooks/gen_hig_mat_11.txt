@@ -1,0 +1,21 @@
+高中数学 - 三角恒等变换
+
+**三角恒等变换**
+
+三角恒等变换是三角函数运算与化简的核心工具，主要包括和差角公式、倍角公式与辅助角公式等。它们揭示了不同角度三角函数间的内在联系，是解决求值、证明、化简问题的关键。
+
+**一、基本公式**
+
+1. **两角和与差的正弦、余弦、正切公式**
+   - \(\sin(\alpha \pm \beta) = \sin\alpha\cos\beta \pm \cos\alpha\sin\beta\)
+   - \(\cos(\alpha \pm \beta) = \cos\alpha\cos\beta \mp \sin\alpha\sin\beta\)
+   - \(\tan(\alpha \pm \beta) = \frac{\tan\alpha \pm \tan\beta}{1 \mp \tan\alpha\tan\beta}\)
+
+2. **二倍角公式与降幂公式**
+   - \(\sin 2\alpha = 2\sin\alpha\cos\alpha\)
+   - \(\cos 2\alpha = \cos^2\alpha - \sin^2\alpha = 2\cos^2\alpha - 1 = 1 - 2\sin^2\alpha\)
+   - \(\tan 2\alpha = \frac{2\tan\alpha}{1 - \tan^2\alpha}\)
+   - 降幂公式：\(\sin^2\alpha = \frac{1-\cos2\alpha}{2}\)，\(\cos^2\alpha = \frac{1+\cos2\alpha}{2}\)
+
+3. **辅助角公式**
+   - \(a\sin x + b\cos x = \sqrt{a^2+b^2}\
