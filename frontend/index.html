@@ -59,6 +59,15 @@ body {
 .sb-nav-item.active { background: var(--bg-active); }
 .sb-nav-item svg { flex-shrink: 0; color: var(--text-primary); }
 
+.sb-hist-header { display: flex; align-items: center; gap: 6px; padding: 8px 12px; cursor: pointer; font-size: 11px; color: var(--text-tertiary); user-select: none; flex-shrink: 0; }
+.sb-hist-header:hover { color: var(--text-secondary); }
+.sb-hist-header .chev { transition: transform .15s; font-size: 10px; }
+.sb-hist-header.open .chev { transform: rotate(90deg); }
+.sb-hist-list { flex: 1; overflow-y: auto; padding: 0 8px; min-height: 0; }
+.sb-hist-list.hidden { display: none; }
+.sb-hist-item { padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background .1s; }
+.sb-hist-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+.sb-hist-item.active { background: var(--bg-active); color: var(--text-primary); }
 .sb-bottom { padding: 12px 8px; flex-shrink: 0; font-size: 13px; color: var(--text-secondary); font-weight: 500; }
 
 /* Main */
@@ -100,6 +109,16 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
 .verdict.m { background: rgba(250,204,21,0.1); color: #b45309; border: 1px solid rgba(250,204,21,0.3); }
 .verdict.l { background: rgba(248,113,113,0.1); color: #b91c1c; border: 1px solid rgba(248,113,113,0.3); }
 
+
+.think-wrap { margin-top: 12px; border: 1px solid var(--border-subtle); border-radius: 10px; overflow: hidden; }
+.think-head { display: flex; align-items: center; gap: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px; color: var(--text-tertiary); user-select: none; }
+.think-head:hover { background: var(--bg-hover); color: var(--text-secondary); }
+.think-head .chev { transition: transform .2s; font-size: 10px; }
+.think-head.open .chev { transform: rotate(90deg); }
+.think-body { display: none; padding: 0 12px 12px; font-size: 12px; color: var(--text-tertiary); line-height: 1.6; }
+.think-body.open { display: block; }
+.think-body .think-row { display: flex; gap: 8px; padding: 3px 0; }
+.think-body .think-label { color: var(--text-secondary); flex-shrink: 0; min-width: 48px; }
 .load-row { display: flex; align-items: center; gap: 6px; padding: 24px 0 24px 48px; }
 .load-dot { width: 6px; height: 6px; background: var(--text-secondary); border-radius: 50%; animation: bounce 1.4s infinite; }
 .load-dot:nth-child(2) { animation-delay: .2s; }
@@ -136,6 +155,9 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
 /* Library View */
 #libView { flex: 1; overflow-y: auto; display: none; padding: 24px 0; }
 #libView.show { display: flex; flex-direction: column; }
+.dv-wrap { max-width: 48rem; width: 100%; margin: 0 auto; padding: 0 24px; }
+.dv-wrap h3 { font-size: 17px; font-weight: 600; margin-bottom: 20px; }
+.diag-result { margin-top: 20px; padding: 18px; background: var(--bg-sidebar); border: 1px solid var(--border-subtle); border-radius: 12px; font-size: 14px; line-height: 1.7; display: none; }
 .lv-wrap { max-width: 48rem; width: 100%; margin: 0 auto; padding: 0 24px; }
 .lv-wrap h3 { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
 .lv-filters { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: flex-end; }
@@ -318,9 +340,9 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
     </button>
   </div>
   <div class="sb-nav">
-    <button class="sb-nav-item active" data-v="chat" onclick="go('chat')">
+    <button class="sb-nav-item active" data-v="chat" onclick="newSession();go('chat')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-      <span class="sb-label">智能问答</span>
+      <span class="sb-label">新会话</span>
     </button>
     <button class="sb-nav-item" data-v="paper" onclick="go('paper')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -332,7 +354,8 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
       <span class="sb-label">文件库</span>
     </button>
   </div>
-  <div style="flex:1;"></div>
+  <div class="sb-hist-header open" onclick="this.classList.toggle('open');document.getElementById('histList').classList.toggle('hidden')"><span class="chev">▶</span> 历史会话</div>
+  <div class="sb-hist-list" id="histList"></div>
   <div class="sb-bottom"><span class="sb-user-text">BGE · ChromaDB · DeepSeek</span></div>
 </aside>
 
@@ -364,6 +387,7 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
       </div>
     </div>
   </div>
+
 
   <!-- Paper -->
   <div id="paperView">
@@ -418,6 +442,26 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
         <button class="btn-primary" onclick="ls()" style="margin-bottom:24px;width:auto;padding:10px 20px;">刷新列表</button>
         <div id="sl"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- Library -->
+  <div id="libView">
+    <div class="lv-wrap">
+      <h3>文件库</h3>
+      <div class="lv-filters">
+        <select id="lfType" onchange="lf()" style="padding:10px 14px;border:1px solid var(--border-subtle);border-radius:10px;background:var(--bg-main);color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;">
+          <option value="">全部类型</option>
+          <option value="paper">试卷</option>
+          <option value="question">问答收藏</option>
+          <option value="diagnosis">错题诊断</option>
+        </select>
+        <select id="lfSubj" onchange="lf()" style="padding:10px 14px;border:1px solid var(--border-subtle);border-radius:10px;background:var(--bg-main);color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;">
+          <option value="">全部学科</option>
+        </select>
+        <span class="lv-cnt" id="lfCnt"></span>
+      </div>
+      <div id="lfList"></div>
     </div>
   </div>
 
@@ -598,13 +642,24 @@ function am(rl,ct,mt){
     _lm[sid]={question:mt?._q||'', answer:ct, stage:mt?.stage||'', subject:mt?._subject||'', knowledge_point:mt?._kp||''};
   }
   if(mt?.sources?.length){h+='<div class="msg-src">';mt.sources.forEach(s=>{h+=`<span>📚 ${e(s.source)} (${typeof s.score==='number'?(s.score*100).toFixed(0):'?'}%)</span>`});if(mt.verdict)h+=`<span class="verdict ${mt.verdict.toLowerCase().charAt(0)}">${mt.verdict}</span>`;h+='</div>'}
+  // Thinking panel for bot messages
+  if(rl==='bot' && mt){
+    h+=`<div class="think-wrap"><div class="think-head" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span class="chev">▶</span> 思考过程</div><div class="think-body">`;
+    if(mt.stage)h+=`<div class="think-row"><span class="think-label">学段</span><span>${e(mt.stage)}</span></div>`;
+    if(mt._subject)h+=`<div class="think-row"><span class="think-label">学科</span><span>${e(mt._subject)}</span></div>`;
+    if(mt._kp)h+=`<div class="think-row"><span class="think-label">知识模块</span><span>${e(mt._kp)}</span></div>`;
+    if(mt._reason)h+=`<div class="think-row"><span class="think-label">判断依据</span><span>${e(mt._reason)}</span></div>`;
+    if(mt.sources?.length){h+=`<div class="think-row"><span class="think-label">检索来源</span><span>`;mt.sources.forEach(s=>{h+=`${e(s.source)} `});h+=`</span></div>`;}
+    if(mt.verdict)h+=`<div class="think-row"><span class="think-label">可信度</span><span class="verdict ${mt.verdict.toLowerCase().charAt(0)}">${mt.verdict}</span></div>`;
+    h+=`</div></div>`;
+  }
   b.innerHTML=h;d.appendChild(a);d.appendChild(b);inn.appendChild(d);document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight
 }
 function sl(){const inn=document.getElementById('msgs'),w=document.getElementById('welc');if(w)w.remove();const d=document.createElement('div');d.className='load-row';d.id='ld';d.innerHTML='<div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div>';inn.appendChild(d);document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight}
 function hl(){const e=document.getElementById('ld');if(e)e.remove()}
 async function send(){
   const i=document.getElementById('input'),q=i.value.trim();if(!q)return;i.style.height='auto';i.value='';upBtn();am('user',q);sl();
-  try{const r=await fetch('/api/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});if(!r.ok)throw new Error(await r.text()||'Error');const d=await r.json();hl();am('bot',d.answer||'(无回答)',{stage:d.stage||'',sources:(d.sources||[]).map(s=>({source:s.source||'?',score:typeof s.score==='number'?s.score:0})),verdict:d.verification?.verdict,_q:q,_subject:d.analysis?.subject||'','_kp':''})}catch(e){hl();am('bot','抱歉，服务暂不可用：'+(e.message||''))}
+  try{const r=await fetch('/api/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});if(!r.ok)throw new Error(await r.text()||'Error');const d=await r.json();hl();am('bot',d.answer||'(无回答)',{stage:d.stage||'',sources:(d.sources||[]).map(s=>({source:s.source||'?',score:typeof s.score==='number'?s.score:0})),verdict:d.verification?.verdict,_q:q,_subject:d.analysis?.subject||'',_kp:d.analysis?.knowledge_module||'',_reason:d.analysis?.reason||''})}catch(e){hl();am('bot','抱歉，服务暂不可用：'+(e.message||''))}
 }
 // ── Favorites / Library ─────────────────────────────────────────
 async function tf(ev, sid) {
@@ -772,6 +827,83 @@ async function ldel(id) {
   } catch (e) { alert('删除失败'); }
 }
 
+async function diag(){
+  const q=document.getElementById('dq').value.trim(),s=document.getElementById('ds').value.trim(),c=document.getElementById('dc').value.trim();_ld={q,s,c};if(!q||!s||!c)return;
+  const r=document.getElementById('dr');r.style.display='block';r.innerHTML='诊断中...';
+  try{const res=await fetch('/api/diagnose',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,student_answer:s,correct_answer:c})});const d=await res.json();
+  r.innerHTML=`<div style="color:var(--text-primary);font-weight:600;margin-bottom:10px;font-size:15px;">${e(d.error_type||'')}</div><div style="margin-bottom:6px;color:var(--text-secondary);">📖 ${e(d.knowledge_point||'')}</div><div style="margin-bottom:14px;color:var(--text-secondary);">💡 ${e(d.hint||'')}</div><div style="line-height:1.7;">${e(d.feedback||'')}</div>
+    <div class="think-wrap" style="margin-top:14px;"><div class="think-head" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span class="chev">▶</span> 诊断思考过程</div><div class="think-body">
+      <div class="think-row"><span class="think-label">错误类型</span><span>${e(d.error_type||'')}</span></div>
+      <div class="think-row"><span class="think-label">知识点</span><span>${e(d.knowledge_point||'')}</span></div>
+      <div class="think-row"><span class="think-label">诊断提示</span><span>${e(d.hint||'')}</span></div>
+      <div class="think-row"><span class="think-label">置信度</span><span>${typeof d.confidence==='number'?(d.confidence*100).toFixed(0)+'%':'N/A'}</span></div>
+    </div></div>`;
+  }catch(e){r.innerHTML='诊断失败：'+(e.message||'')}}
+// History
+let _sessions=JSON.parse(localStorage.getItem('kag_sessions')||'[]');
+let _sessionId=localStorage.getItem('kag_sid')||'';
+let _sessionMsgs=[];
+
+function newSession(){
+  _sessionId=Date.now().toString(36);
+  _sessionMsgs=[];
+  localStorage.setItem('kag_sid',_sessionId);
+  clearMessages();refreshHist();
+}
+
+function saveSession(){
+  if(!_sessionMsgs.length)return;
+  const title=_sessionMsgs.find(m=>m.role==='user');
+  const s={id:_sessionId,title:title?title.content.substring(0,40):'新对话',date:new Date().toISOString(),msgs:_sessionMsgs};
+  const idx=_sessions.findIndex(x=>x.id===_sessionId);
+  if(idx>=0)_sessions[idx]=s;else _sessions.unshift(s);
+  if(_sessions.length>50)_sessions=_sessions.slice(0,50);
+  localStorage.setItem('kag_sessions',JSON.stringify(_sessions));
+}
+
+function refreshHist(){
+  const l=document.getElementById('histList');if(!l)return;
+  _sessions=JSON.parse(localStorage.getItem('kag_sessions')||'[]');
+  l.innerHTML=_sessions.map(s=>`<div class="sb-hist-item${s.id===_sessionId?' active':''}" onclick="loadSession('${s.id}')">${e(s.title||'新对话')}</div>`).join('');
+}
+
+function loadSession(id){
+  const s=_sessions.find(x=>x.id===id);if(!s)return;
+  _sessionId=s.id;_sessionMsgs=s.msgs||[];
+  localStorage.setItem('kag_sid',_sessionId);
+  const inn=document.getElementById('msgs');inn.innerHTML='';
+  _sessionMsgs.forEach(m=>{const d=document.createElement('div');d.className='msg '+m.role;
+    const a=document.createElement('div');a.className='msg-av '+m.role;
+    a.innerHTML=m.role==='user'?'U':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>';
+    const b=document.createElement('div');b.className='msg-body';
+    b.innerHTML='<p>'+m.content+'</p>';if(m.meta)addMsgMeta(b,m.meta);
+    d.appendChild(a);d.appendChild(b);inn.appendChild(d);
+  });
+  document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight;
+  refreshHist();
+}
+
+function addMsgMeta(b,mt){
+  let h='';if(mt&&mt.stage)h+=`<div class="tag">${e(mt.stage)}</div>`;
+  if(mt?.sources?.length){h+='<div class="msg-src">';mt.sources.forEach(s=>{h+=`<span>📚 ${e(s.source)} (${typeof s.score==='number'?(s.score*100).toFixed(0):'?'}%)</span>`});h+='</div>';}
+  if(h)b.innerHTML+=h;
+}
+
+// Override am() to track messages
+const _origAm=am;
+am=function(rl,ct,mt){
+  _sessionMsgs.push({role:rl,content:ct,meta:mt});
+  saveSession();refreshHist();
+  return _origAm(rl,ct,mt);
+};
+
+// Override clearMessages  
+const _origClear=clearMessages;
+clearMessages=function(){_sessionMsgs=[];newSession();return _origClear();};
+
+// Init on load
+refreshHist();
+if(!_sessionId)newSession();
 </script>
 </body>
 </html>
