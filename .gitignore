@@ -21,3 +21,9 @@ venv/
 # Logs
 *.log
 data/chroma_db/
+
+# External datasets (too large for Git, download separately)
+src/kag_pro/data/external/*.csv
+src/kag_pro/data/external/*.json
+src/kag_pro/data/external/SC-Ques-main/datasets/
+src/kag_pro/data/external/math23k_train.json

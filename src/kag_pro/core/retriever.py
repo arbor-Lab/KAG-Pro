@@ -15,8 +15,10 @@ class Retriever:
         self._top_k = top_k if top_k is not None else config["retrieval_top_k"]
         self._threshold = threshold if threshold is not None else config["retrieval_threshold"]
 
-    def retrieve(self, query: str) -> List[dict]:
-        return self._store.search(query=query, top_k=self._top_k, threshold=self._threshold)
+    def retrieve(self, query: str, stage: str | None = None) -> List[dict]:
+        return self._store.search(
+            query=query, top_k=self._top_k, threshold=self._threshold, stage_filter=stage
+        )
 
     @property
     def top_k(self) -> int:

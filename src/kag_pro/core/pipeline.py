@@ -1,4 +1,4 @@
-"""RAG pipeline orchestrator with optional KG enhancement."""
+"""RAG pipeline orchestrator with verification, evaluation, and recommendation."""
 
 from pathlib import Path
 from typing import List
@@ -11,7 +11,7 @@ from kag_pro.core.generator import Generator
 
 
 class RAGPipeline:
-    """End-to-end RAG pipeline with optional knowledge graph enhancement."""
+    """End-to-end RAG pipeline with KG enhancement, verification, and recommendation."""
 
     def __init__(self, chunk_size: int = 500, chunk_overlap: int = 50, persist_dir: str | None = None, use_kg: bool = False):
         self._splitter = ChineseTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -19,15 +19,19 @@ class RAGPipeline:
         self._retriever = Retriever(vector_store=self._vector_store)
         self._generator = Generator()
         self._diagnoser = None
+        self._verifier = None
+        self._recommender = None
+        self._kg = None
         self._kg_retriever = None
+        self._error_history: List[dict] = []
         if use_kg:
             self._init_kg()
 
     def _init_kg(self):
         from kag_pro.kg.extractor import EntityExtractor
         from kag_pro.kg.kg_retriever import KGRetriever
-        kg = EntityExtractor.build_default_kg()
-        self._kg_retriever = KGRetriever(kg=kg, vector_store=self._vector_store)
+        self._kg = EntityExtractor.build_default_kg()
+        self._kg_retriever = KGRetriever(kg=self._kg, vector_store=self._vector_store)
 
     def index_documents(self, directory: str | Path) -> List[Document]:
         loader = DocumentLoader(directory)
@@ -38,19 +42,20 @@ class RAGPipeline:
         self._vector_store.add_documents(chunks)
         return chunks
 
-    def query(self, question: str) -> dict:
+    def query(self, question: str, verify: bool = False) -> dict:
         from kag_pro.stage.detector import StageDetector
 
-        # KG-enhanced or standard retrieval
+        stage_enum = StageDetector.detect(question)
+        stage_name = StageDetector.get_stage_name(stage_enum)
+
         if self._kg_retriever:
             hits = self._kg_retriever.retrieve(question)
             enrichment = self._kg_retriever.get_enrichment(question)
         else:
-            hits = self._retriever.retrieve(question)
+            hits = self._retriever.retrieve(question, stage=stage_enum.value)
             enrichment = {}
 
         answer = self._generator.generate(question, hits)
-        stage = StageDetector.detect(question)
 
         sources = [
             {
@@ -66,11 +71,17 @@ class RAGPipeline:
         result = {
             "question": question,
             "answer": answer,
-            "stage": StageDetector.get_stage_name(stage),
+            "stage": stage_name,
             "sources": sources,
         }
         if enrichment:
             result["kg_enrichment"] = enrichment
+
+        # Factual consistency verification
+        if verify:
+            v = self._get_verifier()
+            result["verification"] = v.verify(question, answer)
+
         return result
 
     def diagnose(self, question: str, student_answer: str, correct_answer: str, stage: str | None = None) -> dict:
@@ -86,7 +97,44 @@ class RAGPipeline:
             stage = stage_map.get(stage, stage)
         result = self._diagnoser.diagnose(question, student_answer, correct_answer, stage=stage)
         result["stage"] = stage
+
+        # Record error for recommendation
+        self._error_history.append({
+            "question": question,
+            "knowledge_point": result["knowledge_point"],
+            "error_type": result["error_type"],
+        })
+
+        # Get exercise recommendations
+        if self._kg and len(self._error_history) >= 2:
+            rec = self._get_recommender()
+            result["exercises"] = rec.recommend(self._error_history, count=3)
+
         return result
+
+    def evaluate(self, test_data: List[dict]) -> dict:
+        """Run evaluation on a test dataset. Each item: {question, reference, sources?}"""
+        from kag_pro.evaluation.metrics import RAGEvaluator
+        evaluator = RAGEvaluator()
+        scored_data = []
+        for item in test_data:
+            result = self.query(item["question"])
+            scored_data.append({
+                "question": item["question"],
+                "generated": result["answer"],
+                "reference": item.get("reference", ""),
+                "sources": result.get("sources", []),
+            })
+        return evaluator.evaluate_batch(scored_data)
+
+    def recommend_exercises(self, count: int = 3) -> dict:
+        """Get exercise recommendations based on accumulated error history."""
+        if not self._kg:
+            return {"error": "KG not initialized. Use use_kg=True."}
+        if not self._error_history:
+            return {"error": "No error history. Run diagnose() first."}
+        rec = self._get_recommender()
+        return rec.recommend(self._error_history, count=count)
 
     @property
     def document_count(self) -> int:
@@ -94,3 +142,15 @@ class RAGPipeline:
 
     def clear_index(self) -> None:
         self._vector_store.clear()
+
+    def _get_verifier(self):
+        if self._verifier is None:
+            from kag_pro.core.verifier import FactualVerifier
+            self._verifier = FactualVerifier(vector_store=self._vector_store)
+        return self._verifier
+
+    def _get_recommender(self):
+        if self._recommender is None:
+            from kag_pro.diagnosis.recommender import ExerciseRecommender
+            self._recommender = ExerciseRecommender(kg=self._kg, vector_store=self._vector_store)
+        return self._recommender
