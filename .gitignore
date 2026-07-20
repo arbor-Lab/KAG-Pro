@@ -20,3 +20,4 @@ venv/
 
 # Logs
 *.log
+data/chroma_db/
