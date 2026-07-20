@@ -123,6 +123,14 @@ class RAGPipeline:
 
         return result
 
+    def exercises(self, question: str, student_answer: str, correct_answer: str) -> dict:
+        """Generate practice exercises based on error classification."""
+        if self._diagnoser is None:
+            from kag_pro.diagnosis.diagnoser import ErrorDiagnoser
+            self._diagnoser = ErrorDiagnoser(vector_store=self._vector_store)
+        c = self._diagnoser._classifier.classify(question, student_answer, correct_answer)
+        return {"knowledge_point": c["knowledge_point"], "exercises": self._diagnoser.generate_exercises(c["knowledge_point"], c["error_type"])}
+
     def evaluate(self, test_data: List[dict]) -> dict:
         """Run evaluation on a test dataset. Each item: {question, reference, sources?}"""
         from kag_pro.evaluation.metrics import RAGEvaluator

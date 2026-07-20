@@ -74,22 +74,26 @@ class ErrorDiagnoser:
     ) -> str:
         persona = _STAGE_PROMPTS.get(stage, _STAGE_PROMPTS["middle"])
 
-        prompt = f"""{persona}学生做错了一道题，请给出个性化反馈。
+        prompt = f"""{persona}学生做错了一道题，请给出个性化学习反馈。
 
 原题：{question}
-
 学生的错误答案：{student_answer}
-
 正确答案：{correct_answer}
-
 诊断出的错误类型：{error_type}
 提示：{hint}
 
-相关知识点资料：
-{remedial_text if remedial_text else "（无相关资料）"}
+相关知识点内容：
+{remedial_text if remedial_text else "（暂无相关资料）"}
 
-请用温和鼓励的语气，先肯定学生的努力，再指出错误原因和正确解法，最后给出1-2个类似题供巩固。
-回答控制在200字以内。"""
+请按以下格式回复（不要用Markdown符号）：
+
+错误分析：
+（用1-2句话温和地指出学生错在哪里）
+
+知识回顾：
+（用2-3句话回顾相关的知识点，帮助学生理解正确解法）
+
+总字数150-250字。"""
         return self._generator._client.chat.completions.create(
             model=self._generator._model,
             messages=[
@@ -97,5 +101,34 @@ class ErrorDiagnoser:
                 {"role": "user", "content": prompt},
             ],
             temperature=0.3,
-            max_tokens=500,
+            max_tokens=400,
         ).choices[0].message.content or ""
+    def generate_exercises(self, knowledge_point: str, error_type: str, count: int = 3) -> str:
+        """Generate similar practice exercises for a given knowledge point.
+
+        Args:
+            knowledge_point: the knowledge point to practice
+            error_type: the type of error the student made
+            count: number of exercises (default 3)
+
+        Returns:
+            formatted exercise string with difficulty progression
+        """
+        prompt = f"""你是一位学科教师。学生在一个知识点上犯了错误，请生成{count}道同类型练习题帮助巩固。
+
+知识点：{knowledge_point}
+错误类型：{error_type}
+
+要求：
+1. 难度由低到高排列（基础 → 中等 → 提高）
+2. 每道题标注难度
+3. 每道题给出答案
+4. 不要用Markdown符号
+5. 总字数150-250字"""
+        resp = self._generator._client.chat.completions.create(
+            model=self._generator._model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.5, max_tokens=500,
+        )
+        return resp.choices[0].message.content or ""
+

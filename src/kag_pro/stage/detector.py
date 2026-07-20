@@ -104,7 +104,7 @@ class StageDetector:
 
             # Parse stage
             if "大学" in text:
-                return EducationStage.UNIVERSITY
+                return EducationStage.HIGH  # 大学内容降级为高中
             if "高中" in text:
                 return EducationStage.HIGH
             if "初中" in text:

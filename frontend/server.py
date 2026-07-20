@@ -110,6 +110,25 @@ def diagnose(req: DiagnosisRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+
+class ExerciseResponse(BaseModel):
+    knowledge_point: str
+    exercises: str
+
+
+@app.post("/api/exercises", response_model=ExerciseResponse)
+def exercises(req: DiagnosisRequest):
+    try:
+        pipeline = get_pipeline()
+        result = pipeline.exercises(req.question, req.student_answer, req.correct_answer)
+        return ExerciseResponse(
+            knowledge_point=result["knowledge_point"],
+            exercises=result["exercises"],
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/api/health")
 def health():
     return {"status": "ok"}

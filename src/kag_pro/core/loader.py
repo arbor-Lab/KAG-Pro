@@ -26,15 +26,13 @@ class DocumentLoader:
 
     # Stage inference from filename prefix: 01-05=primary, 06-11=middle, 12-15=high, 16-18=university
     _STAGE_FROM_PREFIX = {}
-    for i in range(1, 19):
+    for i in range(1, 21):
         if i <= 5:
             _STAGE_FROM_PREFIX[str(i).zfill(2)] = "primary"
         elif i <= 11:
             _STAGE_FROM_PREFIX[str(i).zfill(2)] = "middle"
-        elif i <= 15:
-            _STAGE_FROM_PREFIX[str(i).zfill(2)] = "high"
         else:
-            _STAGE_FROM_PREFIX[str(i).zfill(2)] = "university"
+            _STAGE_FROM_PREFIX[str(i).zfill(2)] = "high"
 
     _SUBJECT_KEYWORDS = {
         "math": ["数学", "代数", "几何", "函数", "方程", "分数", "小数", "三角形", "四则", "面积", "周长", "概率", "统计", "导数", "微积分", "数列", "排列"],

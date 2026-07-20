@@ -117,6 +117,8 @@ header .badge { font-size:11px; background:var(--accent); color:#fff; padding:2p
     </div>
     <button onclick="diagnose()">开始诊断</button>
     <div class="diag-result" id="diagResult"></div>
+    <button id="exerciseBtn" onclick="getExercises()" style="display:none;margin-top:8px;background:#5436da;">相似题目练习</button>
+    <div class="diag-result" id="exerciseResult" style="display:none;"></div>
   </aside>
 </div>
 
@@ -222,6 +224,7 @@ async function diagnose() {
   const q = document.getElementById('diagQuestion').value.trim();
   const s = document.getElementById('diagStudent').value.trim();
   const c = document.getElementById('diagCorrect').value.trim();
+  _lastDiag = {q, s, c};
   if (!q || !s || !c) return;
   const result = document.getElementById('diagResult');
   result.style.display = 'block';

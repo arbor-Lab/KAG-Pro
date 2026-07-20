@@ -37,7 +37,7 @@ class VectorStore:
             return
         texts = [doc.text for doc in documents]
         embeddings = self._embedder.embed_batch(texts)
-        ids = [self._embedder.text_hash(doc.text) for doc in documents]
+        ids = [f"{self._embedder.text_hash(doc.text)}_{i}" for i, doc in enumerate(documents)]
         metadatas = [doc.metadata for doc in documents]
         self._collection.upsert(
             ids=ids, embeddings=embeddings, documents=texts, metadatas=metadatas
