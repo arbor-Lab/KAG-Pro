@@ -41,12 +41,13 @@ class StageDetector:
     """
 
     @classmethod
-    def detect(cls, question: str, use_llm: bool = True) -> EducationStage:
+    def detect(cls, question: str, use_llm: bool = True, generator=None) -> EducationStage:
         """Detect education stage for a question.
 
         Args:
             question: the question text
             use_llm: if True, use LLM for deep analysis (more accurate)
+            generator: optional shared GeneratorPort instance
         """
         # Fast path: keyword matching for instant detection
         fast_result = cls._keyword_detect(question)
@@ -55,7 +56,7 @@ class StageDetector:
 
         # Deep path: LLM knowledge module analysis
         if use_llm:
-            return cls._llm_detect(question)
+            return cls._llm_detect(question, generator=generator)
 
         return EducationStage.MIDDLE  # Safe default
 
@@ -72,10 +73,10 @@ class StageDetector:
         return None  # Uncertain → use LLM
 
     @classmethod
-    def _llm_detect(cls, question: str) -> EducationStage:
+    def _llm_detect(cls, question: str, generator=None) -> EducationStage:
         """Use LLM to identify the knowledge module and map to stage."""
         from kag_pro.core.generator import Generator
-        gen = Generator()
+        gen = generator or Generator()
 
         prompt = f"""分析下面这道题目考察的知识模块，然后判断它属于哪个学段。
 
@@ -87,19 +88,16 @@ class StageDetector:
 原因：<一句话解释为什么是这个学段>"""
 
         try:
-            resp = gen._client.chat.completions.create(
-                model=gen._model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0, max_tokens=80,
+            text = gen.call(
+                system="你是一位教育分析专家。", user=prompt, temperature=0, max_tokens=80
             )
-            text = resp.choices[0].message.content or ""
 
-            # Parse knowledge module
-            knowledge_module = ""
+            # Parse knowledge module (reserved for future use)
+            _knowledge_module = ""
             if "知识模块" in text or "知识模块" in text:
                 for line in text.split("\n"):
                     if "知识模块" in line or "知识模块" in line:
-                        knowledge_module = line.split("：", 1)[-1].split(":", 1)[-1].strip()
+                        _knowledge_module = line.split("：", 1)[-1].split(":", 1)[-1].strip()
                         break
 
             # Parse stage
@@ -116,10 +114,10 @@ class StageDetector:
             return EducationStage.MIDDLE
 
     @classmethod
-    def analyze(cls, question: str) -> dict:
+    def analyze(cls, question: str, generator=None) -> dict:
         """Full analysis: return knowledge module + stage + confidence."""
         from kag_pro.core.generator import Generator
-        gen = Generator()
+        gen = generator or Generator()
 
         prompt = f"""分析下面这道题目考察的知识模块，然后判断它属于哪个学段。
 
@@ -132,12 +130,9 @@ class StageDetector:
 原因：<一句话>"""
 
         try:
-            resp = gen._client.chat.completions.create(
-                model=gen._model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0, max_tokens=100,
+            text = gen.call(
+                system="你是一位教育分析专家。", user=prompt, temperature=0, max_tokens=100
             )
-            text = resp.choices[0].message.content or ""
 
             result = {"knowledge_module": "", "stage": "初中", "subject": "unknown", "reason": ""}
             for line in text.split("\n"):
@@ -167,5 +162,5 @@ class StageDetector:
 
     # Backward compatibility
     @classmethod
-    def robust_detect(cls, question: str) -> EducationStage:
-        return cls.detect(question, use_llm=True)
+    def robust_detect(cls, question: str, generator=None) -> EducationStage:
+        return cls.detect(question, use_llm=True, generator=generator)

@@ -1,97 +1,86 @@
 """Paper generation — knowledge tree extraction and LLM-driven question generation."""
 
-import re
 import json
-from pathlib import Path
-from typing import List, Dict, Optional
+import re
 from collections import OrderedDict
+from pathlib import Path
 
 from kag_pro.core.generator import Generator
 
 
 class KnowledgeTreeExtractor:
-    """Parse curriculum_standards.txt into a stage → subject → topics tree."""
-
-    def __init__(self, standards_path: Optional[str] = None):
+    def __init__(self, standards_path: str | None = None):
         if standards_path is None:
             standards_path = str(
                 Path(__file__).resolve().parent.parent / "data" / "curriculum_standards.txt"
             )
         self._path = standards_path
-        self._tree: Dict[str, Dict[str, List[str]]] = OrderedDict()
+        self._tree: dict[str, dict[str, list[str]]] = OrderedDict()
         self._parse()
 
     def _parse(self):
         text = Path(self._path).read_text(encoding="utf-8")
-
-        # Split into stage sections by separator lines
-        sections = re.split(r"\n?=+\n", text)
-        # Filter out preamble
+        sections = [s.strip() for s in re.split(r"=+\n", text.strip()) if s.strip()]
         stage_map = {"小学": "小学", "初中": "初中", "高中": "高中", "大学": "大学"}
 
-        for section in sections:
-            section = section.strip()
-            if not section:
-                continue
-            # Detect stage
+        for i in range(1, len(sections), 2):
+            if i + 1 >= len(sections):
+                break
+            header = sections[i]
+            content = sections[i + 1]
             stage_name = None
-            for key in stage_map:
-                if key in section[:20]:
-                    stage_name = stage_map[key]
+            for key, label in stage_map.items():
+                if key in header[:20]:
+                    stage_name = label
                     break
             if stage_name is None:
                 continue
 
-            # Parse subjects and topics within the section
-            subjects: Dict[str, List[str]] = OrderedDict()
+            subjects: dict[str, list[str]] = OrderedDict()
             current_subject = None
+            in_category = False
 
-            for line in section.split("\n"):
+            for line in content.split("\n"):
                 stripped = line.strip()
                 if not stripped or stripped.startswith("#"):
                     continue
 
-                # Subject header: [数学]
                 if stripped.startswith("[") and stripped.endswith("]"):
                     current_subject = stripped[1:-1]
                     if current_subject not in subjects:
                         subjects[current_subject] = []
+                    in_category = False
                     continue
 
-                # Topic line: must be indented (at least 2 spaces) under a subject
-                if current_subject and line.startswith("  "):
-                    topic = stripped
-                    # Skip category headers (lines ending with : that have no parens)
-                    if topic.endswith("：") or topic.endswith(":"):
-                        continue
-                    # Skip sub-headings that look like categories (no parens, not a concrete topic)
-                    # Clean the topic text
-                    subjects[current_subject].append(topic)
+                if current_subject and (stripped.endswith(":") or stripped.endswith(":")) and ("错误" in stripped or "易错" in stripped):
+                    in_category = True
+                    continue
+
+                if current_subject and in_category:
+                    continue
+
+                if current_subject and stripped:
+                    subjects[current_subject].append(stripped)
 
             if subjects:
+                if "语文" in subjects:
+                    del subjects["语文"]
                 self._tree[stage_name] = subjects
 
-    def get_stages(self) -> List[str]:
-        """Return list of available stages."""
+    def get_stages(self) -> list[str]:
         return list(self._tree.keys())
 
-    def get_subjects(self, stage: str) -> List[str]:
-        """Return list of subjects for a given stage."""
-        stage_data = self._tree.get(stage, {})
-        return list(stage_data.keys())
+    def get_subjects(self, stage: str) -> list[str]:
+        return list(self._tree.get(stage, {}).keys())
 
-    def get_topics(self, stage: str, subject: str) -> List[str]:
-        """Return list of knowledge point topics for a stage+subject."""
+    def get_topics(self, stage: str, subject: str) -> list[str]:
         return self._tree.get(stage, {}).get(subject, [])
 
-    def get_tree(self) -> Dict:
-        """Return the full parsed tree."""
+    def get_tree(self) -> dict:
         return dict(self._tree)
 
 
 class PaperGenerator:
-    """Generate practice papers using LLM based on selected knowledge points."""
-
     def __init__(self, generator: Generator):
         self._generator = generator
 
@@ -99,96 +88,102 @@ class PaperGenerator:
         self,
         stage: str,
         subject: str,
-        topics: List[str],
+        topics: list[str],
         count: int = 5,
         difficulty: str = "中等",
-    ) -> Dict:
-        """Generate a paper with questions, answers, and analysis.
-
-        Args:
-            stage: education stage (小学/初中/高中/大学)
-            subject: subject name (数学/物理/化学/生物/语文/英语/历史/地理)
-            topics: selected knowledge points
-            count: number of questions (1-20)
-            difficulty: 基础/中等/提高/混合
-
-        Returns:
-            dict with keys: title, stage, subject, topics, difficulty, count,
-            created_at, questions (list of {id, question, answer, analysis, difficulty})
-        """
+        question_types: list[dict] | None = None,
+        allocations: list[dict] | None = None,
+    ) -> dict:
         topics_str = "、".join(topics)
+
+        alloc_detail = ""
+        if allocations and len(allocations) > 0:
+            by_topic = {}
+            for a in allocations:
+                tn = a.get("topic", 0)
+                tp = a.get("type", "")
+                cnt = a.get("count", 0)
+                if tn not in by_topic:
+                    by_topic[tn] = []
+                by_topic[tn].append(f"{tp}{cnt}道" if cnt > 0 else "")
+            parts = []
+            for tn, types in by_topic.items():
+                topic_name = topics[tn] if tn < len(topics) else f"知识点{tn+1}"
+                detail = "、".join([t for t in types if t])
+                if detail:
+                    parts.append(f"{topic_name}：{detail}")
+            alloc_detail = "\n".join(parts)
+
+        type_instruction = ""
+        if question_types and len(question_types) > 0:
+            type_parts = []
+            for qt in question_types:
+                tname = qt.get("type", "")
+                tcount = qt.get("count", 1)
+                type_parts.append(f"{tname}{tcount}道")
+            type_instruction = f"题型分布：{', '.join(type_parts)}。"
+        else:
+            type_instruction = f"题型不限，共{count}道题。"
 
         difficulty_instruction = ""
         if difficulty == "混合":
-            difficulty_instruction = (
-                f"难度分布：共{count}题，其中约40%基础题、40%中等题、20%提高题。"
-            )
+            difficulty_instruction = "难度分布：约40%基础、40%中等、20%提高。"
         else:
             difficulty_instruction = f"所有题目难度统一为：{difficulty}。"
 
-        prompt = f"""你是一位{stage}{subject}教师。请根据以下知识点生成{count}道练习题。
+        alloc_text = ""
+        if alloc_detail:
+            alloc_text = f"\n每题知识点分配：\n{alloc_detail}\n"
+
+        prompt = f"""你是一位{stage}{subject}教师。请严格按以下要求生成恰好{count}道练习题，不多不少。
 
 知识点：{topics_str}
-难度要求：{difficulty_instruction}
-
-请严格按照以下JSON格式输出，不要加任何其他文字：
+{type_instruction}
+{difficulty_instruction}{alloc_text}
+请严格按照以下JSON格式输出：
 {{
   "questions": [
     {{
       "id": 1,
-      "question": "题目内容",
+      "type": "选择题",
+      "question": "题目内容（选择题需包含ABCD四个选项）",
       "answer": "标准答案",
-      "analysis": "解析（包含解题思路、关键知识点提示、易错点提醒）",
+      "analysis": "解析",
       "difficulty": "基础/中等/提高"
     }}
   ]
 }}
 
 要求：
-1. 题目要有代表性，覆盖所选知识点
-2. 答案要准确完整
-3. 解析要详细，包含思路点拨
-4. 如果难度为混合，合理分配基础/中等/提高比例"""
+1. 必须恰好生成{count}道题
+2. 选择题必须给出ABCD四个选项
+3. 填空题答案完整，简答题答案要点清晰
+4. 解析详细"""
 
-        resp = self._generator._client.chat.completions.create(
-            model=self._generator._model,
-            messages=[
-                {
-                    "role": "system",
-                    "content": f"你是一位经验丰富的{stage}{subject}教师。你生成的题目精确、答案规范、解析详尽。请严格按照JSON格式输出。",
-                },
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.5,
-            max_tokens=3000,
-        )
+        questions = []
+        for attempt in range(3):
+            text = self._generator.call(
+                system=f"必须生成恰好{count}道题目。严格JSON输出。",
+                user=prompt,
+                temperature=0.5 + attempt * 0.1,
+                max_tokens=4000,
+            )
+            try:
+                json_match = re.search(r"\{[\s\S]*\}", text)
+                data = json.loads(json_match.group()) if json_match else json.loads(text)
+                questions = data.get("questions", [])
+            except json.JSONDecodeError:
+                questions = []
+            if len(questions) >= count:
+                questions = questions[:count]
+                break
 
-        text = resp.choices[0].message.content or ""
+        if not questions:
+            questions = [{"id": 1, "type": "简答题", "question": "生成失败", "answer": "", "analysis": "", "difficulty": "中等"}]
 
-        # Parse JSON from response
-        try:
-            # Extract JSON block if wrapped in code fences
-            json_match = re.search(r"\{[\s\S]*\}", text)
-            if json_match:
-                data = json.loads(json_match.group())
-            else:
-                data = json.loads(text)
-            questions = data.get("questions", [])
-        except json.JSONDecodeError:
-            # Fallback: return raw text as a single question
-            questions = [
-                {
-                    "id": 1,
-                    "question": text[:500],
-                    "answer": "（解析失败，请重试）",
-                    "analysis": "",
-                    "difficulty": difficulty if difficulty != "混合" else "中等",
-                }
-            ]
-
-        # Ensure each question has required fields
         for q in questions:
             q.setdefault("id", questions.index(q) + 1)
+            q.setdefault("type", "简答题")
             q.setdefault("question", "")
             q.setdefault("answer", "")
             q.setdefault("analysis", "")
@@ -197,11 +192,12 @@ class PaperGenerator:
         from datetime import datetime
 
         return {
-            "title": f"{stage}{subject}练习卷 — {topics_str[:30]}{'...' if len(topics_str) > 30 else ''}",
+            "title": f"{stage}{subject}练习卷 - {topics_str[:30]}{'...' if len(topics_str) > 30 else ''}",
             "stage": stage,
             "subject": subject,
             "topics": topics,
             "difficulty": difficulty,
+            "question_types": question_types or [],
             "count": len(questions),
             "created_at": datetime.now().isoformat(),
             "questions": questions,

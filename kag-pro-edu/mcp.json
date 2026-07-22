@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "kag-pro-edu": {
+      "command": "python",
+      "args": ["-m", "kag_pro.mcp_server.server"],
+      "env": {
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+        "LLM_MODEL": "${LLM_MODEL:-gpt-4o}",
+        "EMBEDDING_MODEL": "${EMBEDDING_MODEL:-text-embedding-3-small}"
+      }
+    }
+  }
+}

@@ -1,13 +1,7 @@
-# _*_ encoding: utf-8 _*_
-import os
-import argparse
-import pickle
-import pandas as pd
-import numpy as np
-from random import sample
-import json
-
 import sys
+
+import numpy as np
+
 sys.path.append("../")
 from models.aml import AML
 
@@ -53,7 +47,7 @@ class AutoFillBlank:
                    "save_dir": path,
                    "model_dir": path
                    }
-        
+
         ai = AML(save_dir=path)
         model_class, config = ai.get_model_config("en_roberta_large")
         config.update(user_config)

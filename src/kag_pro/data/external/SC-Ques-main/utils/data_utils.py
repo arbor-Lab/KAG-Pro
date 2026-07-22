@@ -1,6 +1,7 @@
 import os
-import numpy as np
+
 import pandas as pd
+
 
 def init_dir(dir_path):
     """Create dir if not exists.
@@ -86,7 +87,7 @@ def get_one_data_report(path, name=""):
     raw_report_norm = df['label'].value_counts(normalize=True).to_dict()
     report_norm = {}
     for key, value in raw_report_norm.items():
-        report_norm["{}占比".format(key)] = round(value, 3)
+        report_norm[f"{key}占比"] = round(value, 3)
     report.update(report_norm)
     return report
 

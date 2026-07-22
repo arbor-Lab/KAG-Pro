@@ -1,11 +1,10 @@
 """Chinese text splitter with semantic-aware chunking."""
 
 import re
-from typing import List
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from kag_pro.core.loader import Document
+from kag_pro.core.types import Document
 
 
 class ChineseTextSplitter:
@@ -25,15 +24,15 @@ class ChineseTextSplitter:
             r"(?:第[一二三四五六七八九十百千0-9]+[章节课]|(?:[一二三四五六七八九十]+|[0-9]+)[、.)）])"
         )
 
-    def split(self, documents: List[Document]) -> List[Document]:
-        chunks: List[Document] = []
+    def split(self, documents: list[Document]) -> list[Document]:
+        chunks: list[Document] = []
         for doc in documents:
             doc_chunks = self._split_document(doc)
             chunks.extend(doc_chunks)
         return chunks
 
-    def _split_document(self, doc: Document) -> List[Document]:
-        chunks: List[Document] = []
+    def _split_document(self, doc: Document) -> list[Document]:
+        chunks: list[Document] = []
         sections = self._split_by_sections(doc.text)
         for section_text, section_title in sections:
             base_meta = dict(doc.metadata)
@@ -49,7 +48,7 @@ class ChineseTextSplitter:
                 chunks.append(chunk)
         return chunks
 
-    def _split_by_sections(self, text: str) -> List[tuple]:
+    def _split_by_sections(self, text: str) -> list[tuple]:
         lines = text.split("\n")
         sections = []
         current_lines = []

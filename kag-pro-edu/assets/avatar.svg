@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="KAG-Pro">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4f46e5"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <!-- graduation cap -->
+  <path d="M64 34 L104 52 L64 70 L24 52 Z" fill="#ffffff"/>
+  <path d="M44 60 L44 80 C44 88 84 88 84 80 L84 60 L64 69 Z" fill="#ffffff" opacity="0.85"/>
+  <line x1="104" y1="52" x2="104" y2="78" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="104" cy="82" r="5" fill="#ffffff"/>
+  <text x="64" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">KAG</text>
+</svg>

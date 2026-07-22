@@ -1,5 +1,6 @@
-from sklearn.metrics import *
 import pandas as pd
+from sklearn.metrics import *
+
 
 def get_model_metrics(y_true, y_pred, show=False,tradeoff=0.5):
     """Compute metrics to evaluate the model of a classification.
@@ -32,7 +33,7 @@ def get_model_metrics(y_true, y_pred, show=False,tradeoff=0.5):
     if show:
         for name, value in zip(('Accuracy', 'Precision', 'Recall', 'F_meansure', 'AUC_Value'),
                                (accuracy, precision, recall, f1, auc)):
-            print('{} : {:.4f}'.format(name, value))
+            print(f'{name} : {value:.4f}')
     report = {'Accuracy': round(accuracy, 4),
               'Precision': round(precision, 4),
               'Recall': round(recall, 4),

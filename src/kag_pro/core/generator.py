@@ -1,11 +1,9 @@
 """LLM answer generation via DeepSeek (OpenAI-compatible API)."""
 
-from typing import List
 
 from openai import OpenAI
 
 from kag_pro.utils.config import get_config
-
 
 _SYSTEM_PROMPT = """\
 你是一个面向中国K-12学生的AI学习助教。请根据提供的教材资料回答学生的问题。
@@ -41,7 +39,29 @@ class Generator:
             base_url=config["openai_base_url"],
         )
 
-    def generate(self, question: str, context_chunks: List[dict]) -> str:
+    def call(
+        self,
+        system: str,
+        user: str,
+        temperature: float = 0.3,
+        max_tokens: int = 800,
+    ) -> str:
+        """Unified LLM call entry point for all modules.
+
+        Replaces direct access to _client.chat.completions.create().
+        """
+        response = self._client.chat.completions.create(
+            model=self._model,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+        return response.choices[0].message.content or ""
+
+    def generate(self, question: str, context_chunks: list[dict]) -> str:
         if not context_chunks:
             return self._generate_no_context(question)
         context_text = self._format_context(context_chunks)
@@ -81,8 +101,8 @@ class Generator:
         return response.choices[0].message.content or ""
 
     @staticmethod
-    def _format_context(chunks: List[dict]) -> str:
-        parts: List[str] = []
+    def _format_context(chunks: list[dict]) -> str:
+        parts: list[str] = []
         for i, chunk in enumerate(chunks, 1):
             source = chunk.get("metadata", {}).get("source", "未知")
             score = chunk.get("score", 0)

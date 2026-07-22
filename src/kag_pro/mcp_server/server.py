@@ -1,0 +1,345 @@
+"""MCP Server — exposes KAG-Pro education capabilities as MCP tools.
+
+Implements the Model Context Protocol (MCP) over stdio transport,
+allowing Qoder agents and other MCP-compatible clients to call
+KAG-Pro's query, diagnosis, recommendation, and paper generation
+capabilities as programmatic tools.
+
+Run with: python -m kag_pro.mcp_server.server
+"""
+
+import json
+import sys
+import traceback
+from typing import Any
+
+from kag_pro.core.bootstrap import create_default_registry
+from kag_pro.core.event_bus import EventBus
+from kag_pro.orchestration.orchestrator import EducationOrchestrator
+
+# === Tool Definitions ===
+
+TOOLS = [
+    {
+        "name": "kag_pro_query",
+        "description": (
+            "智能问答：对学生问题进行学段检测、知识检索（KG增强）、LLM生成答案、可选事实验证。"
+            "适用于学科知识提问、解题思路、概念解释等场景。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "question": {"type": "string", "description": "学生的问题"},
+                "verify": {
+                    "type": "boolean",
+                    "default": False,
+                    "description": "是否进行事实一致性验证",
+                },
+            },
+            "required": ["question"],
+        },
+    },
+    {
+        "name": "kag_pro_diagnose",
+        "description": (
+            "错题诊断：分析学生的错误答案，识别错误类型和知识点，"
+            "生成个性化反馈和补救内容。适用于学生做错题后的诊断分析。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "question": {"type": "string", "description": "原题"},
+                "student_answer": {"type": "string", "description": "学生的错误答案"},
+                "correct_answer": {"type": "string", "description": "正确答案"},
+                "stage": {
+                    "type": "string",
+                    "description": "学段（可选）：primary/middle/high",
+                },
+            },
+            "required": ["question", "student_answer", "correct_answer"],
+        },
+    },
+    {
+        "name": "kag_pro_recommend",
+        "description": (
+            "个性化推荐：基于累积的错题历史，利用知识图谱分析薄弱知识点，"
+            "生成针对性练习题和学习路径。需要在 diagnose 之后调用。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "default": 3,
+                    "description": "推荐练习题数量",
+                },
+            },
+        },
+    },
+    {
+        "name": "kag_pro_exercises",
+        "description": "生成练习题：根据错题分类结果，即时生成同类型练习题（难度递进）。",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "question": {"type": "string"},
+                "student_answer": {"type": "string"},
+                "correct_answer": {"type": "string"},
+            },
+            "required": ["question", "student_answer", "correct_answer"],
+        },
+    },
+    {
+        "name": "kag_pro_generate_paper",
+        "description": (
+            "自动出卷：按学段、学科、知识点、难度、题型生成试卷。"
+            "返回JSON格式试卷，包含题目、答案和解析。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "stage": {"type": "string", "description": "小学/初中/高中"},
+                "subject": {"type": "string", "description": "数学/物理/化学等"},
+                "topics": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "知识点列表",
+                },
+                "count": {"type": "integer", "default": 5, "description": "题目数量"},
+                "difficulty": {
+                    "type": "string",
+                    "default": "中等",
+                    "description": "基础/中等/提高/混合",
+                },
+                "question_types": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "type": {"type": "string"},
+                            "count": {"type": "integer"},
+                        },
+                    },
+                    "description": "题型分配（可选）",
+                },
+            },
+            "required": ["stage", "subject", "topics"],
+        },
+    },
+    {
+        "name": "kag_pro_index_documents",
+        "description": "索引文档：将指定目录下的教材文件（.txt/.pdf/.md）加载到向量知识库。",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "directory": {"type": "string", "description": "教材文件目录路径"},
+            },
+            "required": ["directory"],
+        },
+    },
+    {
+        "name": "kag_pro_get_knowledge_tree",
+        "description": "获取知识树：返回按学段和学科组织的知识点结构，用于出卷和导航。",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "kag_pro_kg_search",
+        "description": (
+            "知识图谱查询：搜索知识图谱中的实体，获取前置知识和常见错误。"
+            "适用于理解知识依赖关系和易错点。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "搜索关键词"},
+            },
+            "required": ["query"],
+        },
+    },
+    {
+        "name": "kag_pro_health",
+        "description": "健康检查：返回系统状态和已索引文档数量。",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+]
+
+
+class KAGProMCPServer:
+    """MCP server wrapping EducationOrchestrator capabilities as tools."""
+
+    def __init__(self, use_kg: bool = True):
+        registry = create_default_registry(use_kg=use_kg)
+        bus = EventBus()
+        self._orchestrator = EducationOrchestrator(registry, bus)
+        self._indexed = False
+
+    def list_tools(self) -> list[dict]:
+        """Return the list of available MCP tools."""
+        return TOOLS
+
+    def handle_tool_call(self, tool_name: str, arguments: dict) -> dict:
+        """Handle a tool call and return the result."""
+        try:
+            return self._dispatch(tool_name, arguments)
+        except Exception as e:
+            return {
+                "error": str(e),
+                "traceback": traceback.format_exc(),
+            }
+
+    def _dispatch(self, tool_name: str, arguments: dict) -> dict:
+        """Route tool calls to the appropriate orchestrator method."""
+        if tool_name == "kag_pro_query":
+            result = self._orchestrator.query(
+                question=arguments["question"],
+                verify=arguments.get("verify", False),
+            )
+            return result.to_dict()
+
+        elif tool_name == "kag_pro_diagnose":
+            result = self._orchestrator.diagnose(
+                question=arguments["question"],
+                student_answer=arguments["student_answer"],
+                correct_answer=arguments["correct_answer"],
+                stage=arguments.get("stage"),
+            )
+            return result.to_dict()
+
+        elif tool_name == "kag_pro_recommend":
+            return self._orchestrator.recommend(
+                count=arguments.get("count", 3),
+            )
+
+        elif tool_name == "kag_pro_exercises":
+            return self._orchestrator.exercises(
+                question=arguments["question"],
+                student_answer=arguments["student_answer"],
+                correct_answer=arguments["correct_answer"],
+            )
+
+        elif tool_name == "kag_pro_generate_paper":
+            return self._orchestrator.generate_paper(
+                stage=arguments["stage"],
+                subject=arguments["subject"],
+                topics=arguments["topics"],
+                count=arguments.get("count", 5),
+                difficulty=arguments.get("difficulty", "中等"),
+                question_types=arguments.get("question_types"),
+            )
+
+        elif tool_name == "kag_pro_index_documents":
+            count = self._orchestrator.index_documents(arguments["directory"])
+            self._indexed = True
+            return {"indexed": count, "directory": arguments["directory"]}
+
+        elif tool_name == "kag_pro_get_knowledge_tree":
+            from kag_pro.core.paper_generator import KnowledgeTreeExtractor
+            tree = KnowledgeTreeExtractor()
+            return tree.get_tree()
+
+        elif tool_name == "kag_pro_kg_search":
+            if self._orchestrator.registry.has("knowledge-graph"):
+                kg = self._orchestrator.registry.resolve("knowledge-graph")
+                entities = kg.search_entities(arguments["query"])
+                results = []
+                for e in entities[:10]:
+                    prereqs = kg.get_prerequisites(e["id"])
+                    mistakes = kg.get_common_mistakes(e["id"])
+                    results.append({
+                        "entity": e,
+                        "prerequisites": [p["name"] for p in prereqs],
+                        "common_mistakes": [m["name"] for m in mistakes],
+                    })
+                return {"results": results}
+            return {"error": "Knowledge graph not initialized"}
+
+        elif tool_name == "kag_pro_health":
+            return {
+                "status": "ok",
+                "document_count": self._orchestrator.document_count,
+                "services": self._orchestrator.registry.list_services(),
+                "error_history_count": len(self._orchestrator.error_history),
+            }
+
+        else:
+            return {"error": f"Unknown tool: {tool_name}"}
+
+
+# === MCP Protocol Implementation (stdio transport) ===
+
+def _read_message() -> dict | None:
+    """Read a single JSON-RPC message from stdin."""
+    line = sys.stdin.readline()
+    if not line:
+        return None
+    try:
+        return json.loads(line)
+    except json.JSONDecodeError:
+        return None
+
+
+def _write_message(msg: dict) -> None:
+    """Write a JSON-RPC message to stdout."""
+    sys.stdout.write(json.dumps(msg, ensure_ascii=False) + "\n")
+    sys.stdout.flush()
+
+
+def _make_response(msg_id: str | int | None, result: Any) -> dict:
+    return {"jsonrpc": "2.0", "id": msg_id, "result": result}
+
+
+def _make_error(msg_id: str | int | None, code: int, message: str) -> dict:
+    return {"jsonrpc": "2.0", "id": msg_id, "error": {"code": code, "message": message}}
+
+
+def serve_stdio(server: KAGProMCPServer) -> None:
+    """Run the MCP server on stdio transport (JSON-RPC over stdin/stdout)."""
+    while True:
+        msg = _read_message()
+        if msg is None:
+            break
+
+        msg_id = msg.get("id")
+        method = msg.get("method", "")
+        params = msg.get("params", {})
+
+        if method == "initialize":
+            _write_message(_make_response(msg_id, {
+                "protocolVersion": "2024-11-05",
+                "serverInfo": {"name": "kag-pro-edu", "version": "0.2.0"},
+                "capabilities": {"tools": {}},
+            }))
+
+        elif method == "notifications/initialized":
+            pass  # No response needed for notifications
+
+        elif method == "tools/list":
+            _write_message(_make_response(msg_id, {"tools": server.list_tools()}))
+
+        elif method == "tools/call":
+            tool_name = params.get("name", "")
+            arguments = params.get("arguments", {})
+            result = server.handle_tool_call(tool_name, arguments)
+            _write_message(_make_response(msg_id, {
+                "content": [{
+                    "type": "text",
+                    "text": json.dumps(result, ensure_ascii=False, indent=2),
+                }],
+            }))
+
+        elif method == "ping":
+            _write_message(_make_response(msg_id, {}))
+
+        else:
+            if msg_id is not None:
+                _write_message(_make_error(msg_id, -32601, f"Method not found: {method}"))
+
+
+def main():
+    """Entry point for running the MCP server."""
+    server = KAGProMCPServer(use_kg=True)
+    serve_stdio(server)
+
+
+if __name__ == "__main__":
+    main()

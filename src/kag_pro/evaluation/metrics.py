@@ -2,7 +2,6 @@
 
 import math
 from collections import Counter
-from typing import List
 
 import jieba
 
@@ -15,7 +14,7 @@ class RAGEvaluator:
     def __init__(self):
         self._embedder = Embedder()
 
-    def evaluate(self, question: str, generated: str, reference: str, sources: List[dict] | None = None) -> dict:
+    def evaluate(self, question: str, generated: str, reference: str, sources: list[dict] | None = None) -> dict:
         """Run all evaluation metrics on a single QA pair."""
         return {
             "accuracy": self.accuracy(generated, reference),
@@ -25,7 +24,7 @@ class RAGEvaluator:
             "answer_length": len(generated),
         }
 
-    def evaluate_batch(self, test_data: List[dict]) -> dict:
+    def evaluate_batch(self, test_data: list[dict]) -> dict:
         """Evaluate a batch of QA pairs. Each item: {question, generated, reference, sources?}"""
         results = {"accuracy": [], "bleu": [], "bert_score": [], "faithfulness": []}
         for item in test_data:
@@ -95,7 +94,7 @@ class RAGEvaluator:
         ref_emb = self._embedder.embed(reference[:2000])
         return round(self._cosine_sim(gen_emb, ref_emb), 3)
 
-    def faithfulness(self, generated: str, sources: List[dict]) -> float:
+    def faithfulness(self, generated: str, sources: list[dict]) -> float:
         """Measure how well the generated answer is supported by retrieved sources."""
         if not sources:
             return 1.0
@@ -110,20 +109,20 @@ class RAGEvaluator:
     # ---- Helpers ----
 
     @staticmethod
-    def _get_word_ngrams(tokens: List[str], n: int) -> List[str]:
+    def _get_word_ngrams(tokens: list[str], n: int) -> list[str]:
         if len(tokens) < n:
             return []
         return [" ".join(tokens[i:i + n]) for i in range(len(tokens) - n + 1)]
 
     @staticmethod
-    def _get_ngrams(text: str, n: int) -> List[str]:
+    def _get_ngrams(text: str, n: int) -> list[str]:
         chars = list(text)
         if len(chars) < n:
             return []
         return ["".join(chars[i:i + n]) for i in range(len(chars) - n + 1)]
 
     @staticmethod
-    def _cosine_sim(a: List[float], b: List[float]) -> float:
+    def _cosine_sim(a: list[float], b: list[float]) -> float:
         dot = sum(x * y for x, y in zip(a, b))
         norm_a = math.sqrt(sum(x * x for x in a))
         norm_b = math.sqrt(sum(y * y for y in b))

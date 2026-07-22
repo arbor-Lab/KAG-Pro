@@ -8,19 +8,16 @@ from kag_pro.core.generator import Generator
 class TextbookGenerator:
     """Generate textbook content from curriculum topic outlines."""
 
-    def __init__(self):
-        self._gen = Generator()
+    def __init__(self, generator: Generator | None = None):
+        self._gen = generator or Generator()
 
     def generate_topic(self, stage, subject, topic):
-        prompt = f"""你是一位中国%s%s教师。请为"%s"这个知识点编写教材内容。
+        prompt = f"""你是一位中国{stage}{subject}教师。请为“{topic}”这个知识点编写教材内容。
 
-要求：知识点定义清晰、公式正确、至少3个示例、标注常见错误、控制在300-500字、用"一、二、三"分小节。直接输出内容。""" % (stage, subject, topic)
-        resp = self._gen._client.chat.completions.create(
-            model=self._gen._model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.3, max_tokens=800,
+要求：知识点定义清晰、公式正确、至少3个示例、标注常见错误、控制在300-500字、用“一、二、三”分小节。直接输出内容。"""
+        return self._gen.call(
+            system="你是一位中国教育教师。", user=prompt, temperature=0.3, max_tokens=800
         )
-        return resp.choices[0].message.content or ""
 
     def generate_from_outline(self, outline, output_dir):
         output = Path(output_dir)
@@ -29,7 +26,7 @@ class TextbookGenerator:
         for stage, subjects in outline.items():
             for subject, topics in subjects.items():
                 for i, topic in enumerate(topics):
-                    fname = "%s_%s_%02d.txt" % (stage[:2], subject[:3], i)
+                    fname = f"{stage[:2]}_{subject[:3]}_{i:02d}.txt"
                     fpath = output / fname
                     if fpath.exists():
                         continue

@@ -21,6 +21,8 @@ class TestRetriever:
             query="三角形的内角和是多少？",
             top_k=5,
             threshold=0.3,
+            stage_filter=None,
+            subject_filter=None,
         )
 
     def test_retrieve_empty_results(self):

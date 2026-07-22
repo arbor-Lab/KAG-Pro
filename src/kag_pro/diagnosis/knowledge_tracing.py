@@ -1,8 +1,6 @@
 """Bayesian Knowledge Tracing — track student mastery and question difficulty."""
 
-import math
 from collections import defaultdict
-from typing import Dict, List, Tuple
 
 
 class KnowledgeTracer:
@@ -22,8 +20,8 @@ class KnowledgeTracer:
         self.p_learn = p_learn
         self.p_guess = p_guess
         self.p_slip = p_slip
-        self._knowledge: Dict[str, float] = defaultdict(lambda: p_init)
-        self._history: List[dict] = []
+        self._knowledge: dict[str, float] = defaultdict(lambda: p_init)
+        self._history: list[dict] = []
 
     def update(self, knowledge_point: str, correct: bool) -> dict:
         """Update knowledge state after observing a correct/incorrect answer.
@@ -66,7 +64,7 @@ class KnowledgeTracer:
     def get_mastery(self, knowledge_point: str) -> str:
         return self._mastery_level(self._knowledge[knowledge_point])
 
-    def get_all_mastery(self) -> Dict[str, dict]:
+    def get_all_mastery(self) -> dict[str, dict]:
         return {
             kp: {
                 "p_know": round(p, 3),
@@ -75,12 +73,12 @@ class KnowledgeTracer:
             for kp, p in sorted(self._knowledge.items(), key=lambda x: -x[1])
         }
 
-    def get_weakest(self, n: int = 3) -> List[Tuple[str, float]]:
+    def get_weakest(self, n: int = 3) -> list[tuple[str, float]]:
         """Return the n weakest knowledge points."""
         sorted_kp = sorted(self._knowledge.items(), key=lambda x: x[1])
         return [(kp, round(p, 3)) for kp, p in sorted_kp[:n]]
 
-    def get_learning_curve(self, knowledge_point: str) -> List[float]:
+    def get_learning_curve(self, knowledge_point: str) -> list[float]:
         """Extract learning curve for a knowledge point from history."""
         return [
             h["p_know_after"]
@@ -104,7 +102,7 @@ class DifficultyEstimator:
     """Estimate question difficulty based on student performance data."""
 
     def __init__(self):
-        self._attempts: Dict[str, List[int]] = defaultdict(list)
+        self._attempts: dict[str, list[int]] = defaultdict(list)
 
     def record(self, question_id: str, correct: bool):
         self._attempts[question_id].append(1 if correct else 0)
@@ -116,11 +114,11 @@ class DifficultyEstimator:
             return 0.5  # Default medium difficulty
         return round(1.0 - sum(attempts) / len(attempts), 3)
 
-    def get_top_hard(self, n: int = 5) -> List[Tuple[str, float]]:
+    def get_top_hard(self, n: int = 5) -> list[tuple[str, float]]:
         scores = {qid: self.estimate(qid) for qid in self._attempts}
         return sorted(scores.items(), key=lambda x: -x[1])[:n]
 
-    def get_top_easy(self, n: int = 5) -> List[Tuple[str, float]]:
+    def get_top_easy(self, n: int = 5) -> list[tuple[str, float]]:
         scores = {qid: self.estimate(qid) for qid in self._attempts}
         return sorted(scores.items(), key=lambda x: x[1])[:n]
 
@@ -177,7 +175,6 @@ class DeepKnowledgeTracer:
         loss_fn = nn.BCELoss()
 
         # Prepare training data
-        max_len = max(len(s) for s in sequences) + 1
         X_batches, y_batches = [], []
         for seq in sequences:
             if len(seq) < 2:
@@ -204,7 +201,7 @@ class DeepKnowledgeTracer:
             return
 
         self._model.train()
-        for epoch in range(epochs):
+        for _epoch in range(epochs):
             total_loss = 0.0
             for X, y in zip(X_batches, y_batches):
                 Xb = X.unsqueeze(0)

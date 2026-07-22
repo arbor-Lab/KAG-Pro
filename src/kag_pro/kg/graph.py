@@ -3,7 +3,6 @@
 import json
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
 
 
 class KnowledgeGraph:
@@ -19,10 +18,10 @@ class KnowledgeGraph:
     RELATION_TYPES = ["prerequisite", "contains", "related_to", "common_mistake"]
 
     def __init__(self):
-        self._entities: Dict[str, dict] = {}
-        self._relations: List[Tuple[str, str, str]] = []
-        self._adj_out: Dict[str, List[Tuple[str, str]]] = defaultdict(list)
-        self._adj_in: Dict[str, List[Tuple[str, str]]] = defaultdict(list)
+        self._entities: dict[str, dict] = {}
+        self._relations: list[tuple[str, str, str]] = []
+        self._adj_out: dict[str, list[tuple[str, str]]] = defaultdict(list)
+        self._adj_in: dict[str, list[tuple[str, str]]] = defaultdict(list)
 
     def add_entity(self, entity_id: str, name: str, entity_type: str, metadata: dict | None = None) -> None:
         self._entities[entity_id] = {
@@ -46,19 +45,19 @@ class KnowledgeGraph:
     def get_entity(self, entity_id: str) -> dict | None:
         return self._entities.get(entity_id)
 
-    def search_entities(self, query: str) -> List[dict]:
+    def search_entities(self, query: str) -> list[dict]:
         results = []
-        for eid, entity in self._entities.items():
+        for _eid, entity in self._entities.items():
             if query.lower() in entity["name"].lower():
                 results.append(entity)
         return results
 
-    def get_neighbors(self, entity_id: str, depth: int = 1) -> List[dict]:
+    def get_neighbors(self, entity_id: str, depth: int = 1) -> list[dict]:
         if entity_id not in self._entities:
             return []
-        visited: Set[str] = {entity_id}
+        visited: set[str] = {entity_id}
         frontier = [entity_id]
-        neighbors: List[dict] = []
+        neighbors: list[dict] = []
         for _ in range(depth):
             next_frontier = []
             for node in frontier:
@@ -77,14 +76,14 @@ class KnowledgeGraph:
             frontier = next_frontier
         return neighbors
 
-    def get_prerequisites(self, entity_id: str) -> List[dict]:
+    def get_prerequisites(self, entity_id: str) -> list[dict]:
         prereqs = []
         for source, rel in self._adj_in[entity_id]:
             if rel == "prerequisite":
                 prereqs.append(self._entities[source])
         return prereqs
 
-    def get_common_mistakes(self, entity_id: str) -> List[dict]:
+    def get_common_mistakes(self, entity_id: str) -> list[dict]:
         mistakes = []
         for target, rel in self._adj_out[entity_id]:
             if rel == "common_mistake":

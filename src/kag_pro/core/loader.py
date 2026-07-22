@@ -1,21 +1,10 @@
 """Document loader: supports .txt and .pdf files."""
 
 from pathlib import Path
-from typing import List
 
 from pypdf import PdfReader
 
-
-class Document:
-    """A single document with text content and metadata."""
-
-    def __init__(self, text: str, metadata: dict | None = None):
-        self.text = text
-        self.metadata = metadata or {}
-
-    def __repr__(self) -> str:
-        src = self.metadata.get("source", "unknown")
-        return f"Document(source={src!r}, chars={len(self.text)})"
+from kag_pro.core.types import Document  # re-export for backward compat
 
 
 class DocumentLoader:
@@ -59,9 +48,9 @@ class DocumentLoader:
         prefix = filename[:2]
         return cls._STAGE_FROM_PREFIX.get(prefix, "unknown")
 
-    def load(self, infer_stage: bool = True) -> List[Document]:
+    def load(self, infer_stage: bool = True) -> list[Document]:
         """Load all supported files from the directory."""
-        documents: List[Document] = []
+        documents: list[Document] = []
 
         for filepath in sorted(self.directory.rglob("*")):
             if not filepath.is_file():
@@ -87,7 +76,7 @@ class DocumentLoader:
 
         return documents
 
-    def _load_txt(self, filepath: Path) -> List[Document]:
+    def _load_txt(self, filepath: Path) -> list[Document]:
         text = filepath.read_text(encoding="utf-8")
         doc = Document(
             text=text,
@@ -99,9 +88,9 @@ class DocumentLoader:
         )
         return [doc]
 
-    def _load_pdf(self, filepath: Path) -> List[Document]:
+    def _load_pdf(self, filepath: Path) -> list[Document]:
         reader = PdfReader(str(filepath))
-        documents: List[Document] = []
+        documents: list[Document] = []
         for i, page in enumerate(reader.pages):
             text = page.extract_text()
             if text and text.strip():

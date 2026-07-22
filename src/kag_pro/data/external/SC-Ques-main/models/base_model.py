@@ -1,10 +1,12 @@
-import numpy as np
-from utils.data_utils import init_dir,load_df
-from utils.metrics_utils import get_model_metrics,get_multi_class_report
-import torch
 import random
 
-class BaseModel():
+import numpy as np
+import torch
+from utils.data_utils import init_dir, load_df
+from utils.metrics_utils import get_model_metrics, get_multi_class_report
+
+
+class BaseModel:
     def __init__(self, config):
         self.config = config
         self.batch_size = int(self.config.get('batch_size', 32))
@@ -24,7 +26,7 @@ class BaseModel():
 
     def load_model(self, model_path):
         raise NotImplementedError
-    
+
     def demo(self,text):
         raise NotImplementedError
 
@@ -33,7 +35,7 @@ class BaseModel():
 
     def predict(self,text):
         return self.demo(text)
-    
+
     def predict_list(self,text_list):
         return self.demo_text_list(text_list)
 

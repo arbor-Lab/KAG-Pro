@@ -1,0 +1,9 @@
+schema_version: 1
+module_path: kag_pro_diagnosis
+title: 学生错误诊断与个性化学习推荐
+scope:
+    - src/kag_pro/diagnosis/
+source_files: []
+depends_on: []
+related_to:
+    - path: kag_pro_kg

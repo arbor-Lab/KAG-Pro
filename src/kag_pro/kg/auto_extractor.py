@@ -1,7 +1,6 @@
 """Automated entity and relation extraction from educational text."""
 
 import re
-from typing import List, Tuple, Set
 
 from kag_pro.kg.graph import KnowledgeGraph
 
@@ -31,7 +30,7 @@ class AutoExtractor:
         r"(?:公式|定理|定律)[：:]\s*(.{3,30})"
     )
 
-    def __init__(self, seed_vocabulary: Set[str] | None = None):
+    def __init__(self, seed_vocabulary: set[str] | None = None):
         self._vocab = seed_vocabulary or set()
 
     def load_seed_from_text(self, text: str) -> int:
@@ -45,7 +44,7 @@ class AutoExtractor:
                     count += 1
         return count
 
-    def extract_entities(self, text: str) -> List[Tuple[str, str, str]]:
+    def extract_entities(self, text: str) -> list[tuple[str, str, str]]:
         entities = []
         seen = set()
 
@@ -76,7 +75,7 @@ class AutoExtractor:
 
         return entities[:30]
 
-    def extract_relations(self, text: str, entities: List[str]) -> List[Tuple[str, str, str]]:
+    def extract_relations(self, text: str, entities: list[str]) -> list[tuple[str, str, str]]:
         relations = []
         entity_set = set(entities)
 
@@ -100,7 +99,7 @@ class AutoExtractor:
 
         return relations[:20]
 
-    def build_kg_from_texts(self, texts: List[str]) -> KnowledgeGraph:
+    def build_kg_from_texts(self, texts: list[str]) -> KnowledgeGraph:
         kg = KnowledgeGraph()
         all_entity_names = set()
         entity_id_map = {}
@@ -113,7 +112,7 @@ class AutoExtractor:
                 entity_id_map[name] = eid
                 all_entity_names.add(name)
 
-        for i, text in enumerate(texts):
+        for _i, text in enumerate(texts):
             extracted = self.extract_relations(text, list(all_entity_names))
             for source, rel, target in extracted:
                 if source in entity_id_map and target in entity_id_map:
@@ -140,13 +139,9 @@ class LLMEntityEnricher:
 
 列出前置知识(最多2个)、包含子知识点(最多2个)、关联知识(最多2个)、常见错误(最多1个)。
 输出格式：前置: xxx / 包含: xxx / 关联: xxx / 易错: xxx"""
-        response = self._gen._client.chat.completions.create(
-            model=self._gen._model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.2,
-            max_tokens=300,
+        text = self._gen.call(
+            system="你是一位教育知识图谱专家。", user=prompt, temperature=0.2, max_tokens=300
         )
-        text = response.choices[0].message.content or ""
         suggestions = {"prerequisite": [], "contains": [], "related_to": [], "common_mistake": []}
         for line in text.split("\n"):
             line = line.strip()

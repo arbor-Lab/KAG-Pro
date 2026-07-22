@@ -1,0 +1,102 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: zh-CN
+branch: main
+nodes_managed: true
+exported_at: "2026-07-22T04:12:09Z"
+modules:
+    "":
+        dir_name: KAG-Pro 教育知识增强问答框架
+        title: KAG-Pro 教育知识增强问答框架
+        scope:
+            - README.md
+            - DATA_MANIFEST.md
+            - .gitignore
+            - Makefile
+            - pyproject.toml
+            - .env.example
+        source_files: []
+        children:
+            - frontend
+            - kag_pro_core
+            - kag_pro_datasets
+            - kag_pro_diagnosis
+            - kag_pro_kg
+        depends_on: []
+        related_to: []
+    frontend:
+        dir_name: KAG-Pro 前端服务与单页应用
+        title: KAG-Pro 前端服务与单页应用
+        scope:
+            - frontend/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: kag_pro_core
+    kag_pro_core:
+        dir_name: KAG-Pro RAG 核心编排层
+        title: KAG-Pro RAG 核心编排层
+        scope:
+            - src/kag_pro/core/
+        source_files: []
+        children:
+            - kag_pro_core/data_processing
+            - kag_pro_core/knowledge_retrieval
+        depends_on: []
+        related_to:
+            - path: frontend
+    kag_pro_core/data_processing:
+        dir_name: 文档加载、分块与事实一致性校验
+        title: 文档加载、分块与事实一致性校验
+        scope:
+            - src/kag_pro/core/loader.py
+            - src/kag_pro/core/splitter.py
+            - src/kag_pro/core/verifier.py
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: kag_pro_datasets
+    kag_pro_core/knowledge_retrieval:
+        dir_name: 向量检索与嵌入管线
+        title: 向量检索与嵌入管线
+        scope:
+            - src/kag_pro/core/embedder.py
+            - src/kag_pro/core/retriever.py
+            - src/kag_pro/core/vector_store.py
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    kag_pro_datasets:
+        dir_name: 外部数据集加载与教材内容生成
+        title: 外部数据集加载与教材内容生成
+        scope:
+            - src/kag_pro/datasets/
+            - src/kag_pro/data/external/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: kag_pro_core/data_processing
+    kag_pro_diagnosis:
+        dir_name: 学生错误诊断与个性化学习推荐
+        title: 学生错误诊断与个性化学习推荐
+        scope:
+            - src/kag_pro/diagnosis/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: kag_pro_kg
+    kag_pro_kg:
+        dir_name: 教育领域知识图谱构建与检索
+        title: 教育领域知识图谱构建与检索
+        scope:
+            - src/kag_pro/kg/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: kag_pro_diagnosis

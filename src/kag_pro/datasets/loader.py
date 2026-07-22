@@ -13,17 +13,16 @@ Math23K:   23K Chinese math word problems with equations
            Source: Beijing Normal University Smart Learning Companion
 """
 
-import json
 import csv
+import json
 from pathlib import Path
-from typing import List, Iterator
 
 
 class DatasetLoader:
     """Base class for dataset loading."""
 
     @staticmethod
-    def from_jsonl(path: str) -> List[dict]:
+    def from_jsonl(path: str) -> list[dict]:
         items = []
         with open(path, encoding="utf-8") as f:
             for line in f:
@@ -33,12 +32,12 @@ class DatasetLoader:
         return items
 
     @staticmethod
-    def from_json(path: str) -> List[dict]:
+    def from_json(path: str) -> list[dict]:
         with open(path, encoding="utf-8") as f:
             return json.load(f)
 
     @staticmethod
-    def from_csv(path: str) -> List[dict]:
+    def from_csv(path: str) -> list[dict]:
         with open(path, encoding="utf-8") as f:
             return list(csv.DictReader(f))
 
@@ -55,8 +54,9 @@ class Math23KLoader:
     """
 
     @staticmethod
-    def load(path: str) -> List[dict]:
-        import json, re
+    def load(path: str) -> list[dict]:
+        import json
+        import re
         with open(path, encoding="utf-8") as f:
             raw = f.read()
         parts = re.split(r'\}\n\{', raw)
@@ -73,7 +73,7 @@ class Math23KLoader:
         return items
 
     @staticmethod
-    def to_qa_pairs(data: List[dict]) -> List[dict]:
+    def to_qa_pairs(data: list[dict]) -> list[dict]:
         """Convert Math23K items to QA format for our system."""
         return [
             {
@@ -99,11 +99,11 @@ class SCQuesLoader:
     """
 
     @staticmethod
-    def load(path: str) -> List[dict]:
+    def load(path: str) -> list[dict]:
         return DatasetLoader.from_jsonl(path)
 
     @staticmethod
-    def to_qa_pairs(data: List[dict]) -> List[dict]:
+    def to_qa_pairs(data: list[dict]) -> list[dict]:
         """Convert SC-Ques items to fill-in-the-blank QA format."""
         pairs = []
         for item in data:
@@ -123,7 +123,7 @@ class SCQuesLoader:
         return pairs
 
     @staticmethod
-    def to_textbook_chunks(data: List[dict], chunk_size: int = 20) -> List[str]:
+    def to_textbook_chunks(data: list[dict], chunk_size: int = 20) -> list[str]:
         """Group SC-Ques items into textbook-style chunks for indexing."""
         chunks = []
         for i in range(0, len(data), chunk_size):
@@ -158,13 +158,14 @@ class SmartLearningLoader:
     }
 
     @staticmethod
-    def load(path: str) -> List[dict]:
+    def load(path: str) -> list[dict]:
         return DatasetLoader.from_csv(path)
 
     @staticmethod
     def load_all(data_dir: str) -> dict:
         """Load all subject CSVs from a directory."""
-        import os, csv
+        import csv
+        import os
         all_data = {}
         for fname in sorted(os.listdir(data_dir)):
             if fname.startswith("unit-") and fname.endswith(".csv"):
@@ -175,7 +176,7 @@ class SmartLearningLoader:
         return all_data
 
     @staticmethod
-    def to_knowledge_mastery(data: List[dict]) -> dict:
+    def to_knowledge_mastery(data: list[dict]) -> dict:
         """Aggregate by concept: {concept: {avg_score, total_attempts, error_rate}}"""
         from collections import defaultdict
         concepts = defaultdict(lambda: {"scores": [], "count": 0})
@@ -195,7 +196,7 @@ class SmartLearningLoader:
         return result
 
     @staticmethod
-    def to_question_difficulty(data: List[dict]) -> dict:
+    def to_question_difficulty(data: list[dict]) -> dict:
         """Estimate question difficulty: {question_id: {avg_score, attempts}}"""
         from collections import defaultdict
         questions = defaultdict(lambda: {"scores": []})
@@ -214,7 +215,7 @@ class SmartLearningLoader:
         return result
 
     @staticmethod
-    def to_student_profiles(data: List[dict]) -> dict:
+    def to_student_profiles(data: list[dict]) -> dict:
         """Group by student: {student_id: {concept: avg_score}}"""
         from collections import defaultdict
         students = defaultdict(lambda: defaultdict(list))
@@ -236,10 +237,8 @@ class DatasetIntegrator:
     """Integrate external datasets into KAG-Pro pipeline."""
 
     @staticmethod
-    def integrate_math23k(data: List[dict], output_dir: str) -> int:
+    def integrate_math23k(data: list[dict], output_dir: str) -> int:
         """Convert Math23K problems into textbook chunks."""
-        from kag_pro.core.splitter import ChineseTextSplitter
-        from kag_pro.core.loader import Document
 
         output = Path(output_dir)
         output.mkdir(parents=True, exist_ok=True)
@@ -275,7 +274,7 @@ class DatasetIntegrator:
         return count
 
     @staticmethod
-    def integrate_errors(data: List[dict], output_path: str) -> int:
+    def integrate_errors(data: list[dict], output_path: str) -> int:
         """Save error pairs for diagnosis testing."""
         with open(output_path, "w", encoding="utf-8") as f:
             f.write("# 智慧学伴错题数据\n")

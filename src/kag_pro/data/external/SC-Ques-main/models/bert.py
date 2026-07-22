@@ -1,7 +1,10 @@
+from transformers import (
+    BertConfig,
+    BertTokenizer,
+)
+
 from models.hf_base import HFBase
-from transformers import BertForSequenceClassification, BertModel, BertTokenizer,AutoTokenizer,AutoModelForSequenceClassification
-from transformers import AdamW
-from transformers import BertConfig
+
 
 class BERT(HFBase):
     def __init__(self,config):

@@ -1,0 +1,15 @@
+{
+  "name": "kag-pro-edu",
+  "displayName": "KAG-Pro 教育智能助手",
+  "version": "0.2.0",
+  "description": "Knowledge-Augmented Generation for K-12 education with RAG, KG, diagnosis, and recommendation",
+  "descriptionZh": "面向K-12教育的知识增强问答系统，集成知识图谱、RAG检索、错题诊断和个性化推荐",
+  "author": { "name": "KAG-Pro Team" },
+  "logo": "./assets/avatar.svg",
+  "keywords": ["qoder-plugin", "education", "rag", "knowledge-graph", "k12"],
+  "category": "developer-tools",
+  "tags": ["skill", "mcp", "education"],
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json",
+  "commands": "./commands/"
+}
