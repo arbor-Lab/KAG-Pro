@@ -1,20 +1,14 @@
-# _*_ encoding: utf-8 _*_
-import os
-import argparse
-import pickle
-import pandas as pd
-import numpy as np
-from random import sample
-import json
-
 import sys
+
+import numpy as np
+
 sys.path.append("../")
 from models.aml import AML
+
 
 class AutoFillBlank:
 
     def __init__(self, model_name):
-        from atc.models.aml import AML
         self.model = self.load_model(model_name)
 
     def predict(self, json_dict):

@@ -51,12 +51,9 @@ def main():
 直接输出教材内容，不要加前言结语。"""
 
             try:
-                resp = gen._client.chat.completions.create(
-                    model=gen._model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.2, max_tokens=600,
+                text = gen.call(
+                    system="你是一位中国教育教师。", user=prompt, temperature=0.2, max_tokens=600
                 )
-                text = resp.choices[0].message.content or ""
                 if text:
                     header = f"{subject} - {topic}\n\n"
                     fpath.write_text(header + text, encoding="utf-8")

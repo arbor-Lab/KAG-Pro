@@ -1,7 +1,7 @@
-from models.hf_base import HFBase
 from transformers import AutoTokenizer
-from transformers import AdamW
-from transformers import BertConfig
+
+from models.hf_base import HFBase
+
 
 class DEBERTAV3(HFBase):
     def __init__(self,config):

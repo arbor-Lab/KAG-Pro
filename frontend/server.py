@@ -1,4 +1,8 @@
-"""KAG-Pro API server — FastAPI backend for the chat interface."""
+"""KAG-Pro API server — FastAPI backend powered by EducationOrchestrator.
+
+Uses the new plugin architecture: PluginRegistry + EventBus + EducationOrchestrator.
+Replaces the old RAGPipeline-based server with a cleaner, event-driven design.
+"""
 
 import re
 import sys
@@ -12,58 +16,35 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional, List
 
-from kag_pro.core.pipeline import RAGPipeline
+from kag_pro.core.bootstrap import create_default_registry
+from kag_pro.core.event_bus import EventBus
+from kag_pro.orchestration.orchestrator import EducationOrchestrator
 from kag_pro.core.paper_generator import KnowledgeTreeExtractor, PaperGenerator
 from kag_pro.core.paper_store import PaperStore
 from kag_pro.core.favorite_store import FavoriteStore
 from kag_pro.core.generator import Generator
 
-app = FastAPI(title="KAG-Pro Chat", version="1.0")
-def _detect_diagnosis(question: str):
-    # Quick heuristic pre-check to avoid LLM call on every message
-    answer_keywords = ['我选', '我的答案', '我填', '我写', '对不对', '对吗', '正确吗', '错了吗', '我答',
-                       '我觉得是', '我认为是', '答案是', '应该选', '我觉着']
-    has_answer = any(kw in question for kw in answer_keywords)
-    has_question = ('?' in question or '？' in question or '题目' in question or '这题' in question
-                    or '下列' in question or '正确的是' in question)
-    if not has_answer:
-        return False, question, "", ""
-    try:
-        gen = Generator()
-        prompt = (
-            "请分析以下用户输入，判断是否包含一个错题诊断请求。\n"
-            "诊断请求特征：用户提供了原题、自己做错的答案或选项、以及正确答案或问对错。\n"
-            "如果只是普通提问、要求做题、或没有同时提供题目和答案，则不是诊断请求。\n\n"
-            "用户输入：\n" + question + "\n\n"
-            "请以严格JSON格式回复，不要有任何其他内容：\n"
-            '{"is_diagnosis": true/false, "question": "原题", "student_answer": "学生答案", "correct_answer": "正确答案"}'
-        )
-        resp = gen._call_llm(prompt)
-        import json
-        json_match = re.search(r'\{[^}]*\}', resp, re.DOTALL)
-        if json_match:
-            data = json.loads(json_match.group())
-            if data.get("is_diagnosis"):
-                return True, data.get("question", question), data.get("student_answer", ""), data.get("correct_answer", "")
-    except Exception:
-        pass
-    return False, question, "", ""
+app = FastAPI(title="KAG-Pro Chat", version="2.0")
 
 
-_pipeline: Optional[RAGPipeline] = None
+# === Singleton accessors ===
+
+_orchestrator: Optional[EducationOrchestrator] = None
 _knowledge_tree: Optional[KnowledgeTreeExtractor] = None
 _paper_store: Optional[PaperStore] = None
 _favorite_store: Optional[FavoriteStore] = None
 
 
-def get_pipeline() -> RAGPipeline:
-    global _pipeline
-    if _pipeline is None:
-        _pipeline = RAGPipeline(use_kg=True)
+def get_orchestrator() -> EducationOrchestrator:
+    global _orchestrator
+    if _orchestrator is None:
+        registry = create_default_registry(use_kg=True)
+        bus = EventBus()
+        _orchestrator = EducationOrchestrator(registry, bus)
         data_dir = Path(__file__).resolve().parent.parent / "src" / "kag_pro" / "data" / "textbooks"
-        _pipeline.clear_index()
-        _pipeline.index_documents(str(data_dir))
-    return _pipeline
+        _orchestrator.clear_index()
+        _orchestrator.index_documents(str(data_dir))
+    return _orchestrator
 
 
 def get_knowledge_tree() -> KnowledgeTreeExtractor:
@@ -73,13 +54,6 @@ def get_knowledge_tree() -> KnowledgeTreeExtractor:
     return _knowledge_tree
 
 
-def get_favorite_store() -> FavoriteStore:
-    global _favorite_store
-    if _favorite_store is None:
-        _favorite_store = FavoriteStore()
-    return _favorite_store
-
-
 def get_paper_store() -> PaperStore:
     global _paper_store
     if _paper_store is None:
@@ -87,7 +61,14 @@ def get_paper_store() -> PaperStore:
     return _paper_store
 
 
-# ---- Pydantic models ----
+def get_favorite_store() -> FavoriteStore:
+    global _favorite_store
+    if _favorite_store is None:
+        _favorite_store = FavoriteStore()
+    return _favorite_store
+
+
+# === Pydantic models ===
 
 class QueryRequest(BaseModel):
     question: str
@@ -98,10 +79,12 @@ class SourceItem(BaseModel):
     source: str = ""
     score: float = 0.0
 
+
 class VerificationInfo(BaseModel):
     faith_score: float = 1.0
     verdict: str = "HIGH"
     details: str = ""
+
 
 class QueryResponse(BaseModel):
     question: str
@@ -109,6 +92,8 @@ class QueryResponse(BaseModel):
     stage: str
     sources: list[SourceItem] = []
     verification: Optional[VerificationInfo] = None
+    analysis: dict = {}
+    kg_enrichment: dict = {}
 
 
 class DiagnosisRequest(BaseModel):
@@ -124,17 +109,16 @@ class DiagnosisResponse(BaseModel):
     feedback: str
 
 
+class ExerciseResponse(BaseModel):
+    knowledge_point: str
+    exercises: str
+
+
 # ---- Paper models ----
 
 class QuestionTypeItem(BaseModel):
     type: str
     count: int = 1
-
-
-class AllocItem(BaseModel):
-    topic: int = 0
-    type: str = ""
-    count: int = 0
 
 
 class GeneratePaperRequest(BaseModel):
@@ -144,7 +128,7 @@ class GeneratePaperRequest(BaseModel):
     count: int = 5
     difficulty: str = "中等"
     question_types: List[QuestionTypeItem] = []
-    allocations: List[AllocItem] = []
+    allocations: List[dict] = []
 
 
 class SavePaperRequest(BaseModel):
@@ -159,10 +143,11 @@ class SavePaperRequest(BaseModel):
     questions: list
     created_at: str = ""
 
+
 # ---- Favorite models ----
 
 class FavoriteSaveRequest(BaseModel):
-    type: str  # "paper", "question", "diagnosis"
+    type: str
     title: str = ""
     content: dict = {}
     subject: str = ""
@@ -170,81 +155,89 @@ class FavoriteSaveRequest(BaseModel):
     knowledge_point: str = ""
 
 
-class FavoriteListItem(BaseModel):
-    id: str
-    type: str
-    title: str
-    subject: str
-    stage: str
-    knowledge_point: str
-    created_at: str
-
-
-
-# ---- Existing endpoints ----
+# === Query endpoints ===
 
 @app.post("/api/query", response_model=QueryResponse)
 def query(req: QueryRequest):
     """Smart query: auto-detects diagnosis requests and routes accordingly."""
     try:
-        pipeline = get_pipeline()
+        orch = get_orchestrator()
 
-        # Auto-detect if this is a diagnosis request
-        is_diag, parsed_q, student_ans, correct_ans = _detect_diagnosis(req.question)
+        # Auto-detect if this is a diagnosis request (simple heuristic, no LLM call)
+        answer_keywords = ['我选', '我的答案', '我填', '我写', '对不对', '对吗', '我答',
+                           '我觉得是', '我认为是', '答案是', '应该选']
+        has_answer = any(kw in req.question for kw in answer_keywords)
 
-        if is_diag and student_ans:
-            # Route to diagnosis pipeline
-            diag_result = pipeline.diagnose(parsed_q, student_ans, correct_ans or student_ans)
-            # Build natural-language answer from diagnosis result
-            lines = []
-            if diag_result.get("error_type"):
-                lines.append("【" + diag_result["error_type"] + "】")
-            fb = diag_result.get("personalized_feedback") or diag_result.get("feedback", "")
-            if fb:
-                lines.append(fb)
-            if diag_result.get("hint"):
-                lines.append("提示：")
-                lines.append(diag_result["hint"])
-            answer = "\n\n".join(lines) if lines else fb
+        if has_answer:
+            # Try diagnosis routing — use simple extraction
+            try:
+                gen = orch.registry.resolve("generator")
+                prompt = (
+                    "请分析以下用户输入，判断是否包含一个错题诊断请求。\n"
+                    "诊断请求特征：用户提供了原题、自己做错的答案或选项、以及正确答案或问对错。\n"
+                    "如果只是普通提问、要求做题、或没有同时提供题目和答案，则不是诊断请求。\n\n"
+                    f"用户输入：\n{req.question}\n\n"
+                    '请以严格JSON格式回复：'
+                    '{"is_diagnosis": true/false, "question": "原题", "student_answer": "学生答案", "correct_answer": "正确答案"}'
+                )
+                resp = gen.call(
+                    system="你是一位输入分析助手。请严格按JSON格式回复。",
+                    user=prompt, temperature=0, max_tokens=200,
+                )
+                import json
+                json_match = re.search(r'\{[^}]*\}', resp, re.DOTALL)
+                if json_match:
+                    data = json.loads(json_match.group())
+                    if data.get("is_diagnosis") and data.get("student_answer"):
+                        diag_result = orch.diagnose(
+                            data.get("question", req.question),
+                            data["student_answer"],
+                            data.get("correct_answer", data["student_answer"]),
+                        )
+                        lines = []
+                        if diag_result.error_type:
+                            lines.append(f"【{diag_result.error_type}】")
+                        if diag_result.personalized_feedback:
+                            lines.append(diag_result.personalized_feedback)
+                        if diag_result.hint:
+                            lines.append("提示：")
+                            lines.append(diag_result.hint)
+                        answer = "\n\n".join(lines) if lines else diag_result.personalized_feedback
 
-            sources = []
-            for s in diag_result.get("sources", [])[:3]:
-                sources.append(SourceItem(
-                    text=s.get("text", ""),
-                    source=s.get("source", "unknown"),
-                    score=s.get("score", 0),
-                ))
+                        return QueryResponse(
+                            question=req.question,
+                            answer=answer,
+                            stage=diag_result.stage or "未知",
+                            sources=[],
+                        )
+            except Exception:
+                pass  # Fall through to regular query
 
-            return QueryResponse(
-                question=req.question,
-                answer=answer,
-                stage=diag_result.get("stage", "未知"),
-                sources=sources,
-            )
-
-        # Regular RAG query
-        result = pipeline.query(req.question, verify=True)
+        # Regular RAG query via orchestrator
+        result = orch.query(req.question, verify=True)
         sources = []
-        for s in result.get("sources", [])[:3]:
+        for s in result.sources[:3]:
             sources.append(SourceItem(
                 text=s.get("text", ""),
                 source=s.get("source", ""),
                 score=s.get("score", 0),
             ))
         verification = None
-        if result.get("verification"):
-            v = result["verification"]
+        if result.verification:
+            v = result.verification
             verification = VerificationInfo(
                 faith_score=v.get("faith_score", 1.0),
                 verdict=v.get("verdict", "HIGH"),
                 details=v.get("details", ""),
             )
         return QueryResponse(
-            question=result["question"],
-            answer=result["answer"],
-            stage=result["stage"],
+            question=result.question,
+            answer=result.answer,
+            stage=result.stage,
             sources=sources,
             verification=verification,
+            analysis=result.analysis,
+            kg_enrichment=result.kg_enrichment,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -253,28 +246,23 @@ def query(req: QueryRequest):
 @app.post("/api/diagnose", response_model=DiagnosisResponse)
 def diagnose(req: DiagnosisRequest):
     try:
-        pipeline = get_pipeline()
-        result = pipeline.diagnose(req.question, req.student_answer, req.correct_answer)
+        orch = get_orchestrator()
+        result = orch.diagnose(req.question, req.student_answer, req.correct_answer)
         return DiagnosisResponse(
-            error_type=result["error_type"],
-            knowledge_point=result["knowledge_point"],
-            hint=result["hint"],
-            feedback=result["personalized_feedback"],
+            error_type=result.error_type,
+            knowledge_point=result.knowledge_point,
+            hint=result.hint,
+            feedback=result.personalized_feedback,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-class ExerciseResponse(BaseModel):
-    knowledge_point: str
-    exercises: str
-
-
 @app.post("/api/exercises", response_model=ExerciseResponse)
 def exercises(req: DiagnosisRequest):
     try:
-        pipeline = get_pipeline()
-        result = pipeline.exercises(req.question, req.student_answer, req.correct_answer)
+        orch = get_orchestrator()
+        result = orch.exercises(req.question, req.student_answer, req.correct_answer)
         return ExerciseResponse(
             knowledge_point=result["knowledge_point"],
             exercises=result["exercises"],
@@ -283,7 +271,7 @@ def exercises(req: DiagnosisRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ---- Paper endpoints ----
+# === Paper endpoints ===
 
 @app.get("/api/knowledge-tree")
 def knowledge_tree():
@@ -297,10 +285,9 @@ def knowledge_tree():
 @app.post("/api/generate-paper")
 def generate_paper(req: GeneratePaperRequest):
     try:
-        gen = Generator()
-        paper_gen = PaperGenerator(gen)
+        orch = get_orchestrator()
         qtypes = [qt.model_dump() for qt in req.question_types] if req.question_types else None
-        paper = paper_gen.generate(
+        paper = orch.generate_paper(
             stage=req.stage,
             subject=req.subject,
             topics=req.topics,
@@ -359,9 +346,11 @@ def delete_paper(paper_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+# === Favorite endpoints ===
+
 @app.post("/api/favorites")
 def save_favorite(req: FavoriteSaveRequest):
-    """Save an item to favorites."""
     try:
         store = get_favorite_store()
         item = store.save(req.model_dump())
@@ -376,13 +365,10 @@ def list_favorites(
     subject: Optional[str] = None,
     knowledge_point: Optional[str] = None,
 ):
-    """List favorites with optional filters."""
     try:
         store = get_favorite_store()
         return store.list_all(
-            fav_type=type,
-            subject=subject,
-            knowledge_point=knowledge_point,
+            fav_type=type, subject=subject, knowledge_point=knowledge_point,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -390,7 +376,6 @@ def list_favorites(
 
 @app.get("/api/favorites/{item_id}")
 def get_favorite(item_id: str):
-    """Get a single favorite item."""
     try:
         store = get_favorite_store()
         item = store.get(item_id)
@@ -405,7 +390,6 @@ def get_favorite(item_id: str):
 
 @app.delete("/api/favorites/{item_id}")
 def delete_favorite(item_id: str):
-    """Remove a favorite item."""
     try:
         store = get_favorite_store()
         ok = store.delete(item_id)
@@ -418,8 +402,49 @@ def delete_favorite(item_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# === New v2 endpoints ===
 
-# ---- Health and static ----
+@app.get("/api/v2/health")
+def health_v2():
+    """Health check with orchestrator status."""
+    try:
+        orch = get_orchestrator()
+        return {
+            "status": "ok",
+            "document_count": orch.document_count,
+            "error_history_count": len(orch.error_history),
+            "services": orch.registry.list_services(),
+        }
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
+
+
+@app.get("/api/v2/kg/search")
+def kg_search(q: str):
+    """Search the knowledge graph."""
+    try:
+        orch = get_orchestrator()
+        if not orch.registry.has("knowledge-graph"):
+            raise HTTPException(status_code=404, detail="KG not initialized")
+        kg = orch.registry.resolve("knowledge-graph")
+        entities = kg.search_entities(q)
+        results = []
+        for e in entities[:10]:
+            prereqs = kg.get_prerequisites(e["id"])
+            mistakes = kg.get_common_mistakes(e["id"])
+            results.append({
+                "entity": e,
+                "prerequisites": [p["name"] for p in prereqs],
+                "common_mistakes": [m["name"] for m in mistakes],
+            })
+        return {"results": results}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# === Health and static ===
 
 @app.get("/api/health")
 def health():

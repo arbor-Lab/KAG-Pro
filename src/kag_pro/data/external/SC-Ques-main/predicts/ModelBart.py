@@ -1,15 +1,10 @@
-# _*_ encoding: utf-8 _*_
-import os
-import argparse
-import pickle
-import pandas as pd
-import numpy as np
-from random import sample
-import json
-
 import sys
+
+import numpy as np
+
 sys.path.append("../")
 from models.aml import AML
+
 
 class AutoFillBlank:
 

@@ -1,13 +1,12 @@
 """Vector store using ChromaDB for local persistence."""
 
 from pathlib import Path
-from typing import List
 
 import chromadb
 from chromadb.config import Settings
 
-from kag_pro.core.loader import Document
 from kag_pro.core.embedder import Embedder
+from kag_pro.core.types import Document
 from kag_pro.utils.config import get_config, get_project_root
 
 
@@ -32,7 +31,7 @@ class VectorStore:
             metadata={"hnsw:space": "cosine"},
         )
 
-    def add_documents(self, documents: List[Document]) -> None:
+    def add_documents(self, documents: list[Document]) -> None:
         if not documents:
             return
         texts = [doc.text for doc in documents]
@@ -43,14 +42,14 @@ class VectorStore:
             ids=ids, embeddings=embeddings, documents=texts, metadatas=metadatas
         )
 
-    def search(self, query: str, top_k: int = 5, threshold: float = 0.0, stage_filter: str | None = None, subject_filter: str | None = None) -> List[dict]:
+    def search(self, query: str, top_k: int = 5, threshold: float = 0.0, stage_filter: str | None = None, subject_filter: str | None = None) -> list[dict]:
         query_embedding = self._embedder.embed(query)
         results = self._collection.query(
             query_embeddings=[query_embedding],
             n_results=top_k,
             include=["documents", "metadatas", "distances"],
         )
-        hits: List[dict] = []
+        hits: list[dict] = []
         if not results["ids"] or not results["ids"][0]:
             return hits
         for i in range(len(results["ids"][0])):

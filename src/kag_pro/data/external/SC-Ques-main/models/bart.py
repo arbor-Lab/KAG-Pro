@@ -1,7 +1,7 @@
+from transformers import BartTokenizer
+
 from models.hf_base import HFBase
-from transformers import BartForSequenceClassification,BartTokenizer
-from transformers import AdamW
-from transformers import BertConfig
+
 
 class BART(HFBase):
     def __init__(self,config):

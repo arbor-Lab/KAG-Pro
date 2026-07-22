@@ -1,6 +1,9 @@
+from transformers import (
+    AutoTokenizer,
+)
+
 from models.hf_base import HFBase
-from transformers import BertForSequenceClassification, BertModel, BertTokenizer,AutoTokenizer,AutoModelForSequenceClassification
-from transformers import AdamW
+
 
 class XLNet(HFBase):
     def __init__(self,config):

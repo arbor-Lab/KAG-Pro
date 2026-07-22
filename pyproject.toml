@@ -22,10 +22,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+server = ["fastapi>=0.115", "uvicorn[standard]>=0.32", "pydantic>=2.0"]
 local-embed = ["sentence-transformers>=3.0"]
 faiss = ["faiss-cpu>=1.8"]
-dev = ["pytest>=8.0", "pytest-cov>=6.0"]
-all = ["kag-pro[local-embed,faiss,dev]"]
+dev = ["pytest>=8.0", "pytest-cov>=6.0", "ruff>=0.5", "pre-commit>=3.6"]
+all = ["kag-pro[server,local-embed,faiss,dev]"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -33,3 +34,32 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+src = ["src", "tests"]
+exclude = [
+    "src/kag_pro/data/external/**",
+]
+extend-exclude = ["src/kag_pro/data/external"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "B006",  # mutable argument defaults
+    "B905",  # zip without strict
+    "E722",  # bare except
+    "UP031", # percent format (false positives with f-strings)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["B", "UP"]

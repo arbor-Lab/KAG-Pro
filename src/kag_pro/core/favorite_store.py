@@ -4,13 +4,12 @@ import json
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
 
 
 class FavoriteStore:
     """CRUD for favorited items: papers, chat Q&A, and error diagnoses."""
 
-    def __init__(self, store_dir: Optional[str] = None):
+    def __init__(self, store_dir: str | None = None):
         if store_dir is None:
             store_dir = str(
                 Path(__file__).resolve().parent.parent / "data" / "favorites"
@@ -18,7 +17,7 @@ class FavoriteStore:
         self._dir = Path(store_dir)
         self._dir.mkdir(parents=True, exist_ok=True)
 
-    def save(self, item: Dict) -> Dict:
+    def save(self, item: dict) -> dict:
         """Save a favorite item. Required fields: type, content.
         Optional: subject, knowledge_point, stage, title.
         Returns the saved item dict with id."""
@@ -35,10 +34,10 @@ class FavoriteStore:
 
     def list_all(
         self,
-        fav_type: Optional[str] = None,
-        subject: Optional[str] = None,
-        knowledge_point: Optional[str] = None,
-    ) -> List[Dict]:
+        fav_type: str | None = None,
+        subject: str | None = None,
+        knowledge_point: str | None = None,
+    ) -> list[dict]:
         """List favorites, optionally filtered by type, subject, knowledge_point."""
         items = []
         for fpath in sorted(
@@ -67,7 +66,7 @@ class FavoriteStore:
             })
         return items
 
-    def get(self, item_id: str) -> Optional[Dict]:
+    def get(self, item_id: str) -> dict | None:
         """Get full favorite item by id."""
         filepath = self._dir / f"{item_id}.json"
         if not filepath.exists():

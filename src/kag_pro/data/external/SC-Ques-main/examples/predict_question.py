@@ -1,11 +1,11 @@
-import sys
-import pickle
 import json
+import pickle
+import sys
+
 sys.path.append("../predicts/")
-import os
 import pandas as pd
 
-with open("../datasets/SC-Ques/test.jsons", "r") as f:
+with open("../datasets/SC-Ques/test.jsons") as f:
     processed_data = []
     for line in f.readlines()[0:100]:
         processed_data.append(json.loads(line))
@@ -64,7 +64,7 @@ def get_class_acc(predict_data, threshold=0.0):
     i = 0; out_lines = []
     for line in predict_data:
         out_lines.append(line)
-        
+
         prob_lsts = [x[1] for x in line["prob_dict"].items()]
         prob = max(prob_lsts)
         if prob >= threshold:

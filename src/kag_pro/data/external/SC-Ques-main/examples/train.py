@@ -13,10 +13,11 @@ args = parser.parse_args()
 
 import os
 import sys
-import pandas as pd
+
 sys.path.append('..')
 from models.aml import AML
 from utils.data_utils import load_df
+
 base_path = os.path.dirname(os.path.realpath(__file__))
 
 data_dir = args.data_dir
@@ -57,6 +58,6 @@ print(f"df_train: {df_train.shape}, df_dev: {df_dev.shape}")
 ai = AML(save_dir=save_dir)
 model_class, config = ai.get_model_config(model_name)
 config.update(user_config)
-print("config is :{}".format(config))
+print(f"config is :{config}")
 model = model_class(config)
 model.train(df_train, df_dev)

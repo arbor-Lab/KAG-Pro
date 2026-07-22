@@ -1,11 +1,9 @@
 """Error diagnosis engine with knowledge retrieval and personalized feedback."""
 
-from typing import Optional
 
-from kag_pro.diagnosis.classifier import ErrorClassifier
-from kag_pro.core.vector_store import VectorStore
 from kag_pro.core.generator import Generator
-
+from kag_pro.core.vector_store import VectorStore
+from kag_pro.diagnosis.classifier import ErrorClassifier
 
 _STAGE_PROMPTS = {
     "primary": "你是一位耐心的小学辅导老师，用简单有趣的语言、生活化的比喻来解释。",
@@ -18,10 +16,10 @@ _STAGE_PROMPTS = {
 class ErrorDiagnoser:
     """Analyze student errors and generate personalized feedback."""
 
-    def __init__(self, vector_store: VectorStore):
+    def __init__(self, vector_store: VectorStore, generator: Generator | None = None):
         self._classifier = ErrorClassifier()
         self._store = vector_store
-        self._generator = Generator()
+        self._generator = generator or Generator()
 
     def diagnose(
         self,
@@ -94,15 +92,9 @@ class ErrorDiagnoser:
 （用2-3句话回顾相关的知识点，帮助学生理解正确解法）
 
 总字数150-250字。"""
-        return self._generator._client.chat.completions.create(
-            model=self._generator._model,
-            messages=[
-                {"role": "system", "content": persona},
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.3,
-            max_tokens=400,
-        ).choices[0].message.content or ""
+        return self._generator.call(
+            system=persona, user=prompt, temperature=0.3, max_tokens=400
+        )
     def generate_exercises(self, knowledge_point: str, error_type: str, count: int = 3) -> str:
         """Generate similar practice exercises for a given knowledge point.
 
@@ -125,10 +117,7 @@ class ErrorDiagnoser:
 3. 每道题给出答案
 4. 不要用Markdown符号
 5. 总字数150-250字"""
-        resp = self._generator._client.chat.completions.create(
-            model=self._generator._model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.5, max_tokens=500,
+        return self._generator.call(
+            system="你是一位学科教师。", user=prompt, temperature=0.5, max_tokens=500
         )
-        return resp.choices[0].message.content or ""
 

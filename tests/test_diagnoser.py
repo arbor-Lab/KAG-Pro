@@ -1,10 +1,9 @@
 """Tests for ErrorDiagnoser (integration with vector store)."""
 
 import tempfile
-from pathlib import Path
 
-from kag_pro.core.vector_store import VectorStore
 from kag_pro.core.loader import Document
+from kag_pro.core.vector_store import VectorStore
 from kag_pro.diagnosis.diagnoser import ErrorDiagnoser
 
 

@@ -1,0 +1,10 @@
+schema_version: 1
+module_path: kag_pro_datasets
+title: 外部数据集加载与教材内容生成
+scope:
+    - src/kag_pro/datasets/
+    - src/kag_pro/data/external/
+source_files: []
+depends_on: []
+related_to:
+    - path: kag_pro_core/data_processing

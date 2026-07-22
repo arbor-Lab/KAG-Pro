@@ -1,6 +1,7 @@
+import os
+
 from models import *
 
-import os
 base_path = os.path.dirname(os.path.realpath(__file__))
 from os.path import join
 

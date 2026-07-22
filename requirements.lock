@@ -1,0 +1,15 @@
+chromadb==1.5.9
+dashscope==1.26.4
+fastapi==0.139.2
+jieba==0.42.1
+langchain-core==1.4.9
+langchain-text-splitters==1.1.2
+openai==2.46.0
+pydantic==2.12.5
+pypdf==6.9.2
+pytest==9.1.1
+pytest-cov==7.1.0
+python-dotenv==1.2.2
+ruff==0.15.22
+sentence-transformers==5.6.0
+uvicorn==0.42.0

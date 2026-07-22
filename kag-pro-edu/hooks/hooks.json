@@ -1,0 +1,9 @@
+{
+  "hooks": [
+    {
+      "event": "project_open",
+      "action": "check_index",
+      "description": "项目打开时检查知识库索引状态，调用 kag_pro_health 工具"
+    }
+  ]
+}

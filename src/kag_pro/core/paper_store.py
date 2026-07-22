@@ -4,13 +4,12 @@ import json
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
 
 
 class PaperStore:
     """CRUD for saved exam papers stored as JSON files."""
 
-    def __init__(self, store_dir: Optional[str] = None):
+    def __init__(self, store_dir: str | None = None):
         if store_dir is None:
             store_dir = str(
                 Path(__file__).resolve().parent.parent / "data" / "papers"
@@ -18,7 +17,7 @@ class PaperStore:
         self._dir = Path(store_dir)
         self._dir.mkdir(parents=True, exist_ok=True)
 
-    def save(self, paper: Dict) -> Dict:
+    def save(self, paper: dict) -> dict:
         """Save a paper dict. If it has no id, one is generated.
         Returns the saved paper dict with id."""
         paper = dict(paper)  # shallow copy
@@ -32,7 +31,7 @@ class PaperStore:
         )
         return paper
 
-    def list_all(self) -> List[Dict]:
+    def list_all(self) -> list[dict]:
         """Return summary list of all saved papers."""
         papers = []
         for fpath in sorted(self._dir.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
@@ -51,7 +50,7 @@ class PaperStore:
                 continue
         return papers
 
-    def get(self, paper_id: str) -> Optional[Dict]:
+    def get(self, paper_id: str) -> dict | None:
         """Get full paper data by id."""
         filepath = self._dir / f"{paper_id}.json"
         if not filepath.exists():

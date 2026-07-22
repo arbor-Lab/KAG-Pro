@@ -1,9 +1,8 @@
 """KG-enhanced retrieval with hybrid re-ranking."""
 
-from typing import List
 
-from kag_pro.kg.graph import KnowledgeGraph
 from kag_pro.core.vector_store import VectorStore
+from kag_pro.kg.graph import KnowledgeGraph
 
 
 class KGRetriever:
@@ -14,7 +13,7 @@ class KGRetriever:
         self._store = vector_store
         self._alpha = alpha  # Weight for vector score (1-alpha for graph score)
 
-    def retrieve(self, query: str, top_k: int = 5, threshold: float = 0.3) -> List[dict]:
+    def retrieve(self, query: str, top_k: int = 5, threshold: float = 0.3) -> list[dict]:
         # Step 1: Vector retrieval
         vector_hits = self._store.search(query=query, top_k=top_k * 2, threshold=threshold)
 
@@ -35,25 +34,25 @@ class KGRetriever:
         scored.sort(key=lambda x: x["score"], reverse=True)
         return scored[:top_k]
 
-    def _find_entities(self, query: str) -> List[dict]:
+    def _find_entities(self, query: str) -> list[dict]:
         entities = []
-        for eid, entity in self._kg._entities.items():
+        for _eid, entity in self._kg._entities.items():
             if entity["name"] in query:
                 entities.append(entity)
         if not entities:
-            for eid, entity in self._kg._entities.items():
+            for _eid, entity in self._kg._entities.items():
                 for char in entity["name"]:
                     if char in query and len(entity["name"]) >= 2:
                         entities.append(entity)
                         break
         return entities[:3]
 
-    def _compute_graph_score(self, text: str, query_entities: List[dict]) -> float:
+    def _compute_graph_score(self, text: str, query_entities: list[dict]) -> float:
         if not query_entities:
             return 0.0
         score = 0.0
         text_entities = []
-        for eid, entity in self._kg._entities.items():
+        for _eid, entity in self._kg._entities.items():
             if entity["name"] in text:
                 text_entities.append(entity)
         if not text_entities:

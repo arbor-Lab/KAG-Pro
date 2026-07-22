@@ -1,7 +1,6 @@
 """Embedding generation via local BGE model or OpenAI-compatible API."""
 
 import hashlib
-from typing import List
 
 from kag_pro.utils.config import get_config
 
@@ -34,10 +33,10 @@ class Embedder:
             cls._local_model = SentenceTransformer(model_name, local_files_only=True)
             cls._local_model_name = model_name
 
-    def embed(self, text: str) -> List[float]:
+    def embed(self, text: str) -> list[float]:
         return self.embed_batch([text])[0]
 
-    def embed_batch(self, texts: List[str]) -> List[List[float]]:
+    def embed_batch(self, texts: list[str]) -> list[list[float]]:
         if not texts:
             return []
         trimmed = [t[:8000] for t in texts]

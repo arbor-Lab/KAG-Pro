@@ -1,21 +1,20 @@
 """Personalized exercise recommendation based on error history and knowledge graph."""
 
-from typing import List
 
-from kag_pro.kg.graph import KnowledgeGraph
-from kag_pro.core.vector_store import VectorStore
 from kag_pro.core.generator import Generator
+from kag_pro.core.vector_store import VectorStore
+from kag_pro.kg.graph import KnowledgeGraph
 
 
 class ExerciseRecommender:
     """Recommend practice exercises based on student error patterns and KG relationships."""
 
-    def __init__(self, kg: KnowledgeGraph, vector_store: VectorStore):
+    def __init__(self, kg: KnowledgeGraph, vector_store: VectorStore, generator: Generator | None = None):
         self._kg = kg
         self._store = vector_store
-        self._generator = Generator()
+        self._generator = generator or Generator()
 
-    def recommend(self, error_history: List[dict], count: int = 3) -> dict:
+    def recommend(self, error_history: list[dict], count: int = 3) -> dict:
         """Generate personalized exercise recommendations.
 
         Args:
@@ -44,7 +43,7 @@ class ExerciseRecommender:
             "learning_path": learning_path,
         }
 
-    def _analyze_weak_points(self, history: List[dict]) -> List[dict]:
+    def _analyze_weak_points(self, history: list[dict]) -> list[dict]:
         """Identify weak knowledge points from error history."""
         kp_counts = {}
         for item in history:
@@ -65,7 +64,7 @@ class ExerciseRecommender:
             })
         return weak
 
-    def _enrich_with_kg(self, weak_points: List[dict]) -> dict:
+    def _enrich_with_kg(self, weak_points: list[dict]) -> dict:
         """Use KG to find prerequisites and related knowledge for weak points."""
         enrichment = {"prerequisites": [], "related": [], "mistakes": []}
 
@@ -84,7 +83,7 @@ class ExerciseRecommender:
 
         return enrichment
 
-    def _generate_exercises(self, enriched: dict, count: int) -> List[dict]:
+    def _generate_exercises(self, enriched: dict, count: int) -> list[dict]:
         """Generate practice exercises targeting weak areas."""
         topics = []
         for wp in enriched.get("weak_points", enriched.get("weak_points", [])):
@@ -106,17 +105,12 @@ class ExerciseRecommender:
 题号. (考察：知识点) 题目内容
    答案：简短答案"""
 
-        response = self._generator._client.chat.completions.create(
-            model=self._generator._model,
-            messages=[
-                {"role": "system", "content": "你是一位有经验的学科教师，善于设计针对性的练习题。"},
-                {"role": "user", "content": prompt},
-            ],
+        exercises_text = self._generator.call(
+            system="你是一位有经验的学科教师，善于设计针对性的练习题。",
+            user=prompt,
             temperature=0.5,
             max_tokens=600,
         )
-
-        exercises_text = response.choices[0].message.content or ""
         exercises = []
         current = ""
         for line in exercises_text.split("\n"):
@@ -138,7 +132,7 @@ class ExerciseRecommender:
             exercises.append({"content": current})
         return exercises[:count]
 
-    def _build_learning_path(self, enriched: dict) -> List[str]:
+    def _build_learning_path(self, enriched: dict) -> list[str]:
         """Build a recommended learning path based on KG topology and weakness."""
         path = []
         seen = set()

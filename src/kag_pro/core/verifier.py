@@ -1,9 +1,8 @@
 """Factual consistency verification — check if generated answer is supported by knowledge base."""
 
-from typing import List, Tuple
 
-from kag_pro.core.vector_store import VectorStore
 from kag_pro.core.embedder import Embedder
+from kag_pro.core.vector_store import VectorStore
 
 
 class FactualVerifier:
@@ -47,9 +46,8 @@ class FactualVerifier:
             "details": f"{len(supported)}/{len(claims)} claims supported by knowledge base",
         }
 
-    def _extract_claims(self, text: str) -> List[str]:
+    def _extract_claims(self, text: str) -> list[str]:
         """Extract factual claims from answer text by splitting on sentences."""
-        sentences = []
         for sep in ["。", "！", "？", "；", "\n"]:
             text = text.replace(sep, "|||")
         parts = [p.strip() for p in text.split("|||") if p.strip()]
@@ -60,7 +58,7 @@ class FactualVerifier:
                 claims.append(p)
         return claims[:8]  # Limit to avoid excessive API calls
 
-    def _check_claim(self, claim: str) -> Tuple[bool, str]:
+    def _check_claim(self, claim: str) -> tuple[bool, str]:
         """Check if a single claim is supported by the knowledge base."""
         hits = self._store.search(query=claim, top_k=3, threshold=self._threshold)
         if not hits:

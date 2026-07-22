@@ -1,0 +1,198 @@
+{
+  "summary": {
+    "projectName": "KAG-Pro",
+    "locale": "zh-CN",
+    "modelId": "agent-work-loop-v4",
+    "reportContractVersion": 24,
+    "overview": "KAG-Pro 的 RAG 核心编排（pipeline.py）与 FastAPI 服务（server.py）边界清晰、pytest 测试可直跑，但当前 Harness 在可复现启动、合并前质量门与 agent 上下文入口三处存在可修复缺口。证据为 session-limited：2 个合格会话、0 个保留的变更/检查/验收 Episode，故任务完成与交付状态主要依赖项目静态证据，行为层面多为 Unobserved；最突出的两个高优先级问题是文档化的服务启动在干净环境失败（fastapi/uvicorn/pydantic 未声明）与无任何合并前机械质量门。",
+    "aiAgentPractice": {
+      "inspectedSurfaces": [
+        "Rules",
+        "Skills",
+        "Plugins",
+        "Custom Agents"
+      ],
+      "coverageRows": [
+        {
+          "surface": "Rules",
+          "scopes": [
+            "Project"
+          ],
+          "count": 0,
+          "paths": []
+        },
+        {
+          "surface": "Skills",
+          "scopes": [
+            "Project"
+          ],
+          "count": 0,
+          "paths": []
+        },
+        {
+          "surface": "Plugins",
+          "scopes": [
+            "Global"
+          ],
+          "count": 10,
+          "paths": []
+        },
+        {
+          "surface": "Custom Agents",
+          "scopes": [
+            "Project"
+          ],
+          "count": 0,
+          "paths": []
+        }
+      ]
+    },
+    "suggestions": [
+      {
+        "id": "try-configured-make-test",
+        "kind": "try-existing",
+        "title": "在下次实质性编辑后运行已配置的 make test",
+        "reason": "pytest 已在 Makefile 与 pyproject.toml 配置（testpaths=tests, pythonpath=src），但会话样本未观测到任何校验命令；先运行已配置路由可建立可观测的编辑后校验行为。",
+        "confidence": "Medium",
+        "owner": "维护者",
+        "nextStep": "下次实质性编辑后运行 make test，确认其产出文件/行级失败信息。",
+        "validation": "pytest 执行并返回可定位的失败输出。"
+      }
+    ],
+    "assignmentSummaries": [],
+    "dimensions": [
+      {
+        "id": "task-understanding",
+        "label": "任务理解",
+        "score": 52,
+        "summary": "无 AGENTS.md/spec/验收标准等 agent 入口与可恢复验收边界；README 与 4 张项目知识卡提供静态上下文，但无渐进式路由，作用域边界未跟踪。",
+        "findingRefs": [
+          "no-agent-entrypoint"
+        ]
+      },
+      {
+        "id": "controlled-execution",
+        "label": "可控执行",
+        "score": 46,
+        "summary": "Makefile 提供 install/test/lint/clean，但文档化的服务启动与 lint 在干净环境均失败（fastapi/uvicorn/pydantic 与 ruff 未声明）；无运行时锁定/锁文件；无 hooks/沙箱等强制权限边界。",
+        "findingRefs": [
+          "server-startup-unreproducible",
+          "tracked-binary-state"
+        ]
+      },
+      {
+        "id": "change-validation",
+        "label": "改动验证",
+        "score": 52,
+        "summary": "pytest 测试套件已配置并可直跑（Present/Wired），但 ruff lint 在干净环境不可用、无受影响检查路由、无结构化诊断；会话样本未观测到任何校验命令。",
+        "findingRefs": [
+          "lint-check-unavailable"
+        ]
+      },
+      {
+        "id": "reliable-delivery",
+        "label": "可靠交付",
+        "score": 38,
+        "summary": "无 CI、无 pre-commit、无分支保护，工作直接落在 main 且存在未提交改动；无修订绑定的验收决策、高风险审批或回滚恢复路由。",
+        "findingRefs": [
+          "no-delivery-gate"
+        ]
+      },
+      {
+        "id": "learning-capture",
+        "label": "经验沉淀",
+        "score": 38,
+        "summary": "有界审查已完成，但仅有 1 个 Episode 且 0 规范化事件，不足以区分重复工作或干净窗口；无已执行检测器、可复用干预或后续可比结果。",
+        "findingRefs": [
+          "learning-capture-evidence-gap"
+        ]
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "server-startup-unreproducible",
+      "title": "文档化的服务启动路由在干净环境不可复现",
+      "severity": "High",
+      "reason": "frontend/server.py 依赖 fastapi/uvicorn/pydantic，但三者均未在 pyproject.toml 的 dependencies 或 optional 中声明；README 文档化的 `pip install -e \".[all]\"` 后 `python frontend/server.py` 在干净环境必然 ModuleNotFoundError。同时无 .python-version 与锁文件，跨机依赖漂移。这使主交付物（聊天服务）在干净环境无法启动。",
+      "expectedOutput": [
+        "干净环境安装后服务启动且 /api/health 返回 200。"
+      ],
+      "expectedArtifact": "pyproject.toml 依赖与运行时锁定",
+      "aiFixPrompt": "/better-loop fix this issue\n\n将 fastapi/uvicorn/pydantic 加入 pyproject.toml 依赖（或新增 [server] optional 并同步更新 README 安装命令），并补齐 .python-version 与锁文件以保证可复现。\n\n## Validation\n\n- 全新 venv 执行 `pip install -e \".[all]\"` 后 `python frontend/server.py` 可启动\n- `/api/health` 返回 200",
+      "dimensionRefs": [
+        "controlled-execution"
+      ]
+    },
+    {
+      "id": "lint-check-unavailable",
+      "title": "make lint 在干净环境不可用且规则不可复现",
+      "severity": "Medium",
+      "reason": "Makefile 的 `make lint` 调用 ruff，但 ruff 既不在 dev 依赖、也无 [tool.ruff] 配置段；干净安装后 `make install-dev && make lint` 直接失败。受影响变更（如 paper_generator.py、index.html）缺少可运行的静态检查，规则不可复现。",
+      "expectedOutput": [
+        "干净环境 make lint 退出码 0 且规则可复现。"
+      ],
+      "expectedArtifact": "ruff 依赖与配置",
+      "aiFixPrompt": "/better-loop fix this issue\n\n将 ruff 加入 dev 依赖、添加 [tool.ruff] 配置段，并新增 `make check` 合并 lint 与 test。\n\n## Validation\n\n- 全新 venv `make install-dev && make lint` 退出码 0",
+      "dimensionRefs": [
+        "change-validation"
+      ]
+    },
+    {
+      "id": "no-delivery-gate",
+      "title": "合并前无机械质量门与验收边界",
+      "severity": "High",
+      "reason": "无 .github/workflows、无 .pre-commit-config.yaml、无分支保护；工作直接落在 main 且当前存在未提交/未校验改动（paper_generator.py、index.html、chroma.sqlite3）。无修订绑定的验收决策、高风险审批或回滚路由，变更可无门入库。",
+      "expectedOutput": [
+        "PR 必须通过 lint+test 方可合并。"
+      ],
+      "expectedArtifact": "CI 工作流与分支保护",
+      "aiFixPrompt": "/better-loop fix this issue\n\n新增 GitHub Actions 在 PR 上运行 `make lint && make test`，配置 main 分支保护与必要状态检查；可选加 .pre-commit-config.yaml。\n\n## Validation\n\n- PR 触发 CI 通过；`pre-commit run --all-files` 通过",
+      "dimensionRefs": [
+        "reliable-delivery"
+      ]
+    },
+    {
+      "id": "tracked-binary-state",
+      "title": "可变二进制向量库被纳入版本控制",
+      "severity": "Medium",
+      "reason": "data/chroma_db/chroma.sqlite3 仍被 git 跟踪（git ls-files 确认）且工作区已修改，尽管 .gitignore 已忽略该目录。二进制状态文件产生噪声 diff、合并冲突与多机状态漂移，agent 工作可无意修改共享状态而无强制清理边界。",
+      "expectedOutput": [
+        "chroma_db 不再被跟踪，重建后 git status 干净。"
+      ],
+      "expectedArtifact": "版本控制卫生修复",
+      "aiFixPrompt": "/better-loop fix this issue\n\n执行 `git rm --cached data/chroma_db/chroma.sqlite3`（及目录下被跟踪文件）并提交，依赖既有 .gitignore。\n\n## Validation\n\n- 重建向量库后 `git status` 干净",
+      "dimensionRefs": [
+        "controlled-execution"
+      ]
+    },
+    {
+      "id": "no-agent-entrypoint",
+      "title": "缺少 agent 上下文入口与目录职责图",
+      "severity": "Medium",
+      "reason": "无 AGENTS.md/CLAUDE.md/.cursor 等 agent 入口，README 为散文式结构说明，无目录职责图、高风险区或任务路由。agent 需遍历整库推断形状，无法循权威所有者链定位规范源与受影响检查。",
+      "expectedOutput": [
+        "agent 循入口可达目录职责、命令与风险路由。"
+      ],
+      "expectedArtifact": "AGENTS.md 入口",
+      "aiFixPrompt": "/better-loop fix this issue\n\n新增 AGENTS.md（80-150 行）：项目定位、目录职责表、命令指针（install/test/lint/run）、高风险区（向量库/密钥/直接 main 提交）与受影响检查映射。\n\n## Validation\n\n- agent 可依入口定位核心边界与对应检查路由",
+      "dimensionRefs": [
+        "task-understanding"
+      ]
+    },
+    {
+      "id": "learning-capture-evidence-gap",
+      "title": "学习捕获观测边界不足以区分重复工作",
+      "severity": "Low",
+      "reason": "有界审查仅 1 个 Episode 且 0 规范化事件（0 编辑/0 检查/0 验收），覆盖边界多为 not-evaluable-missing-normalized-events / insufficient-episodes；无已执行检测器、可复用干预或后续可比结果。无法判定重复工作或干净窗口，需保留证据缺口。",
+      "expectedOutput": [
+        "后续审查可区分重复工作或确认干净窗口。"
+      ],
+      "expectedArtifact": "可观测校验边界",
+      "aiFixPrompt": "/better-loop fix this issue\n\n先建立可观测的编辑后校验路由（AGENTS.md 校验指引 + 可运行 make test/lint），使后续会话产生规范化校验事件，再在后续有界审查中区分重复工作或干净窗口。\n\n## Validation\n\n- 后续有界审查具备至少 2 个含规范化校验事件的 Episode",
+      "dimensionRefs": [
+        "learning-capture"
+      ]
+    }
+  ]
+}

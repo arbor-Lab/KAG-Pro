@@ -1,20 +1,17 @@
-import os
 import copy
+import os
 import time
-import pandas as pd
-import numpy as np
-from tqdm import tqdm
-from keras.layers import Lambda, Dense
-from utils.data_utils import init_dir
-from models.base_model import BaseModel
-from utils.metrics_utils import get_model_metrics,get_multi_class_report
-from utils.data_utils import load_df
-from configs.aml_config import model_dict, default_model_list
-from utils.data_utils import load_df
 import traceback
 
+import numpy as np
+import pandas as pd
+from configs.aml_config import default_model_list, model_dict
+from tqdm import tqdm
+from utils.data_utils import init_dir, load_df
+from utils.metrics_utils import get_model_metrics, get_multi_class_report
 
-class AML():
+
+class AML:
     def __init__(self, save_dir, config={}):
         self.model_dict = model_dict
         self.save_dir = save_dir
@@ -58,18 +55,18 @@ class AML():
         for model_name in model_list:
             if model_name not in self.model_dict:
                 raise Exception(
-                    "model:{} is not support now!".format(model_name))
+                    f"model:{model_name} is not support now!")
         return model_list
 
     def __get_one_model(self, model_name, df_train, df_dev, train=True):
         model_class, config = self.get_model_config(model_name)
         config.update(self.config)
         config['save_dir'] = os.path.join(self.save_dir, model_name)
-        print("config is :{}".format(config))
+        print(f"config is :{config}")
         model = model_class(config)
         if train:
             print('Training...')
-            print("Start train {}".format(model_name))
+            print(f"Start train {model_name}")
             _ = model.train(df_train, df_dev)
             print("release after train")
         else:
@@ -97,10 +94,9 @@ class AML():
                 self.all_report.append(dev_report)
                 # release
                 model.release()
-                print("model_name:{} eval finish!,dev_report:{}".format(
-                    model_name, dev_report))
+                print(f"model_name:{model_name} eval finish!,dev_report:{dev_report}")
             except:
-                print("model_name:{},fail,detail is {}".format(model_name,traceback.format_exc()))
+                print(f"model_name:{model_name},fail,detail is {traceback.format_exc()}")
         if self.num_labels==2:
             df_report = pd.DataFrame(self.all_report)
             cols = ["Accuracy", "Precision", "Recall",
@@ -133,10 +129,9 @@ class AML():
                 all_report.append(model_report)
                 # release
                 model.release()
-                print("model_name:{} eval finish!,model_report:{}".format(
-                    model_name, model_report))
+                print(f"model_name:{model_name} eval finish!,model_report:{model_report}")
             except:
-               print("model_name:{},fail,detail is {}".format(model_name,traceback.format_exc()))
+               print(f"model_name:{model_name},fail,detail is {traceback.format_exc()}")
         if self.num_labels==2:
             cols = ["model_name", "Accuracy", "Precision",
                     "Recall", "F_meansure", "AUC_Value", "avg_time_s"]
@@ -160,5 +155,5 @@ class AML():
                 # release
                 model.release()
             except:
-               print("model_name:{},fail,detail is {}".format(model_name,traceback.format_exc()))
+               print(f"model_name:{model_name},fail,detail is {traceback.format_exc()}")
         return df_list

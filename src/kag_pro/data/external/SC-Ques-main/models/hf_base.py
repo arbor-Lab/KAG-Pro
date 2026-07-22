@@ -1,25 +1,15 @@
-import sys
-import torch
-import os
-import copy
-import numpy as np
-import pandas as pd
-from tqdm import tqdm
-import random
-import time
 import datetime
-from tqdm import tqdm, trange
-from transformers import BertConfig
-from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
+import os
+import time
+
+import numpy as np
+import torch
 from keras.preprocessing.sequence import pad_sequences
-from transformers import BertForSequenceClassification, BertModel, BertTokenizer, AutoTokenizer, AutoModelForSequenceClassification
-from transformers import AdamW
-from transformers import get_linear_schedule_with_warmup
-from utils.data_utils import init_dir
-from models.base_model import BaseModel
-from utils.metrics_utils import get_model_metrics
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, TensorDataset
+from transformers import AdamW, AutoConfig, AutoModelForSequenceClassification, get_linear_schedule_with_warmup
 from utils.data_utils import load_df
-from transformers import AutoConfig
+
+from models.base_model import BaseModel
 
 try:
     from apex import amp  # noqa: F401
@@ -42,7 +32,7 @@ def format_time(elapsed):
     Takes a time in seconds and returns a string hh:mm:ss
     '''
     # Round to the nearest second.
-    elapsed_rounded = int(round((elapsed)))
+    elapsed_rounded = int(round(elapsed))
 
     # Format as hh:mm:ss
     return str(datetime.timedelta(seconds=elapsed_rounded))
@@ -50,7 +40,7 @@ def format_time(elapsed):
 
 class HFBase(BaseModel):
     def __init__(self, config):
-        super().__init__(config)    
+        super().__init__(config)
         self.tokenizer = self.get_tokenizer()
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model_path = self.save_dir
@@ -137,7 +127,7 @@ class HFBase(BaseModel):
                                lr=1e-5,
                                eps=1e-8
                                )
-        if not self.fp16 is None:
+        if self.fp16 is not None:
             if not is_apex_available():
                 raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
             self.model, self.optimizer = amp.initialize(self.model, self.optimizer, opt_level=self.fp16)
@@ -164,8 +154,7 @@ class HFBase(BaseModel):
         prediction_sampler = SequentialSampler(prediction_data)
         prediction_dataloader = DataLoader(
             prediction_data, sampler=prediction_sampler, batch_size=self.batch_size, shuffle=False)
-        print('Predicting labels for {:,} test sentences...'.format(
-            len(prediction_data)))
+        print(f'Predicting labels for {len(prediction_data):,} test sentences...')
         self.model.eval()
         predictions = []
 
@@ -205,7 +194,7 @@ class HFBase(BaseModel):
         for epoch_i in range(0, epochs):
             print("")
             print(
-                '======== Epoch {:} / {:} ========'.format(epoch_i + 1, epochs))
+                f'======== Epoch {epoch_i + 1} / {epochs} ========')
             print('Training...')
 
             t0 = time.time()
@@ -238,7 +227,7 @@ class HFBase(BaseModel):
                 total_loss += loss.item()
 
                 loss.backward()
-               
+
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
                 self.optimizer.step()
                 scheduler.step()
@@ -248,9 +237,8 @@ class HFBase(BaseModel):
             loss_values.append(avg_train_loss)
 
             print("")
-            print("  Average training loss: {0:.2f}".format(avg_train_loss))
-            print("  Training epcoh took: {:}".format(
-                format_time(time.time() - t0)))
+            print(f"  Average training loss: {avg_train_loss:.2f}")
+            print(f"  Training epcoh took: {format_time(time.time() - t0)}")
 
             print("")
             print("Running Validation...")
@@ -286,13 +274,12 @@ class HFBase(BaseModel):
                 eval_accuracy += tmp_eval_accuracy
 
                 nb_eval_steps += 1
-                
+
             avg_eval_acc = eval_accuracy/nb_eval_steps
             avg_eval_loss =  eval_loss/nb_eval_steps
-            print("  Accuracy: {:.4f},Loss :{:.4f}".format(avg_eval_acc,avg_eval_loss))
-            print("  Validation took: {:}".format(
-                format_time(time.time() - t0)))
-            
+            print(f"  Accuracy: {avg_eval_acc:.4f},Loss :{avg_eval_loss:.4f}")
+            print(f"  Validation took: {format_time(time.time() - t0)}")
+
             if not os.path.exists(output_dir):
                     os.makedirs(output_dir)
             output_dir_with_epoch = os.path.join(output_dir, "epoch_" + str(epoch_i + 1))
@@ -309,8 +296,7 @@ class HFBase(BaseModel):
             else:
                 patience_count = patience_count + 1
             if patience_count > self.patience:
-                print("Epoch {}:early stopping Get best result, val_loss did not improve from {}".format(
-                    epoch_i + 1, best_acc))
+                print(f"Epoch {epoch_i + 1}:early stopping Get best result, val_loss did not improve from {best_acc}")
                 break
 
     def release(self):
@@ -318,7 +304,7 @@ class HFBase(BaseModel):
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
         pass
-    
+
     def load_raw_config(self):
         '''获取原始的config'''
         config = AutoConfig.from_pretrained(self.model_dir)
@@ -328,8 +314,8 @@ class HFBase(BaseModel):
         config = self.load_raw_config()
         num_labels = self.num_labels
         config_dict = {"num_labels": num_labels,
-                    "id2label": {x: "LABEL_{}".format(x) for x in range(num_labels)},
-                    "label2id": {"LABEL_{}".format(x): x for x in range(num_labels)},
+                    "id2label": {x: f"LABEL_{x}" for x in range(num_labels)},
+                    "label2id": {f"LABEL_{x}": x for x in range(num_labels)},
                     }
         for k,v in config_dict.items():
             setattr(config,k,v)

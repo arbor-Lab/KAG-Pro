@@ -110,15 +110,6 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
 .verdict.l { background: rgba(248,113,113,0.1); color: #b91c1c; border: 1px solid rgba(248,113,113,0.3); }
 
 
-.think-wrap { margin-top: 12px; border: 1px solid var(--border-subtle); border-radius: 10px; overflow: hidden; }
-.think-head { display: flex; align-items: center; gap: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px; color: var(--text-tertiary); user-select: none; }
-.think-head:hover { background: var(--bg-hover); color: var(--text-secondary); }
-.think-head .chev { transition: transform .2s; font-size: 10px; }
-.think-head.open .chev { transform: rotate(90deg); }
-.think-body { display: none; padding: 0 12px 12px; font-size: 12px; color: var(--text-tertiary); line-height: 1.6; }
-.think-body.open { display: block; }
-.think-body .think-row { display: flex; gap: 8px; padding: 3px 0; }
-.think-body .think-label { color: var(--text-secondary); flex-shrink: 0; min-width: 48px; }
 .load-row { display: flex; align-items: center; gap: 6px; padding: 24px 0 24px 48px; }
 .load-dot { width: 6px; height: 6px; background: var(--text-secondary); border-radius: 50%; animation: bounce 1.4s infinite; }
 .load-dot:nth-child(2) { animation-delay: .2s; }
@@ -642,17 +633,6 @@ function am(rl,ct,mt){
     _lm[sid]={question:mt?._q||'', answer:ct, stage:mt?.stage||'', subject:mt?._subject||'', knowledge_point:mt?._kp||''};
   }
   if(mt?.sources?.length){h+='<div class="msg-src">';mt.sources.forEach(s=>{h+=`<span>📚 ${e(s.source)} (${typeof s.score==='number'?(s.score*100).toFixed(0):'?'}%)</span>`});if(mt.verdict)h+=`<span class="verdict ${mt.verdict.toLowerCase().charAt(0)}">${mt.verdict}</span>`;h+='</div>'}
-  // Thinking panel for bot messages
-  if(rl==='bot' && mt){
-    h+=`<div class="think-wrap"><div class="think-head" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span class="chev">▶</span> 思考过程</div><div class="think-body">`;
-    if(mt.stage)h+=`<div class="think-row"><span class="think-label">学段</span><span>${e(mt.stage)}</span></div>`;
-    if(mt._subject)h+=`<div class="think-row"><span class="think-label">学科</span><span>${e(mt._subject)}</span></div>`;
-    if(mt._kp)h+=`<div class="think-row"><span class="think-label">知识模块</span><span>${e(mt._kp)}</span></div>`;
-    if(mt._reason)h+=`<div class="think-row"><span class="think-label">判断依据</span><span>${e(mt._reason)}</span></div>`;
-    if(mt.sources?.length){h+=`<div class="think-row"><span class="think-label">检索来源</span><span>`;mt.sources.forEach(s=>{h+=`${e(s.source)} `});h+=`</span></div>`;}
-    if(mt.verdict)h+=`<div class="think-row"><span class="think-label">可信度</span><span class="verdict ${mt.verdict.toLowerCase().charAt(0)}">${mt.verdict}</span></div>`;
-    h+=`</div></div>`;
-  }
   b.innerHTML=h;d.appendChild(a);d.appendChild(b);inn.appendChild(d);document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight
 }
 function sl(){const inn=document.getElementById('msgs'),w=document.getElementById('welc');if(w)w.remove();const d=document.createElement('div');d.className='load-row';d.id='ld';d.innerHTML='<div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div>';inn.appendChild(d);document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight}
@@ -832,12 +812,6 @@ async function diag(){
   const r=document.getElementById('dr');r.style.display='block';r.innerHTML='诊断中...';
   try{const res=await fetch('/api/diagnose',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,student_answer:s,correct_answer:c})});const d=await res.json();
   r.innerHTML=`<div style="color:var(--text-primary);font-weight:600;margin-bottom:10px;font-size:15px;">${e(d.error_type||'')}</div><div style="margin-bottom:6px;color:var(--text-secondary);">📖 ${e(d.knowledge_point||'')}</div><div style="margin-bottom:14px;color:var(--text-secondary);">💡 ${e(d.hint||'')}</div><div style="line-height:1.7;">${e(d.feedback||'')}</div>
-    <div class="think-wrap" style="margin-top:14px;"><div class="think-head" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span class="chev">▶</span> 诊断思考过程</div><div class="think-body">
-      <div class="think-row"><span class="think-label">错误类型</span><span>${e(d.error_type||'')}</span></div>
-      <div class="think-row"><span class="think-label">知识点</span><span>${e(d.knowledge_point||'')}</span></div>
-      <div class="think-row"><span class="think-label">诊断提示</span><span>${e(d.hint||'')}</span></div>
-      <div class="think-row"><span class="think-label">置信度</span><span>${typeof d.confidence==='number'?(d.confidence*100).toFixed(0)+'%':'N/A'}</span></div>
-    </div></div>`;
   }catch(e){r.innerHTML='诊断失败：'+(e.message||'')}}
 // History
 let _sessions=JSON.parse(localStorage.getItem('kag_sessions')||'[]');
@@ -848,7 +822,7 @@ function newSession(){
   _sessionId=Date.now().toString(36);
   _sessionMsgs=[];
   localStorage.setItem('kag_sid',_sessionId);
-  clearMessages();refreshHist();
+  document.getElementById("msgs").innerHTML="";refreshHist();
 }
 
 function saveSession(){
@@ -898,8 +872,7 @@ am=function(rl,ct,mt){
 };
 
 // Override clearMessages  
-const _origClear=clearMessages;
-clearMessages=function(){_sessionMsgs=[];newSession();return _origClear();};
+function clearMessages(){_sessionMsgs=[];saveSession();document.getElementById("msgs").innerHTML="";}
 
 // Init on load
 refreshHist();
