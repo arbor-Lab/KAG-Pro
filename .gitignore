@@ -22,6 +22,9 @@ venv/
 *.log
 data/chroma_db/
 
+# Qoder local cache and temporary files
+.qoder/
+
 # External datasets (too large for Git, download separately)
 src/kag_pro/data/external/*.csv
 src/kag_pro/data/external/*.json
