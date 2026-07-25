@@ -24,6 +24,7 @@ def main():
         "初中生物": ("mid", "bio"), "初中地理": ("mid", "geo"), "初中历史": ("mid", "his"),
         "高中物理": ("hig", "phy"), "高中化学": ("hig", "che"), "高中数学": ("hig", "mat"),
         "高中生物": ("hig", "bio"), "高中地理": ("hig", "geo"), "高中历史": ("hig", "his"),
+        "小学数学": ("ele", "mat"), "小学奥数": ("ele", "oly"),
     }
 
     for subject, topics in COMPREHENSIVE_OUTLINE.items():

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KAG-Pro</title>
+<link rel="icon" href="data:,">
 <style>
 :root {
   color-scheme: light;
@@ -102,12 +103,6 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
 .msg-body .tag { display: inline-block; font-size: 11px; color: var(--text-primary); background: rgba(0,0,0,0.05); padding: 2px 8px; border-radius: 6px; margin-bottom: 8px; font-weight: 500; }
 .msg-body p { white-space: pre-wrap; line-height: 1.6; margin-bottom: 8px; }
 .msg-body p:last-child { margin-bottom: 0; }
-.msg-src { margin-top: 16px; padding-top: 12px; font-size: 12px; color: var(--text-secondary); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.msg-src span { display: inline-block; background: var(--bg-sidebar); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-subtle); }
-.verdict { font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: 500; }
-.verdict.h { background: rgba(74,222,128,0.1); color: #15803d; border: 1px solid rgba(74,222,128,0.3); }
-.verdict.m { background: rgba(250,204,21,0.1); color: #b45309; border: 1px solid rgba(250,204,21,0.3); }
-.verdict.l { background: rgba(248,113,113,0.1); color: #b91c1c; border: 1px solid rgba(248,113,113,0.3); }
 
 
 .load-row { display: flex; align-items: center; gap: 6px; padding: 24px 0 24px 48px; }
@@ -284,16 +279,39 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
 /* Diagnosis Result */
 .diag-result { margin-top: 24px; padding: 20px; background: rgba(0,0,0,0.02); border: 1px solid var(--border-subtle); border-radius: 16px; font-size: 15px; line-height: 1.7; display: none; }
 
+/* Thought Chain */
+.thought-chain { margin-bottom: 12px; border: 1px solid var(--border-subtle); border-radius: 12px; overflow: hidden; background: var(--bg-sidebar); }
+.tc-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-secondary); user-select: none; }
+.tc-header:hover { background: var(--bg-hover); }
+.tc-header svg { flex-shrink: 0; }
+.tc-chev { margin-left: auto; transition: transform .2s; }
+.tc-header.collapsed .tc-chev { transform: rotate(-90deg); }
+.tc-body { max-height: 2000px; overflow: hidden; transition: max-height .3s ease, padding .3s ease; padding: 0 14px 12px; }
+.tc-header.collapsed + .tc-body { max-height: 0; padding-top: 0; padding-bottom: 0; }
+.tc-step { padding: 10px 0; border-top: 1px solid var(--border-subtle); }
+.tc-step:first-child { border-top: none; }
+.tc-step-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.tc-step-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; white-space: pre-wrap; }
+.tc-step-detail { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+.tc-step-sources { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.tc-step-sources span { font-size: 11px; background: var(--bg-input); padding: 2px 8px; border-radius: 8px; color: var(--text-secondary); }
+/* Streaming indicators */
+.thinking-indicator { display: flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: 13px; color: var(--text-secondary); }
+.thinking-indicator .ti-dots { display: flex; gap: 4px; }
+.thinking-indicator .ti-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse-dot 1.4s infinite; }
+.thinking-indicator .ti-dot:nth-child(2) { animation-delay: .2s; }
+.thinking-indicator .ti-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes pulse-dot { 0%,80%,100% { opacity: 0.3; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1.2); } }
+.tc-step.entering { animation: stepSlide 0.3s ease-out; }
+@keyframes stepSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.answer-cursor::after { content: '\u258b'; color: var(--accent); animation: blink 1s infinite; }
+@keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+
 @media print {
   body { background: #fff; color: #000; }
   #sidebar, .composer, .pv-tabs, #paperForm, .paper-actions, .q-btns, .hist-banner,
-  .saved-item, .welcome .chips .f-group, .row2, 
-.alloc-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--bg-main); }
-.alloc-topic { font-size: 13px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.alloc-types { display: flex; gap: 6px; flex-shrink: 0; }
-.alloc-types input { width: 40px; padding: 4px; border: 1px solid var(--border-subtle); border-radius: 6px; background: var(--bg-input); color: var(--text-primary); font-size: 12px; text-align: center; font-family: inherit; }
-.alloc-types label { font-size: 11px; color: var(--text-tertiary); display: flex; align-items: center; gap: 3px; }
-.btn-primary { display: none !important; }
+  .saved-item, .welcome .chips, .f-group, .row2 { display: none !important; }
+  .btn-primary { display: none !important; }
   main { overflow: visible; }
   #paperView { display: block !important; overflow: visible; padding: 0; }
   .pv-wrap { max-width: none; }
@@ -398,9 +416,9 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
         <div class="f-group">
           <div class="f-label">题型与数量</div>
           <div class="qtype-list">
-            <div class="qtype-row"><label><input type="checkbox" value="选择题" class="qt-cb" checked onchange="ut()"> 选择题</label><span style="font-size:13px;color:var(--text-secondary);flex:1;text-align:right;">数量</span><input type="number" class="qt-n" value="2" min="1" max="10" oninput="ut()"></div>
-            <div class="qtype-row"><label><input type="checkbox" value="填空题" class="qt-cb" onchange="ut()"> 填空题</label><span style="font-size:13px;color:var(--text-secondary);flex:1;text-align:right;">数量</span><input type="number" class="qt-n" value="2" min="1" max="10" oninput="ut()"></div>
-            <div class="qtype-row"><label><input type="checkbox" value="简答题" class="qt-cb" onchange="ut()"> 简答题</label><span style="font-size:13px;color:var(--text-secondary);flex:1;text-align:right;">数量</span><input type="number" class="qt-n" value="1" min="1" max="10" oninput="ut()"></div>
+            <div class="qtype-row"><label><input type="checkbox" value="选择题" class="qt-cb" checked onchange="ut()"> 选择题</label><span style="font-size:13px;color:var(--text-secondary);flex:1;text-align:right;">数量</span><input type="number" class="qt-n" name="qt-n-choice" value="2" min="1" max="10" oninput="ut()"></div>
+            <div class="qtype-row"><label><input type="checkbox" value="填空题" class="qt-cb" onchange="ut()"> 填空题</label><span style="font-size:13px;color:var(--text-secondary);flex:1;text-align:right;">数量</span><input type="number" class="qt-n" name="qt-n-fill" value="2" min="1" max="10" oninput="ut()"></div>
+            <div class="qtype-row"><label><input type="checkbox" value="简答题" class="qt-cb" onchange="ut()"> 简答题</label><span style="font-size:13px;color:var(--text-secondary);flex:1;text-align:right;">数量</span><input type="number" class="qt-n" name="qt-n-short" value="1" min="1" max="10" oninput="ut()"></div>
           </div>
         </div>
         <div class="row2">
@@ -459,7 +477,7 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
 </main>
 
 <script>
-let cv='chat',ct='gen',kt=null,cp=null,ph=[],_ld=null;
+let cv='chat',ct='gen',kt=null,cp=null,ph=[];
 
 function toggleSb(){document.getElementById('sidebar').classList.toggle('folded')}
 function go(v){
@@ -613,6 +631,18 @@ async function dp(id){if(!confirm('确认删除？'))return;try{await fetch('/ap
 
 function e(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
+// Thought Chain renderer (for session restoration)
+function renderTC(tc){
+  const icons={analysis:'\uD83D\uDD0D',retrieval:'\uD83D\uDCDA',kg_enrichment:'\uD83C\uDF10',reasoning:'\uD83D\uDCA4',verification:'\u2713'};
+  let steps='';
+  tc.forEach(s=>{
+    let srcHtml='';if(s.sources&&s.sources.length)srcHtml='<div class="tc-step-sources">'+s.sources.map(x=>'<span>'+e(x)+'</span>').join('')+'</div>';
+    let detHtml='';if(s.detail)detHtml='<div class="tc-step-detail">'+e(s.detail)+'</div>';
+    steps+='<div class="tc-step"><div class="tc-step-title">'+(icons[s.step]||'\u25B8')+' '+e(s.title)+'</div><div class="tc-step-desc">'+e(s.description)+'</div>'+srcHtml+detHtml+'</div>';
+  });
+  return '<div class="thought-chain"><div class="tc-header" onclick="this.classList.toggle(\'collapsed\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg><span>推理过程</span><svg class="tc-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div><div class="tc-body">'+steps+'</div></div>';
+}
+
 // Chat
 function upBtn(){const b=document.getElementById('sbtn'),v=document.getElementById('input').value.trim();b.classList.toggle('active',!!v);b.disabled=!v}
 let _lm={}; // last message metadata per element
@@ -632,14 +662,156 @@ function am(rl,ct,mt){
       '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></button>';
     _lm[sid]={question:mt?._q||'', answer:ct, stage:mt?.stage||'', subject:mt?._subject||'', knowledge_point:mt?._kp||''};
   }
-  if(mt?.sources?.length){h+='<div class="msg-src">';mt.sources.forEach(s=>{h+=`<span>📚 ${e(s.source)} (${typeof s.score==='number'?(s.score*100).toFixed(0):'?'}%)</span>`});if(mt.verdict)h+=`<span class="verdict ${mt.verdict.toLowerCase().charAt(0)}">${mt.verdict}</span>`;h+='</div>'}
   b.innerHTML=h;d.appendChild(a);d.appendChild(b);inn.appendChild(d);document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight
 }
 function sl(){const inn=document.getElementById('msgs'),w=document.getElementById('welc');if(w)w.remove();const d=document.createElement('div');d.className='load-row';d.id='ld';d.innerHTML='<div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div>';inn.appendChild(d);document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight}
 function hl(){const e=document.getElementById('ld');if(e)e.remove()}
 async function send(){
-  const i=document.getElementById('input'),q=i.value.trim();if(!q)return;i.style.height='auto';i.value='';upBtn();am('user',q);sl();
-  try{const r=await fetch('/api/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});if(!r.ok)throw new Error(await r.text()||'Error');const d=await r.json();hl();am('bot',d.answer||'(无回答)',{stage:d.stage||'',sources:(d.sources||[]).map(s=>({source:s.source||'?',score:typeof s.score==='number'?s.score:0})),verdict:d.verification?.verdict,_q:q,_subject:d.analysis?.subject||'',_kp:d.analysis?.knowledge_module||'',_reason:d.analysis?.reason||''})}catch(e){hl();am('bot','抱歉，服务暂不可用：'+(e.message||''))}
+  const i=document.getElementById('input'),q=i.value.trim();if(!q)return;
+  i.style.height='auto';i.value='';upBtn();am('user',q);
+  // Create streaming bot message container
+  const cs=createStreamBotMessage();
+  try{
+    const response=await fetch('/api/query/stream',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,show_reasoning:true})});
+    if(!response.ok)throw new Error(await response.text()||'Error');
+    const reader=response.body.getReader();
+    const decoder=new TextDecoder();
+    let buffer='',fullAnswer='',meta={},thoughtChain=[];
+    while(true){
+      const{done,value}=await reader.read();
+      if(done)break;
+      buffer+=decoder.decode(value,{stream:true});
+      const events=buffer.split('\n\n');
+      buffer=events.pop();
+      for(const evt of events){
+        const lines=evt.split('\n');
+        let type=null,data=null;
+        for(const line of lines){
+          if(line.startsWith('event: '))type=line.slice(7).trim();
+          else if(line.startsWith('data: ')){try{data=JSON.parse(line.slice(6));}catch(e){data=null;}}
+        }
+        if(type&&data){
+          if(type==='thought'){thoughtChain.push(data);handleSSEEvent('thought',data,cs);}
+          else if(type==='reasoning_delta')handleSSEEvent('reasoning_delta',data,cs);
+          else if(type==='answer_delta'){fullAnswer+=data.content;handleSSEEvent('answer_delta',data,cs);}
+          else if(type==='meta'){meta=data;handleSSEEvent('meta',data,cs);}
+          else if(type==='diagnosis'){handleSSEEvent('diagnosis',data,cs);fullAnswer=data.answer||'';meta={stage:data.stage,sources:[],is_diagnosis:true,diagnosis_info:data.diagnosis_info};}
+          else if(type==='done')handleSSEEvent('done',data,cs);
+          else if(type==='error')handleSSEEvent('error',data,cs);
+        }
+      }
+    }
+    // Save to session history
+    const botMeta={stage:meta.stage||'',sources:(meta.sources||[]).map(s=>({source:s.source||'?',score:typeof s.score==='number'?s.score:0})),verdict:meta.verification?.verdict,thought_chain:thoughtChain,_q:q,_subject:meta.analysis?.subject||'',_kp:meta.analysis?.knowledge_module||'',is_diagnosis:meta.is_diagnosis||false,diagnosis_info:meta.diagnosis_info||null};
+    _sessionMsgs.push({role:'bot',content:fullAnswer,meta:botMeta});
+    saveSession();refreshHist();
+    addStarButtonStreaming(cs.body,fullAnswer,botMeta);
+  }catch(err){
+    cs.answerP.textContent='抱歉，服务暂不可用：'+(err.message||'');
+    cs.answerP.classList.remove('answer-cursor');
+    var lbl3=cs.tcHeader?cs.tcHeader.querySelector('span'):null;if(lbl3)lbl3.textContent='推理过程';
+  }
+}
+
+function createStreamBotMessage(){
+  const inn=document.getElementById('msgs');
+  const w=document.getElementById('welc');if(w)w.remove();
+  const ld=inn.querySelector('.load-row');if(ld)ld.remove();
+  const d=document.createElement('div');d.className='msg bot';
+  const a=document.createElement('div');a.className='msg-av bot';
+  a.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>';
+  const b=document.createElement('div');b.className='msg-body';
+  let h='<div class="thought-chain">'+
+    '<div class="tc-header" onclick="this.classList.toggle(\'collapsed\')">'+
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>'+
+    '<span>思考中</span><svg class="tc-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div>'+
+    '<div class="tc-body">'+
+    '<div class="thinking-indicator">'+
+    '<div class="ti-dots"><div class="ti-dot"></div><div class="ti-dot"></div><div class="ti-dot"></div></div>'+
+    '<span>正在分析问题...</span></div>'+
+    '</div></div>';
+  h+='<p class="answer-cursor"></p>';
+  b.innerHTML=h;
+  d.appendChild(a);d.appendChild(b);inn.appendChild(d);
+  document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight;
+  return{body:b,answerP:b.querySelector('p'),tcBody:b.querySelector('.tc-body'),tcHeader:b.querySelector('.tc-header')};
+}
+
+function buildStepHtml(s){
+  const icons={analysis:'\uD83D\uDD0D',retrieval:'\uD83D\uDCDA',kg_enrichment:'\uD83C\uDF10',reasoning:'\uD83D\uDCA4',verification:'\u2713'};
+  let html='<div class="tc-step-title">'+(icons[s.step]||'\u25B8')+' '+e(s.title||'')+'</div>';
+  html+='<div class="tc-step-desc">'+e(s.description||'')+'</div>';
+  if(s.sources&&s.sources.length){html+='<div class="tc-step-sources">';s.sources.forEach(x=>{html+='<span>'+e(x)+'</span>';});html+='</div>';}
+  if(s.detail)html+='<div class="tc-step-detail">'+e(s.detail)+'</div>';
+  return html;
+}
+
+function handleSSEEvent(type,data,cs){
+  const scroll=document.getElementById('scroll');
+  switch(type){
+    case 'thought':
+      var ti=cs.body.querySelector('.thinking-indicator');if(ti)ti.remove();
+      var step=document.createElement('div');step.className='tc-step entering';step.innerHTML=buildStepHtml(data);
+      if(cs.tcBody)cs.tcBody.appendChild(step);
+      break;
+    case 'reasoning_delta':
+      var ti2=cs.body.querySelector('.thinking-indicator');if(ti2)ti2.remove();
+      var rStep=cs.tcBody?cs.tcBody.querySelector('.tc-reasoning-stream'):null;
+      if(!rStep&&cs.tcBody){
+        rStep=document.createElement('div');rStep.className='tc-step tc-reasoning-stream entering';
+        rStep.innerHTML='<div class="tc-step-title" style="color:var(--accent)">\uD83D\uDCA4 推理过程</div><div class="tc-step-desc"></div>';
+        cs.tcBody.appendChild(rStep);
+      }
+      if(rStep){var desc=rStep.querySelector('.tc-step-desc');if(desc)desc.textContent+=data.content;}
+      break;
+    case 'answer_delta':
+      if(cs.tcHeader&&!cs.tcHeader.classList.contains('collapsed')&&cs.answerP.textContent===''){cs.tcHeader.classList.add('collapsed');}
+      cs.answerP.textContent+=data.content;
+      break;
+    case 'meta':
+      finalizeStreamMessage(cs,data);
+      break;
+    case 'diagnosis':
+      var tc=cs.body.querySelector('.thought-chain');if(tc)tc.remove();
+      cs.answerP.textContent=data.answer||'';
+      cs.answerP.classList.remove('answer-cursor');
+      if(data.is_diagnosis){
+        var tag=document.createElement('div');tag.className='tag';tag.style.cssText='background:rgba(239,68,68,0.1);color:#ef4444;';tag.textContent='错题诊断';
+        cs.body.insertBefore(tag,cs.body.firstChild);
+      }
+      if(data.stage){
+        var tag2=document.createElement('div');tag2.className='tag';tag2.textContent=data.stage;
+        cs.body.insertBefore(tag2,cs.body.firstChild.nextSibling);
+      }
+      break;
+    case 'done':
+      cs.answerP.classList.remove('answer-cursor');
+      var ti3=cs.body.querySelector('.thinking-indicator');if(ti3)ti3.remove();
+      var lbl=cs.tcHeader?cs.tcHeader.querySelector('span'):null;if(lbl)lbl.textContent='推理过程';
+      break;
+    case 'error':
+      cs.answerP.textContent='错误：'+(data.message||'未知错误');
+      cs.answerP.classList.remove('answer-cursor');
+      var lbl2=cs.tcHeader?cs.tcHeader.querySelector('span'):null;if(lbl2)lbl2.textContent='推理过程';
+      break;
+  }
+  scroll.scrollTop=scroll.scrollHeight;
+}
+
+function finalizeStreamMessage(cs,meta){
+  if(meta.stage){
+    var tag=document.createElement('div');tag.className='tag';tag.textContent=meta.stage;
+    cs.body.insertBefore(tag,cs.body.firstChild);
+  }
+}
+
+function addStarButtonStreaming(bodyEl,answer,meta){
+  var sid='s'+Date.now()+Math.random().toString(36).slice(2,8);
+  var btn=document.createElement('button');btn.className='star-btn';btn.id=sid;btn.title='收藏';
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+  btn.onclick=function(ev){tf(ev,sid);};
+  bodyEl.appendChild(btn);
+  _lm[sid]={question:meta._q||'',answer:answer,stage:meta.stage||'',subject:meta._subject||'',knowledge_point:meta._kp||'',is_diagnosis:meta.is_diagnosis||false,diagnosis_info:meta.diagnosis_info||null};
 }
 // ── Favorites / Library ─────────────────────────────────────────
 async function tf(ev, sid) {
@@ -647,27 +819,44 @@ async function tf(ev, sid) {
   const btn = document.getElementById(sid);
   if (!btn || !_lm[sid]) return;
   if (btn.classList.contains('faved')) {
-    // Unfavorite — need to find the favorite id first
     btn.classList.remove('faved');
-    return; // For simplicity, skip delete on unstar; they can delete from library
+    return;
   }
   const m = _lm[sid];
   try {
-    const r = await fetch('/api/favorites', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    let payload;
+    if (m.is_diagnosis && m.diagnosis_info) {
+      const di = m.diagnosis_info;
+      payload = {
+        type: 'diagnosis',
+        title: (di.question || m.question || '').substring(0, 60),
+        content: {
+          question: di.question || m.question || '',
+          student_answer: di.student_answer || '',
+          correct_answer: di.correct_answer || '',
+          feedback: di.feedback || m.answer || '',
+          knowledge_point: di.knowledge_point || '',
+          error_type: di.error_type || '',
+        },
+        subject: m.subject || '',
+        stage: m.stage || '',
+        knowledge_point: di.knowledge_point || '',
+      };
+    } else {
+      payload = {
         type: 'question',
         title: (m.question || '').substring(0, 60),
         content: { question: m.question, answer: m.answer },
         subject: m.subject || '',
         stage: m.stage || '',
-        knowledge_point: m.knowledge_point || ''
-      })
-    });
-    if (r.ok) {
-      btn.classList.add('faved');
-      btn.title = '已收藏';
+        knowledge_point: m.knowledge_point || '',
+      };
     }
+    const r = await fetch('/api/favorites', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (r.ok) { btn.classList.add('faved'); btn.title = '已收藏'; }
   } catch (e) { /* ignore */ }
 }
 
@@ -807,12 +996,6 @@ async function ldel(id) {
   } catch (e) { alert('删除失败'); }
 }
 
-async function diag(){
-  const q=document.getElementById('dq').value.trim(),s=document.getElementById('ds').value.trim(),c=document.getElementById('dc').value.trim();_ld={q,s,c};if(!q||!s||!c)return;
-  const r=document.getElementById('dr');r.style.display='block';r.innerHTML='诊断中...';
-  try{const res=await fetch('/api/diagnose',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,student_answer:s,correct_answer:c})});const d=await res.json();
-  r.innerHTML=`<div style="color:var(--text-primary);font-weight:600;margin-bottom:10px;font-size:15px;">${e(d.error_type||'')}</div><div style="margin-bottom:6px;color:var(--text-secondary);">📖 ${e(d.knowledge_point||'')}</div><div style="margin-bottom:14px;color:var(--text-secondary);">💡 ${e(d.hint||'')}</div><div style="line-height:1.7;">${e(d.feedback||'')}</div>
-  }catch(e){r.innerHTML='诊断失败：'+(e.message||'')}}
 // History
 let _sessions=JSON.parse(localStorage.getItem('kag_sessions')||'[]');
 let _sessionId=localStorage.getItem('kag_sid')||'';
@@ -845,12 +1028,25 @@ function loadSession(id){
   const s=_sessions.find(x=>x.id===id);if(!s)return;
   _sessionId=s.id;_sessionMsgs=s.msgs||[];
   localStorage.setItem('kag_sid',_sessionId);
+  go('chat');
   const inn=document.getElementById('msgs');inn.innerHTML='';
-  _sessionMsgs.forEach(m=>{const d=document.createElement('div');d.className='msg '+m.role;
+  _sessionMsgs.forEach(m=>{
+    const d=document.createElement('div');d.className='msg '+m.role;
     const a=document.createElement('div');a.className='msg-av '+m.role;
     a.innerHTML=m.role==='user'?'U':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>';
     const b=document.createElement('div');b.className='msg-body';
-    b.innerHTML='<p>'+m.content+'</p>';if(m.meta)addMsgMeta(b,m.meta);
+    let h='<p>'+e(m.content)+'</p>';
+    if(m.role==='bot'){
+      const sid='s'+Date.now()+Math.random().toString(36).slice(2,8);
+      h+='<button class="star-btn" id="'+sid+'" title="收藏"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></button>';
+      b.innerHTML=h;
+      const mt=m.meta||{};
+      _lm[sid]={question:mt._q||'',answer:m.content,stage:mt.stage||'',subject:mt._subject||'',knowledge_point:mt._kp||'',is_diagnosis:mt.is_diagnosis||false,diagnosis_info:mt.diagnosis_info||null};
+      var btn=b.querySelector('#'+sid);if(btn)btn.onclick=function(ev){tf(ev,sid);};
+      if(m.meta)addMsgMeta(b,m.meta);
+    }else{
+      b.innerHTML=h;
+    }
     d.appendChild(a);d.appendChild(b);inn.appendChild(d);
   });
   document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight;
@@ -858,9 +1054,11 @@ function loadSession(id){
 }
 
 function addMsgMeta(b,mt){
-  let h='';if(mt&&mt.stage)h+=`<div class="tag">${e(mt.stage)}</div>`;
-  if(mt?.sources?.length){h+='<div class="msg-src">';mt.sources.forEach(s=>{h+=`<span>📚 ${e(s.source)} (${typeof s.score==='number'?(s.score*100).toFixed(0):'?'}%)</span>`});h+='</div>';}
-  if(h)b.innerHTML+=h;
+  let h='';
+  if(mt&&mt.is_diagnosis)h+='<div class="tag" style="background:rgba(239,68,68,0.1);color:#ef4444;">错题诊断</div>';
+  if(mt&&mt.stage)h+=`<div class="tag">${e(mt.stage)}</div>`;
+  if(mt&&mt.thought_chain&&mt.thought_chain.length)h+=renderTC(mt.thought_chain);
+  if(h)b.insertAdjacentHTML('afterbegin',h);
 }
 
 // Override am() to track messages

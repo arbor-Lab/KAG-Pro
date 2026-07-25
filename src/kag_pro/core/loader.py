@@ -1,5 +1,6 @@
 """Document loader: supports .txt and .pdf files."""
 
+import re
 from pathlib import Path
 
 from pypdf import PdfReader
@@ -23,8 +24,25 @@ class DocumentLoader:
         else:
             _STAGE_FROM_PREFIX[str(i).zfill(2)] = "high"
 
+    # Generated-textbook filename convention (see frontend/generate_textbooks.py):
+    # gen_{stage_code}_{subject_code}_{nn}.txt, e.g. gen_ele_mat_01.txt
+    _GEN_FILE_PATTERN = re.compile(r"^gen_([a-z]{3})_([a-z]{3})_\d+")
+    _GEN_STAGE_CODES = {"ele": "primary", "mid": "middle", "hig": "high"}
+    _GEN_SUBJECT_CODES = {
+        "mat": "math",
+        "oly": "math",  # 小学奥数属于数学学科
+        "phy": "physics",
+        "che": "chemistry",
+        "bio": "biology",
+        "geo": "geography",
+        "his": "history",
+    }
+
+    # Fallback stage inference from Chinese stage keywords in the filename
+    _STAGE_KEYWORDS = {"小学": "primary", "初中": "middle", "高中": "high", "大学": "university"}
+
     _SUBJECT_KEYWORDS = {
-        "math": ["数学", "代数", "几何", "函数", "方程", "分数", "小数", "三角形", "四则", "面积", "周长", "概率", "统计", "导数", "微积分", "数列", "排列"],
+        "math": ["数学", "代数", "几何", "函数", "方程", "分数", "小数", "三角形", "四则", "面积", "周长", "概率", "统计", "导数", "微积分", "数列", "排列", "奥数"],
         "physics": ["物理", "力学", "牛顿", "重力", "压强", "浮力", "电磁", "电场", "磁场", "电路", "欧姆", "声", "光", "物态", "熔化", "蒸发", "热", "运动", "力"],
         "chemistry": ["化学", "反应", "配平", "方程式", "元素", "酸碱", "平衡", "勒夏特列", "电离", "pH"],
         "biology": ["生物", "细胞", "光合", "呼吸", "遗传", "基因", "免疫", "传染病"],
@@ -36,7 +54,20 @@ class DocumentLoader:
     }
 
     @classmethod
+    def _parse_gen_filename(cls, filename: str) -> tuple[str | None, str | None]:
+        """Parse the gen_{stage}_{subject}_{nn} convention; (None, None) if unmatched."""
+        match = cls._GEN_FILE_PATTERN.match(filename)
+        if not match:
+            return None, None
+        stage = cls._GEN_STAGE_CODES.get(match.group(1))
+        subject = cls._GEN_SUBJECT_CODES.get(match.group(2))
+        return stage, subject
+
+    @classmethod
     def _infer_subject(cls, filename: str, text: str) -> str:
+        _, gen_subject = cls._parse_gen_filename(filename)
+        if gen_subject:
+            return gen_subject
         combined = filename + text[:200]
         for subject, keywords in cls._SUBJECT_KEYWORDS.items():
             if any(kw in combined for kw in keywords):
@@ -45,8 +76,16 @@ class DocumentLoader:
 
     @classmethod
     def _infer_stage(cls, filename: str) -> str:
+        gen_stage, _ = cls._parse_gen_filename(filename)
+        if gen_stage:
+            return gen_stage
         prefix = filename[:2]
-        return cls._STAGE_FROM_PREFIX.get(prefix, "unknown")
+        if prefix in cls._STAGE_FROM_PREFIX:
+            return cls._STAGE_FROM_PREFIX[prefix]
+        for keyword, stage in cls._STAGE_KEYWORDS.items():
+            if keyword in filename:
+                return stage
+        return "unknown"
 
     def load(self, infer_stage: bool = True) -> list[Document]:
         """Load all supported files from the directory."""

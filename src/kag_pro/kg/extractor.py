@@ -8,7 +8,7 @@ class EntityExtractor:
 
     @staticmethod
     def build_default_kg() -> KnowledgeGraph:
-        """Build a KG covering high school math, physics, and chemistry."""
+        """Build a KG covering high school math/physics/chemistry and elementary math."""
         kg = KnowledgeGraph()
 
         # === Math entities ===
@@ -115,5 +115,49 @@ class EntityExtractor:
         kg.add_relation("math_sequence", "related_to", "math_derivative")
         kg.add_relation("math_permutation", "prerequisite", "math_probability_adv")
         kg.add_relation("math_probability_adv", "contains", "math_statistics")
+
+        # === Elementary math entities ===
+        for eid, name, etype in [
+            ("elem_arithmetic", "四则运算", "concept"),
+            ("elem_fraction", "分数", "concept"),
+            ("elem_decimal", "小数", "concept"),
+            ("elem_simple_equation", "简易方程", "concept"),
+            ("elem_chicken_rabbit", "鸡兔同笼", "concept"),
+            ("elem_sum_multiple", "和倍问题", "concept"),
+            ("elem_diff_multiple", "差倍问题", "concept"),
+            ("elem_pursuit", "追及问题", "concept"),
+            ("elem_meeting", "相遇问题", "concept"),
+            ("elem_profit_loss", "盈亏问题", "concept"),
+            ("elem_tree_planting", "植树问题", "concept"),
+            ("elem_grazing", "牛吃草问题", "concept"),
+            ("elem_work", "工程问题", "concept"),
+            ("elem_concentration", "浓度问题", "concept"),
+            ("elem_assumption_method", "假设法", "method"),
+            ("elem_equation_method", "方程法", "method"),
+            ("elem_drawing_method", "画图法", "method"),
+            ("elem_line_diagram", "线段图法", "method"),
+            ("elem_tree_planting_error", "植树问题忽略两端情况", "common_mistake"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("elem_arithmetic", "prerequisite", "elem_chicken_rabbit")
+        kg.add_relation("elem_arithmetic", "prerequisite", "elem_sum_multiple")
+        kg.add_relation("elem_arithmetic", "prerequisite", "elem_diff_multiple")
+        kg.add_relation("elem_arithmetic", "prerequisite", "elem_profit_loss")
+        kg.add_relation("elem_arithmetic", "prerequisite", "elem_tree_planting")
+        kg.add_relation("elem_arithmetic", "prerequisite", "elem_pursuit")
+        kg.add_relation("elem_decimal", "related_to", "elem_fraction")
+        kg.add_relation("elem_fraction", "prerequisite", "elem_work")
+        kg.add_relation("elem_fraction", "prerequisite", "elem_concentration")
+        kg.add_relation("elem_simple_equation", "prerequisite", "elem_chicken_rabbit")
+        kg.add_relation("elem_simple_equation", "prerequisite", "elem_grazing")
+        kg.add_relation("elem_pursuit", "related_to", "elem_meeting")
+        kg.add_relation("elem_chicken_rabbit", "contains", "elem_assumption_method")
+        kg.add_relation("elem_chicken_rabbit", "contains", "elem_equation_method")
+        kg.add_relation("elem_grazing", "contains", "elem_assumption_method")
+        kg.add_relation("elem_sum_multiple", "contains", "elem_line_diagram")
+        kg.add_relation("elem_diff_multiple", "contains", "elem_line_diagram")
+        kg.add_relation("elem_profit_loss", "contains", "elem_drawing_method")
+        kg.add_relation("elem_tree_planting", "common_mistake", "elem_tree_planting_error")
 
         return kg

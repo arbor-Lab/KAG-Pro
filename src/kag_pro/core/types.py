@@ -53,6 +53,8 @@ class QueryResult:
     analysis: dict = field(default_factory=dict)
     kg_enrichment: dict = field(default_factory=dict)
     verification: dict | None = None
+    clarification: bool = False
+    cache_hit: bool = False
 
     def to_dict(self) -> dict:
         return {
@@ -63,6 +65,8 @@ class QueryResult:
             "analysis": self.analysis,
             "kg_enrichment": self.kg_enrichment,
             "verification": self.verification,
+            "clarification": self.clarification,
+            "cache_hit": self.cache_hit,
         }
 
 

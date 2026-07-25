@@ -68,7 +68,10 @@ def create_default_registry(
 
     registry.register(
         "verifier",
-        lambda: FactualVerifier(vector_store=registry.resolve("vector-store")),
+        lambda: FactualVerifier(
+            vector_store=registry.resolve("vector-store"),
+            generator=registry.resolve("generator"),
+        ),
     )
 
     registry.register("stage-detector", lambda: StageDetector())

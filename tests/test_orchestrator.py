@@ -4,8 +4,11 @@ Uses lightweight in-memory fakes registered into a PluginRegistry so the
 orchestration logic and event flow can be tested without any network/LLM.
 """
 
+import json
 import os
 import tempfile
+
+import pytest
 
 from kag_pro.core.bootstrap import create_default_registry
 from kag_pro.core.event_bus import EventBus, Events
@@ -14,14 +17,38 @@ from kag_pro.core.types import DiagnosisResult, QueryResult
 from kag_pro.orchestration.orchestrator import EducationOrchestrator
 from kag_pro.stage.detector import EducationStage
 
+
+@pytest.fixture(autouse=True)
+def _redirect_low_confidence_log(tmp_path, monkeypatch):
+    """Keep low-confidence JSONL out of the repo during tests."""
+    monkeypatch.setenv("LOW_CONFIDENCE_LOG", str(tmp_path / "low_conf.jsonl"))
+
+
 # === Lightweight fakes ===
 
 class FakeGenerator:
-    def generate(self, question, context_chunks):
+    def generate(self, question, context_chunks, enrichment=None):
         return f"answer:{question}"
 
     def call(self, system, user, temperature=0.3, max_tokens=800):
         return "called"
+
+
+class FakeRevisingGenerator(FakeGenerator):
+    """Generator whose answers fail verification once, then get revised."""
+
+    def revise(self, question, context_chunks, unsupported_claims, previous_answer):
+        return f"revised:{question}"
+
+
+class FakeSelfConsistentGenerator(FakeGenerator):
+    """Generator exposing self-consistency voting for objective questions."""
+
+    def generate_self_consistent(self, question, context_chunks, enrichment=None, n=3):
+        return (
+            "答案：B。三角形内角和是180度。",
+            {"votes": {"B": 2, "A": 1}, "winner": "B", "samples": n},
+        )
 
 
 class FakeDetector:
@@ -47,9 +74,26 @@ class FakeVerifier:
         return {"faith_score": 1.0, "verdict": "HIGH"}
 
 
+class FakeLowVerifier:
+    """Verifier that fails the initial answer and passes the revised one."""
+
+    def verify(self, question, answer):
+        if answer.startswith("revised:"):
+            return {
+                "faith_score": 0.9, "verdict": "HIGH",
+                "supported": [{"claim": "c1"}], "unsupported": [],
+            }
+        return {
+            "faith_score": 0.2, "verdict": "LOW",
+            "supported": [], "unsupported": [{"claim": "c1"}],
+        }
+
+
 class FakeStore:
     def __init__(self):
         self.added = []
+        self.cached_entry = None
+        self.stored = []
 
     def add_documents(self, docs):
         self.added.extend(docs)
@@ -59,6 +103,15 @@ class FakeStore:
 
     def clear(self):
         self.added = []
+
+    def cache_lookup(self, query, stage="", threshold=0.95):
+        return self.cached_entry
+
+    def cache_store(self, query, answer, stage="", faith_score=1.0):
+        self.stored.append({
+            "query": query, "answer": answer,
+            "stage": stage, "faith_score": faith_score,
+        })
 
 
 class FakeClassifier:
@@ -114,12 +167,15 @@ class FakeEvaluator:
         return {"count": len(test_data), "avg_accuracy": 1.0}
 
 
-def make_registry(with_kg: bool = False, hits=None) -> PluginRegistry:
+def make_registry(
+    with_kg: bool = False, hits=None,
+    generator=None, verifier=None,
+) -> PluginRegistry:
     r = PluginRegistry()
     r.register("stage-detector", FakeDetector())
-    r.register("generator", FakeGenerator())
+    r.register("generator", generator or FakeGenerator())
     r.register("retriever", FakeRetriever(hits))
-    r.register("verifier", FakeVerifier())
+    r.register("verifier", verifier or FakeVerifier())
     r.register("vector-store", FakeStore())
     r.register("text-splitter", FakeSplitter())
     r.register("diagnoser", FakeDiagnoser())
@@ -172,6 +228,122 @@ class TestOrchestratorQuery:
         result = orch.query("完全不相关的问题")
         assert result.sources == []
         assert len(empty) == 1
+
+    def test_weak_retrieval_takes_clarification_path(self):
+        """Hits below the clarify gate must NOT reach the generator."""
+        bus = EventBus()
+        weak = []
+        bus.subscribe(Events.RETRIEVAL_WEAK, lambda d: weak.append(d))
+        hits = [{"text": "弱相关内容", "metadata": {"source": "weak.txt"}, "score": 0.35}]
+        orch = EducationOrchestrator(make_registry(hits=hits), bus)
+        result = orch.query("模糊的问题", verify=True)
+        assert result.clarification is True
+        assert "没有找到与这个问题足够相关的内容" in result.answer
+        assert not result.answer.startswith("answer:")
+        # Clarification path skips factual verification
+        assert result.verification is None
+        assert len(weak) == 1
+        assert weak[0]["best_score"] == 0.35
+
+    def test_low_verdict_triggers_self_correction(self):
+        """LOW verdict rewrites the answer once and re-verifies."""
+        bus = EventBus()
+        revised_events = []
+        bus.subscribe(Events.ANSWER_REVISED, lambda d: revised_events.append(d))
+        orch = EducationOrchestrator(make_registry(
+            generator=FakeRevisingGenerator(), verifier=FakeLowVerifier(),
+        ), bus)
+        result = orch.query("q", verify=True)
+        assert result.answer == "revised:q"
+        assert result.verification["revised"] is True
+        assert result.verification["previous_faith_score"] == 0.2
+        assert result.verification["faith_score"] == 0.9
+        assert len(revised_events) == 1
+
+    def test_low_verdict_without_revise_support_keeps_answer(self):
+        """Generators without revise() keep the original answer."""
+        orch = EducationOrchestrator(make_registry(verifier=FakeLowVerifier()))
+        result = orch.query("q", verify=True)
+        assert result.answer == "answer:q"
+        assert "revised" not in result.verification
+
+    def test_high_verdict_answer_is_cached(self):
+        """Verified-HIGH answers are written to the semantic answer cache."""
+        registry = make_registry()
+        store = registry.resolve("vector-store")
+        orch = EducationOrchestrator(registry)
+        result = orch.query("三角形的内角和是多少？", verify=True)
+        assert len(store.stored) == 1
+        assert store.stored[0]["answer"] == result.answer
+        assert store.stored[0]["stage"] == "初中"
+        assert result.cache_hit is False
+
+    def test_low_verdict_answer_not_cached_without_revision(self):
+        """Answers stuck at LOW verdict must not enter the cache."""
+        registry = make_registry(verifier=FakeLowVerifier())
+        store = registry.resolve("vector-store")
+        orch = EducationOrchestrator(registry)
+        orch.query("q", verify=True)
+        assert store.stored == []
+
+    def test_cache_hit_skips_generation_and_verifier(self):
+        """A cache hit reuses the verified answer without LLM/verifier calls."""
+
+        class ExplodingGenerator(FakeGenerator):
+            def generate(self, question, context_chunks, enrichment=None):
+                raise AssertionError("generate() must not run on cache hit")
+
+        registry = make_registry(generator=ExplodingGenerator())
+        store = registry.resolve("vector-store")
+        store.cached_entry = {
+            "answer": "缓存的可靠答案", "similarity": 0.97, "faith_score": 0.9,
+        }
+        bus = EventBus()
+        hits = []
+        bus.subscribe(Events.ANSWER_CACHE_HIT, lambda d: hits.append(d))
+        orch = EducationOrchestrator(registry, bus)
+        result = orch.query("q", verify=True)
+        assert result.answer == "缓存的可靠答案"
+        assert result.cache_hit is True
+        assert result.verification["from_cache"] is True
+        assert result.verification["faith_score"] == 0.9
+        assert len(hits) == 1
+
+    def test_objective_question_uses_self_consistency(self):
+        """Choice questions route through majority-vote generation."""
+        orch = EducationOrchestrator(make_registry(generator=FakeSelfConsistentGenerator()))
+        result = orch.query("下列说法正确的是？A. 甲 B. 乙", verify=True)
+        assert result.answer.startswith("答案：B")
+        assert result.verification["self_consistency"]["winner"] == "B"
+        assert result.verification["self_consistency"]["votes"] == {"B": 2, "A": 1}
+
+    def test_non_objective_question_skips_self_consistency(self):
+        orch = EducationOrchestrator(make_registry(generator=FakeSelfConsistentGenerator()))
+        result = orch.query("三角形的内角和是多少？")
+        # Falls back to plain generate()
+        assert result.answer == "answer:三角形的内角和是多少？"
+
+    def test_composite_confidence_attached(self):
+        """confidence = 0.5*faith + 0.3*best_score + 0.2*kg(0.5 without KG)."""
+        orch = EducationOrchestrator(make_registry())
+        result = orch.query("三角形的内角和是多少？", verify=True)
+        # faith 1.0, best_score 0.9, no KG → 0.5 + 0.27 + 0.1 = 0.87
+        assert result.verification["confidence"] == 0.87
+        assert result.verification["low_confidence"] is False
+
+    def test_low_confidence_sample_is_logged(self, tmp_path, monkeypatch):
+        log_path = tmp_path / "custom_low_conf.jsonl"
+        monkeypatch.setenv("LOW_CONFIDENCE_LOG", str(log_path))
+        orch = EducationOrchestrator(make_registry(verifier=FakeLowVerifier()))
+        result = orch.query("q", verify=True)
+        # faith 0.2 → confidence 0.1+0.27+0.1 = 0.47 < 0.5
+        assert result.verification["low_confidence"] is True
+        lines = log_path.read_text(encoding="utf-8").strip().splitlines()
+        assert len(lines) == 1
+        record = json.loads(lines[0])
+        assert record["question"] == "q"
+        assert record["verdict"] == "LOW"
+        assert record["confidence"] < 0.5
 
 
 class TestOrchestratorDiagnose:

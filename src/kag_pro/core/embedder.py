@@ -1,6 +1,7 @@
 """Embedding generation via local BGE model or OpenAI-compatible API."""
 
 import hashlib
+from collections import OrderedDict
 
 from kag_pro.utils.config import get_config
 
@@ -23,6 +24,9 @@ class Embedder:
             base_url = config["embedding_base_url"] or config["openai_base_url"]
             self._client = OpenAI(api_key=api_key, base_url=base_url)
         self._dimensions: int | None = None
+        # Instance-level bounded LRU for single-text embeddings
+        self._cache: OrderedDict[str, list[float]] = OrderedDict()
+        self._cache_maxsize = 1024
 
     @classmethod
     def _init_local(cls):
@@ -34,7 +38,16 @@ class Embedder:
             cls._local_model_name = model_name
 
     def embed(self, text: str) -> list[float]:
-        return self.embed_batch([text])[0]
+        key = text[:8000]
+        cached = self._cache.get(key)
+        if cached is not None:
+            self._cache.move_to_end(key)
+            return list(cached)
+        embedding = self.embed_batch([text])[0]
+        self._cache[key] = embedding
+        if len(self._cache) > self._cache_maxsize:
+            self._cache.popitem(last=False)
+        return list(embedding)
 
     def embed_batch(self, texts: list[str]) -> list[list[float]]:
         if not texts:
@@ -60,3 +73,6 @@ class Embedder:
     @staticmethod
     def text_hash(text: str) -> str:
         return hashlib.md5(text.encode("utf-8")).hexdigest()
+
+    def clear_cache(self) -> None:
+        self._cache.clear()

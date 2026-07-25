@@ -1,8 +1,36 @@
 """KG-enhanced retrieval with hybrid re-ranking."""
 
 
+import jieba
+
 from kag_pro.core.vector_store import VectorStore
 from kag_pro.kg.graph import KnowledgeGraph
+
+
+def _edit_distance_le1(a: str, b: str) -> bool:
+    """True if two strings differ by at most one edit (insert/delete/replace)."""
+    if a == b:
+        return True
+    la, lb = len(a), len(b)
+    if abs(la - lb) > 1:
+        return False
+    if la == lb:
+        return sum(1 for x, y in zip(a, b) if x != y) == 1
+    # Length differs by exactly one: check single insertion/deletion
+    if la > lb:
+        a, b = b, a
+    i = j = 0
+    skipped = False
+    while i < len(a) and j < len(b):
+        if a[i] == b[j]:
+            i += 1
+            j += 1
+        elif skipped:
+            return False
+        else:
+            skipped = True
+            j += 1
+    return True
 
 
 class KGRetriever:
@@ -35,17 +63,32 @@ class KGRetriever:
         return scored[:top_k]
 
     def _find_entities(self, query: str) -> list[dict]:
-        entities = []
-        for _eid, entity in self._kg._entities.items():
-            if entity["name"] in query:
-                entities.append(entity)
-        if not entities:
-            for _eid, entity in self._kg._entities.items():
-                for char in entity["name"]:
-                    if char in query and len(entity["name"]) >= 2:
-                        entities.append(entity)
-                        break
-        return entities[:3]
+        """Entity linking: exact (incl. aliases) → jieba token fuzzy match.
+
+        Replaces the old per-character fallback, which produced false hits
+        whenever any single character of an entity name appeared in the query.
+        """
+        all_entities = list(self._kg._entities.values())
+
+        # Pass 1: exact substring match, longest entity names first
+        matched: list[dict] = []
+        for entity in sorted(all_entities, key=lambda e: len(e["name"]), reverse=True):
+            names = [entity["name"], *entity.get("metadata", {}).get("aliases", [])]
+            if any(name and name in query for name in names):
+                matched.append(entity)
+        if matched:
+            return matched[:3]
+
+        # Pass 2: jieba token match — token equals name/alias, or differs by ≤1 edit
+        tokens = [t.strip() for t in jieba.lcut(query) if len(t.strip()) >= 2]
+        for entity in all_entities:
+            names = [entity["name"], *entity.get("metadata", {}).get("aliases", [])]
+            names = [n for n in names if len(n) >= 2]
+            for token in tokens:
+                if any(_edit_distance_le1(token, name) for name in names):
+                    matched.append(entity)
+                    break
+        return matched[:3]
 
     def _compute_graph_score(self, text: str, query_entities: list[dict]) -> float:
         if not query_entities:

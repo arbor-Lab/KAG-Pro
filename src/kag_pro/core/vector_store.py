@@ -14,6 +14,7 @@ class VectorStore:
     """ChromaDB-backed vector store for document embeddings."""
 
     COLLECTION_NAME = "kagpro_education"
+    QA_COLLECTION_NAME = "kagpro_qa_cache"
 
     def __init__(self, persist_dir: str | None = None):
         config = get_config()
@@ -28,6 +29,11 @@ class VectorStore:
         self._embedder = Embedder()
         self._collection = self._client.get_or_create_collection(
             name=self.COLLECTION_NAME,
+            metadata={"hnsw:space": "cosine"},
+        )
+        # Semantic answer cache: verified Q→A pairs, hit by query similarity
+        self._qa_collection = self._client.get_or_create_collection(
+            name=self.QA_COLLECTION_NAME,
             metadata={"hnsw:space": "cosine"},
         )
 
@@ -86,9 +92,61 @@ class VectorStore:
     def count(self) -> int:
         return self._collection.count()
 
+    def cache_lookup(
+        self, query: str, stage: str = "", threshold: float = 0.95,
+    ) -> dict | None:
+        """Semantic answer-cache lookup. Returns cached entry or None.
+
+        A hit requires similarity >= threshold AND matching stage (when the
+        cached entry carries stage metadata).
+        """
+        if self._qa_collection.count() == 0:
+            return None
+        query_embedding = self._embedder.embed(query)
+        results = self._qa_collection.query(
+            query_embeddings=[query_embedding],
+            n_results=1,
+            include=["documents", "metadatas", "distances"],
+        )
+        if not results["ids"] or not results["ids"][0]:
+            return None
+        similarity = 1.0 - results["distances"][0][0]
+        if similarity < threshold:
+            return None
+        metadata = results["metadatas"][0][0] or {}
+        cached_stage = metadata.get("stage", "")
+        if stage and cached_stage and cached_stage != stage:
+            return None
+        return {
+            "answer": results["documents"][0][0],
+            "similarity": round(similarity, 4),
+            "faith_score": metadata.get("faith_score", 1.0),
+            "stage": cached_stage,
+        }
+
+    def cache_store(
+        self, query: str, answer: str, stage: str = "", faith_score: float = 1.0,
+    ) -> None:
+        """Store a verified Q→A pair in the semantic answer cache."""
+        if not query or not answer:
+            return
+        embedding = self._embedder.embed(query)
+        self._qa_collection.upsert(
+            ids=[f"qa_{self._embedder.text_hash(query)}"],
+            embeddings=[embedding],
+            documents=[answer],
+            metadatas=[{"stage": stage, "faith_score": float(faith_score)}],
+        )
+
     def clear(self) -> None:
         self._client.delete_collection(name=self.COLLECTION_NAME)
         self._collection = self._client.get_or_create_collection(
             name=self.COLLECTION_NAME,
+            metadata={"hnsw:space": "cosine"},
+        )
+        # Wipe the answer cache as well — it may reference deleted content
+        self._client.delete_collection(name=self.QA_COLLECTION_NAME)
+        self._qa_collection = self._client.get_or_create_collection(
+            name=self.QA_COLLECTION_NAME,
             metadata={"hnsw:space": "cosine"},
         )
