@@ -83,7 +83,7 @@ class ErrorDiagnoser:
 相关知识点内容：
 {remedial_text if remedial_text else "（暂无相关资料）"}
 
-请按以下格式回复（不要用Markdown符号）：
+请按以下格式回复（不要用Markdown符号；数学公式用LaTeX格式，行内 $...$，独立公式 $$...$$）：
 
 错误分析：
 （用1-2句话温和地指出学生错在哪里）
@@ -116,7 +116,8 @@ class ErrorDiagnoser:
 2. 每道题标注难度
 3. 每道题给出答案
 4. 不要用Markdown符号
-5. 总字数150-250字"""
+5. 数学公式用LaTeX格式（行内 $...$，独立公式 $$...$$）
+6. 总字数150-250字"""
         return self._generator.call(
             system="你是一位学科教师。", user=prompt, temperature=0.5, max_tokens=500
         )

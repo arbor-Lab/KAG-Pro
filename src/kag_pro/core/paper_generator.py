@@ -8,6 +8,35 @@ from pathlib import Path
 from kag_pro.core.generator import Generator
 
 
+def _escape_latex_backslashes(text: str) -> str:
+    """Repair bare LaTeX backslashes inside LLM-produced JSON text.
+
+    LLMs often emit single-backslash LaTeX (e.g. $\\frac{1}{2}$) in JSON
+    strings, which either breaks json.loads (invalid escapes like \\s) or
+    silently corrupts formulas (\\f decodes to form feed, \\t to tab).
+    Escape every backslash that is not part of a valid JSON escape.
+    """
+    # Collisions with valid JSON escapes followed by letters: \\f rac, \\t imes
+    text = re.sub(r"(?<!\\)\\([bfnrt])(?=[a-zA-Z])", r"\\\\\1", text)
+    # Invalid escapes: \\s in \\sin, \\a in \\alpha, \\D in \\Delta, ...
+    return re.sub(r'(?<!\\)\\(?![\\"/bfnrtu])', r"\\\\", text)
+
+
+_LATEX_CONTROL_CHARS = {"\f": "f", "\b": "b", "\t": "t"}
+
+
+def _restore_latex_control_chars(text: str) -> str:
+    """Restore LaTeX commands swallowed by JSON escape decoding.
+
+    Single-backslash \\f/\\b/\\t in JSON decode to form feed / backspace / tab.
+    These control characters never appear in normal Chinese question text,
+    so map them back to backslash + letter ("\\x0crac" -> "\\frac").
+    """
+    for ch, letter in _LATEX_CONTROL_CHARS.items():
+        text = text.replace(ch, "\\" + letter)
+    return text
+
+
 class KnowledgeTreeExtractor:
     def __init__(self, standards_path: str | None = None):
         if standards_path is None:
@@ -63,8 +92,7 @@ class KnowledgeTreeExtractor:
                     subjects[current_subject].append(stripped)
 
             if subjects:
-                if "语文" in subjects:
-                    del subjects["语文"]
+                # 保留所有学科，包括语文（用户要求小学语文可用于练习生成）
                 self._tree[stage_name] = subjects
 
     def get_stages(self) -> list[str]:
@@ -158,7 +186,9 @@ class PaperGenerator:
 1. 必须恰好生成{count}道题
 2. 选择题必须给出ABCD四个选项
 3. 填空题答案完整，简答题答案要点清晰
-4. 解析详细"""
+4. 解析详细
+5. 题目、答案、解析中的数学公式一律使用LaTeX格式（行内 $...$，独立公式 $$...$$）
+6. JSON字符串值中的LaTeX反斜杠必须写成双反斜杠（例如 "求 $\\\\frac{{a}}{{b}}$ 的值"）"""
 
         questions = []
         for attempt in range(3):
@@ -170,7 +200,11 @@ class PaperGenerator:
             )
             try:
                 json_match = re.search(r"\{[\s\S]*\}", text)
-                data = json.loads(json_match.group()) if json_match else json.loads(text)
+                raw = json_match.group() if json_match else text
+                try:
+                    data = json.loads(raw)
+                except json.JSONDecodeError:
+                    data = json.loads(_escape_latex_backslashes(raw))
                 questions = data.get("questions", [])
             except json.JSONDecodeError:
                 questions = []
@@ -188,6 +222,8 @@ class PaperGenerator:
             q.setdefault("answer", "")
             q.setdefault("analysis", "")
             q.setdefault("difficulty", difficulty if difficulty != "混合" else "中等")
+            for field in ("question", "answer", "analysis"):
+                q[field] = _restore_latex_control_chars(str(q[field]))
 
         from datetime import datetime
 

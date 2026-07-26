@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KAG-Pro</title>
 <link rel="icon" href="data:,">
+<link rel="stylesheet" href="/static/katex/katex.min.css">
 <style>
 :root {
   color-scheme: light;
@@ -307,6 +308,11 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
 .answer-cursor::after { content: '\u258b'; color: var(--accent); animation: blink 1s infinite; }
 @keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
 
+/* KaTeX math rendering */
+.katex { font-size: 1.04em; }
+.katex-display { margin: 0.5em 0; overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+.katex-error { color: inherit; }
+
 @media print {
   body { background: #fff; color: #000; }
   #sidebar, .composer, .pv-tabs, #paperForm, .paper-actions, .q-btns, .hist-banner,
@@ -476,6 +482,8 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
 
 </main>
 
+<script src="/static/katex/katex.min.js"></script>
+<script src="/static/katex/auto-render.min.js"></script>
 <script>
 let cv='chat',ct='gen',kt=null,cp=null,ph=[];
 
@@ -613,6 +621,7 @@ function rp(p){
   const h=qs.map((q,i)=>`<div class="q" id="qi${i}"><div class="q-head" onclick="tq(${i})"><span class="q-num">${i+1}</span><span class="q-typ">${e(q.type||'')}</span><span class="q-prev">${e(String(q.question||'').substring(0,60))}</span><span class="q-diff ${dc[q.difficulty]||'d-mid'}">${e(q.difficulty||'')}</span><span class="q-chev">▾</span></div><div class="q-body" id="qb${i}"><div class="q-text">${e(String(q.question||''))}</div><div class="ans" id="qa${i}"><div class="lbl">答案</div><div class="txt">${e(String(q.answer||''))}</div></div><div class="anal" id="qx${i}"><div class="lbl">解析</div><div class="txt">${e(String(q.analysis||''))}</div></div><div class="q-btns"><button onclick="event.stopPropagation();ta(${i})" id="bta${i}">查看答案</button><button onclick="event.stopPropagation();tx(${i})" id="btx${i}">查看解析</button><button onclick="event.stopPropagation();aq(${i})">追问</button></div></div></div>`).join('');
   document.getElementById('pr').innerHTML=`<div class="paper-card"><h4>${e(p.title||'练习卷')}</h4><div class="paper-meta"><span>${e(p.stage||'')}</span><span>${e(p.subject||'')}</span><span>${e(p.difficulty||'')}</span><span>${p.count||0}题</span><span>${(p.created_at||'').substring(0,10)}</span></div><div class="paper-actions"><button onclick="prt()">打印试卷</button><button onclick="saa()">全部答案</button><button onclick="sax()">全部解析</button><button class="btn-s" onclick="sv()">保存试卷</button> <button class="btn-s" onclick="fp()" style="background:#f59e0b;" title="收藏试卷">★ 收藏</button>${p.id?`<button class="btn-d" onclick="dp('${p.id}')">删除试卷</button>`:''}</div>${h}</div>`;
   document.getElementById('pr').style.display='block';document.getElementById('sp').style.display='none'
+  renderMath(document.getElementById('pr'));
 }
 function tq(i){document.getElementById('qb'+i).classList.toggle('open');document.querySelector('#qi'+i+' .q-head').classList.toggle('open')}
 function ta(i){const a=document.getElementById('qa'+i),b=document.getElementById('bta'+i),s=a.classList.toggle('show');b.textContent=s?'隐藏答案':'查看答案'}
@@ -630,6 +639,23 @@ async function lp(id){try{const r=await fetch('/api/papers/'+id);if(!r.ok)throw 
 async function dp(id){if(!confirm('确认删除？'))return;try{await fetch('/api/papers/'+id,{method:'DELETE'});if(cp?.id===id){cp=null;document.getElementById('pr').style.display='none'}ls()}catch(e){alert('删除失败')}}
 
 function e(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// LaTeX math rendering via KaTeX auto-render ($...$, $$...$$, \(...\), \[...\])
+function renderMath(el){
+  if(!el||typeof renderMathInElement!=='function')return;
+  try{
+    renderMathInElement(el,{
+      delimiters:[
+        {left:'$$',right:'$$',display:true},
+        {left:'\\[',right:'\\]',display:true},
+        {left:'\\(',right:'\\)',display:false},
+        {left:'$',right:'$',display:false}
+      ],
+      throwOnError:false,
+      ignoredClasses:['star-btn','thought-chain','q-prev']
+    });
+  }catch(err){/* keep raw text when rendering fails */}
+}
 
 // Thought Chain renderer (for session restoration)
 function renderTC(tc){
@@ -788,6 +814,7 @@ function handleSSEEvent(type,data,cs){
       cs.answerP.classList.remove('answer-cursor');
       var ti3=cs.body.querySelector('.thinking-indicator');if(ti3)ti3.remove();
       var lbl=cs.tcHeader?cs.tcHeader.querySelector('span'):null;if(lbl)lbl.textContent='推理过程';
+      renderMath(cs.answerP);
       break;
     case 'error':
       cs.answerP.textContent='错误：'+(data.message||'未知错误');
@@ -1044,6 +1071,7 @@ function loadSession(id){
       _lm[sid]={question:mt._q||'',answer:m.content,stage:mt.stage||'',subject:mt._subject||'',knowledge_point:mt._kp||'',is_diagnosis:mt.is_diagnosis||false,diagnosis_info:mt.diagnosis_info||null};
       var btn=b.querySelector('#'+sid);if(btn)btn.onclick=function(ev){tf(ev,sid);};
       if(m.meta)addMsgMeta(b,m.meta);
+      renderMath(b);
     }else{
       b.innerHTML=h;
     }

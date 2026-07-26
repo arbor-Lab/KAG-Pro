@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from kag_pro.core.bootstrap import create_default_registry
@@ -24,6 +25,11 @@ from kag_pro.core.paper_store import PaperStore
 from kag_pro.orchestration.orchestrator import EducationOrchestrator
 
 app = FastAPI(title="KAG-Pro Chat", version="2.0")
+
+# Static assets (KaTeX for LaTeX math rendering, etc.)
+_static_dir = Path(__file__).resolve().parent / "static"
+if _static_dir.is_dir():
+    app.mount("/static", StaticFiles(directory=str(_static_dir)), name="static")
 
 
 # === Singleton accessors ===
