@@ -51,12 +51,17 @@ class KGRetriever:
         # Step 2: Find KG entities mentioned in query
         kg_entities = self._find_entities(query)
 
-        # Step 3: Re-rank with KG graph score
+        # Step 3: Re-rank with KG graph score. When the query links to no KG
+        # entity there is no graph signal — keep the pure vector score instead
+        # of letting a zero graph score penalize relevant hits.
         scored = []
         for hit in vector_hits:
             vec_score = hit["score"]
             graph_score = self._compute_graph_score(hit["text"], kg_entities)
-            combined = self._alpha * vec_score + (1 - self._alpha) * graph_score
+            if kg_entities:
+                combined = self._alpha * vec_score + (1 - self._alpha) * graph_score
+            else:
+                combined = vec_score
             scored.append({**hit, "vector_score": vec_score, "graph_score": graph_score, "score": round(combined, 4)})
 
         scored.sort(key=lambda x: x["score"], reverse=True)

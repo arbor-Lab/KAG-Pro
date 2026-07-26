@@ -75,3 +75,18 @@ class TestRetrieveFusion:
         hits = retriever.retrieve("一次函数的图像", top_k=2)
         assert hits[0]["metadata"]["source"] == "f.txt"
         assert "vector_score" in hits[0] and "graph_score" in hits[0]
+
+    def test_no_kg_entity_keeps_pure_vector_score(self):
+        """Regression: a query linking to no KG entity must NOT have its
+        vector score penalized by a zero graph score (previously the fused
+        score was alpha*vec, which systematically pushed relevant hits below
+        the clarification threshold)."""
+        kg = make_kg()
+        store = MagicMock()
+        store.search.return_value = [
+            {"text": "完全无关的段落。", "metadata": {"source": "g.txt"}, "score": 0.7},
+        ]
+        retriever = KGRetriever(kg=kg, vector_store=store)
+        hits = retriever.retrieve("量子引力波是什么", top_k=1)
+        assert hits[0]["score"] == 0.7  # pure vector score, not 0.6*0.7
+        assert hits[0]["graph_score"] == 0.0
