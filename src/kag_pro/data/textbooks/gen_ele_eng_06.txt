@@ -1,0 +1,22 @@
+小学英语 - 数字1-100
+
+一、数字1-12：先认识这些小调皮
+英语里1到12，每个都有自己独一无二的名字，就像班里十二个性格不同的同学。它们没有统一的拼写规律，需要我们一个一个记住。
+你可以一边拍手一边读：one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve。特别注意eleven和twelve，它们和“one”“two”长得完全不像，不要用“十”的规律去硬凑。我们还可以用身体打节拍：大声读出$1$是one，$2$是two，一直拍到$12$是twelve，让嘴巴和耳朵一起记住这些单词。
+
+二、数字13-19：十几家族的小尾巴
+到了13，英语开始出现规律：大多数“十几”都在个位数后面加上“teen”这个小尾巴。比如$4$是four，$14$就是fourteen；$6$是six，$16$就是sixteen，读起来声音要重一些、长一些。
+但是，有三个小朋友会给自己“变装”：
+three变成thirteen（不是threeteen）
+five变成fifteen（注意ve变成了f，不是fiveteen）
+eight变成eighteen（只加一个een，而且只有一个t）
+我们可以编个儿歌：三穿新衣thirteen，五换帽子fifteen，八很直接eighteen。
+常见错误：学生常常把thirteen读成three-teen，把fifteen写成fiveteen。纠正方法：用彩色笔把thirteen里的“thir”圈出来，反复听音对比，并让学生用手指数着写fif-teen，强调中间是“fif”不是“five”。
+
+三、20到99与100：整十搭桥，几十几用上连字符
+整十数字就像十位数字穿上了“ty”外套。我们记住几个关键角色：$2$是two，$20$是twenty；$3$是three，$30$是thirty（不是threety）；$4$是four，$40$是forty（丢失了字母u，不是fourty）；$5$是five，$50$是fifty（变成fif-ty，和fifteen一样变装）；$8$是eight，$80$是eighty（只加-y，只有一个t）。这里面有个小陷阱：four变成forty时，u偷偷溜走了，一定要用“for-ty”来记。
+几十几的构成，就像搭积木，有一个公式：
+$$整十数字 + \text{“-”} + 个位数字$$
+例如，$21$是twenty-one，$35$是thirty-five，$47$是forty-seven，$99$是ninety-nine。连字符“-”就像一座小桥，把两个数字连成一家，千万别丢掉。
+数字$100$最特别，它不是“ten-ty”之类的，而是单独的一个词：one hundred，也可以说a hundred。不要读成one-zero-zero。
+常见错误：把$13$和$30$、$14$和$40$听混写混。纠正方法：我们玩“拍肩膀”游戏，听到十几（尾音n）拍一次肩，听到几十（尾音短i）拍两次肩，比如thirteen拍一次，thirty拍两次。同时做听写比赛，要求学生把“-”写得又直又显眼，忘了写“-”就要在订正时画一道彩虹小桥，强化记忆。

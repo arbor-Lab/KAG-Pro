@@ -1,10 +1,26 @@
 高中化学 - 醇与酚
 
-本章旨在对比醇与酚的结构与性质差异，明晰官能团连接方式对有机物化学性质的决定性影响。醇是羟基与饱和碳原子（或苯环侧链饱和碳）相连的化合物，而酚是羟基与苯环直接相连的化合物。这一结构差异导致二者性质迥异。
+一、醇与酚的定义及结构特征  
+醇是分子中含有羟基（$-\mathrm{OH}$）且羟基与饱和碳原子直接相连的有机化合物。这里的饱和碳原子可以是链烃基上的碳，也可以是苯环侧链（如甲基）上的碳。饱和一元醇的通式为 $\mathrm{C}_n\mathrm{H}_{2n+1}\mathrm{OH}$，结构简写为 $\mathrm{R}-\mathrm{OH}$。酚则是羟基直接连在苯环碳原子上的化合物，其官能团同样为羟基，但结构必须满足 $\mathrm{Ar}-\mathrm{OH}$ 的形式。最简单的酚为苯酚，分子式 $\mathrm{C}_6\mathrm{H}_6\mathrm{O}$，结构简式 $\mathrm{C}_6\mathrm{H}_5\mathrm{OH}$。两类物质结构的分水岭在于：羟基所连的碳原子是否属于苯环。
 
-**1. 结构与性质对比**
-醇分子中，羟基氧原子的孤对电子与烷基存在给电子诱导效应，O-H键极性相对较弱，醇主要表现为中性。苯酚中，氧原子的孤对电子与苯环形成p-π共轭体系，导致O-H键极性显著增强，易电离出氢离子，使苯酚具有弱酸性（$K_a \approx 1.0 \times 10^{-10}$），其酸性强于水但弱于碳酸。
+二、醇与酚的典型代表与性质对比示例  
+以乙醇与苯酚为例，它们的化学性质差异鲜明。  
+示例1．与活泼金属反应：乙醇与钠反应生成乙醇钠和氢气，方程式  
+$$2\mathrm{C}_2\mathrm{H}_5\mathrm{OH} + 2\mathrm{Na} \rightarrow 2\mathrm{C}_2\mathrm{H}_5\mathrm{ONa} + \mathrm{H}_2\uparrow$$  
+苯酚与钠反应生成苯酚钠和氢气，方程式  
+$$2\mathrm{C}_6\mathrm{H}_5\mathrm{OH} + 2\mathrm{Na} \rightarrow 2\mathrm{C}_6\mathrm{H}_5\mathrm{ONa} + \mathrm{H}_2\uparrow$$  
+两者均能放出氢气，但苯酚因酚羟基具有弱酸性，反应更为剧烈。  
+示例2．与氢氧化钠反应：乙醇与 $\mathrm{NaOH}$ 溶液不反应；苯酚则表现出酸性，能与 $\mathrm{NaOH}$ 发生中和反应，生成苯酚钠和水：  
+$$\mathrm{C}_6\mathrm{H}_5\mathrm{OH} + \mathrm{NaOH} \rightarrow \mathrm{C}_6\mathrm{H}_5\mathrm{ONa} + \mathrm{H}_2\mathrm{O}$$  
+这说明酚羟基中的氢原子比醇羟基中的氢原子更易电离。  
+示例3．特征鉴别反应：苯酚与饱和溴水反应，生成2,4,6-三溴苯酚白色沉淀，方程式  
+$$\mathrm{C}_6\mathrm{H}_5\mathrm{OH} + 3\mathrm{Br}_2 \rightarrow \mathrm{C}_6\mathrm{H}_2\mathrm{Br}_3\mathrm{OH}\downarrow + 3\mathrm{HBr}$$  
+此反应极为灵敏，可用于苯酚的定性检验。此外，苯酚遇稀氯化铁溶液显紫色，这是酚类物质的特征显色反应。乙醇均无上述现象。
 
-**2. 典型例题剖析**
-
-**例1（醇的取代
+三、常见错误辨析  
+错误理解1：认为所有含有羟基的有机物都属于醇类。  
+纠正方法：判断的关键是观察羟基所连的碳原子是否与苯环直接相连。若羟基直接连在苯环上，则属于酚；若羟基连在链烃基或苯环侧链碳上，则属于醇。例如，$\mathrm{C}_6\mathrm{H}_5\mathrm{CH}_2\mathrm{OH}$（苯甲醇）是醇，而 $\mathrm{C}_6\mathrm{H}_5\mathrm{OH}$ 是酚。记忆要领：“羟连苯环是酚，连其余饱和碳是醇。”  
+错误理解2：认为苯酚的酸性较强，可使石蕊试液变红。  
+纠正方法：苯酚的酸性极弱，其酸性比碳酸还弱，不能使指示剂变色。向苯酚钠溶液中通入二氧化碳气体，溶液变浑浊并析出苯酚，反应为  
+$$\mathrm{C}_6\mathrm{H}_5\mathrm{ONa} + \mathrm{CO}_2 + \mathrm{H}_2\mathrm{O} \rightarrow \mathrm{C}_6\mathrm{H}_5\mathrm{OH} + \mathrm{NaHCO}_3$$  
+这遵循“强酸制弱酸”原理，证明碳酸酸性强于苯酚。苯酚只能与强碱反应，不与碳酸盐反应放出二氧化碳。

@@ -1,0 +1,27 @@
+小学英语 - 一般现在时
+
+一、什么是一般现在时  
+一般现在时就像我们生活中的“习惯记录员”，专门用来表示经常发生的事情、一直存在的状态，或者永远不变的真理。比如，你每天早上七点起床，太阳每天从东方升起，这些都可以用一般现在时来表达。简单来说，只要是“常常做、总是这样、永远不变”的动作或事实，我们就可以请它出场。
+
+二、一般现在时的句型公式  
+一般现在时的句子可以分为两大类：一类是用be动词（am, is, are）的句子，另一类是用行为动词（run, eat, play等）的句子。
+
+先说be动词的情况。它的肯定句公式是：主语 + am/is/are + 其他。比如，I am a student. 否定句时，就在be动词后加not：I am not a student. 疑问句直接把be动词提到主语前：Are you a student? 这里有个小口诀可以记：“I用am，you用are，is连着he, she, it；单数名词用is，复数名词都用are。”
+
+再说行为动词的情况。肯定句里，当主语是“我、你、我们、他们”或复数名词时，动词直接保持原形：I like apples. 当主语是“他、她、它”或单数名词时，动词就要穿上“小尾巴”s或es：She likes apples. 否定句和疑问句需要借助助动词do或does。主语是第三人称单数时用does，其余用do。注意，用了does之后，动词要变回原形，因为does已经帮忙表达了“单数”的意思。公式可以这样看：
+
+肯定句：I/You/We/They + 动词原形 + 其他.   He/She/It + 动词三单形式 + 其他.  
+否定句：主语 + don’t/doesn’t + 动词原形 + 其他.  
+疑问句：Do/Does + 主语 + 动词原形 + 其他?
+
+三、一起来看几个例子吧  
+例1：表示习惯  
+Amy每天都读书。英文是：Amy reads books every day. 主语Amy是单数第三人称，所以read加s变成reads。如果改否定句：Amy doesn’t read books every day. 用了doesn’t后，read变回原形。  
+例2：表示状态  
+我们在教室里。英文是：We are in the classroom. 否定句：We are not in the classroom. 疑问句：Are you in the classroom?  
+例3：表示真理  
+地球绕着太阳转。英文是：The earth goes around the sun. 因为地球是单个事物，相当于“它”，所以go加es。
+
+四、大家容易犯的小错误  
+第一个小陷阱：忘记给“他、她、它”后面的动词加小尾巴。比如错句：He play football. 正确应该是：He plays football. 你可以这样提醒自己——只要看到he, she, it或能替换成它们的人或东西，马上检查动词后面有没有s或es。如果用了doesn’t或does提问，动词就要赶紧脱掉“尾巴”，如Does he play football? 而不是Does he plays football.  
+第二个小陷阱：把be动词和行为动词混在一起。有的同学会写出I am go home. 这是不对的，因为am和go不能直接当好朋友手拉手。要么用行为动词说I go home. 要么用be动词说I am at home. 请记住，一个简单句里，be动词和行为动词不能同时做谓语。

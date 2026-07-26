@@ -1,0 +1,35 @@
+小学英语 - there be句型
+
+一、什么是There be句型
+There be句型用来表达“某个地方存在某人或某物”，可以理解为“有”。当我们想说教室里有一张桌子、书包里有一本书时，就要用到这个句型。它的基本公式是：
+$$There\ be + 某人/某物 + 地点$$
+这里的be动词要根据后面名词的单复数来选择，如果名词是单数或不可数名词，be动词用is；如果是复数名词，be动词用are。例如：
+$$There\ is\ a\ book\ on\ the\ desk.$$
+$$There\ are\ two\ pens\ in\ the\ pencil\ case.$$
+当后面有多个名词时，be动词要和离它最近的名词保持单复数一致，这就是“就近原则”。公式可以写成：
+$$There\ be + 名词1 + and + 名词2 + 地点$$
+如果名词1是单数，be动词就用is；名词1是复数，就用are。例如：
+$$There\ is\ a\ ruler\ and\ two\ erasers\ in\ the\ bag.$$
+$$There\ are\ two\ erasers\ and\ a\ ruler\ in\ the\ bag.$$
+
+二、例题与示例
+例题1：树上有两只鸟。
+根据公式，先找“鸟”是复数，所以用are。答案为：$$There\ are\ two\ birds\ in\ the\ tree.$$
+
+例题2：杯子里有一些水。
+“水”是不可数名词，视为单数，用is。不可数名词前不用a。答案为：$$There\ is\ some\ water\ in\ the\ cup.$$
+
+例题3：公园里有一个男孩和三个女孩。
+使用就近原则，“一个男孩”离be动词更近，是单数，所以用is。答案为：$$There\ is\ a\ boy\ and\ three\ girls\ in\ the\ park.$$
+
+例题4：墙上有三张地图和一面钟。
+“三张地图”离be动词更近，是复数，用are。答案为：$$There\ are\ three\ maps\ and\ a\ clock\ on\ the\ wall.$$
+
+三、常见错误及纠正方法
+错误1：漏掉be动词或把be动词用成“have”。
+很多同学会说：The room has a bed. 这个句子语法上没错，但地道表达存在的东西应该用There be句型，改为：There is a bed in the room. 千万不要写成：There have a bed. there和have不能连用。
+
+错误2：看到后面有复数名词就不管前面，直接把be动词一律写成are。
+比如把“桌子上有一本书和两支笔”说成：There are a book and two pens on the desk. 由于“一本书”紧挨be动词，是单数，所以正确的be动词是is，即：There is a book and two pens on the desk. 纠正方法很简单，每次写完站定时，用笔圈出紧跟在be动词后的那个名词，判断它是不是单数，再决定be动词的形态。
+
+掌握There be句型并不难，记住基本公式，再用就近原则逐一检查，你就能写出正确的句子。多做一些替换名词和地点的游戏，会让这个句型越练越熟。

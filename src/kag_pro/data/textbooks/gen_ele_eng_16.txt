@@ -1,0 +1,35 @@
+小学英语 - 现在进行时
+
+一、现在进行时的模样  
+现在进行时就是“此刻正在做的事”。比如，你正在读这句话，妈妈正在厨房做饭，小鸟正在窗外唱歌。英语里要把“正在”说出来，需要一个固定搭配：主语加上be动词（am, is, are），再加上动词的ing小尾巴。它的样子可以写成一个公式：  
+$$主语 + be (am, is, are) + 动词ing + 其他$$  
+这里的be动词像一个“正在”的小帮手，它根据主语换衣服：I用am，he/she/it用is，you、we、they用are。  
+
+二、三个例句小屋  
+我们来看三个例句，把现在进行时用起来。  
+
+例句一（肯定句）：  
+She is reading a storybook.  
+她正在读一本故事书。  
+公式是 $主语 + be + 动词ing + 其他.$，主语She配上is，read直接加ing。  
+
+例句二（否定句）：  
+I am not singing now.  
+我现在没在唱歌。  
+否定句在be后面加not，像个小叉子。公式：$主语 + be + not + 动词ing + 其他.$  
+
+例句三（一般疑问句）：  
+Are they playing football?  
+他们正在踢足球吗？  
+提问时把be提到句子最前面，公式：$Be + 主语 + 动词ing + 其他?$ 回答用Yes, they are. 或No, they aren't.  
+
+三、小错别让它捣乱  
+同学们常常掉进两个小陷阱，我们一起来填平。  
+
+错误一：忘记带上be小帮手  
+有人会说：“He playing games.” 听起来好像少了点什么。  
+纠正方法：现在进行时里，be动词决不可省。可以把口诀记在心里：“现在进行真好记，be加ing不分离。” 正确的句子是：He is playing games. 缺了be，句子就没有“正在”的灵魂啦。  
+
+错误二：ing尾巴贴错了位置  
+有的动词加ing不是直接贴上去。比如“write”写成“writeing”，这就错了，正确是“writing”，要去掉结尾不发音的e再加ing。再比如“swim”，要双写m再加ing，变成“swimming”。  
+纠正方法：记住三个ing变化小口诀：“一般直接加，哑e去e加，重读闭音双写加。”多举例子：dance变成dancing，run变成running，play直接加ing变成playing。平时多读多拼，小尾巴就会贴得又牢又准。

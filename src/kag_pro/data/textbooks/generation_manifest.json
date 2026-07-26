@@ -1,0 +1,2826 @@
+{
+  "gen_ele_mat_29.txt": {
+    "stage": "小学",
+    "subject": "数学",
+    "topic": "长方形和正方形的周长与面积",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T07:59:27",
+    "fact_checked": true
+  },
+  "gen_ele_chi_08.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "形近字辨析",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:01:23",
+    "fact_checked": false
+  },
+  "gen_ele_chi_09.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "同音字辨析",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:01:48",
+    "fact_checked": false
+  },
+  "gen_ele_chi_10.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "词语的理解与运用",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:02:11",
+    "fact_checked": false
+  },
+  "gen_ele_chi_11.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "近义词与反义词",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:02:38",
+    "fact_checked": false
+  },
+  "gen_ele_chi_12.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "成语的积累与运用",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:03:08",
+    "fact_checked": false
+  },
+  "gen_ele_chi_13.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "句子的类型与变换",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:03:28",
+    "fact_checked": false
+  },
+  "gen_ele_chi_14.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "扩句与缩句",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:03:56",
+    "fact_checked": false
+  },
+  "gen_ele_chi_15.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "修辞手法（比喻拟人排比）",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:04:18",
+    "fact_checked": false
+  },
+  "gen_ele_chi_16.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "病句修改",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:04:32",
+    "fact_checked": false
+  },
+  "gen_ele_chi_17.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "标点符号的使用",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:05:02",
+    "fact_checked": false
+  },
+  "gen_ele_chi_18.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "记叙文阅读",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:05:22",
+    "fact_checked": false
+  },
+  "gen_ele_chi_19.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "说明文阅读",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:05:45",
+    "fact_checked": false
+  },
+  "gen_ele_chi_20.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "古诗词诵读与理解",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:06:07",
+    "fact_checked": false
+  },
+  "gen_ele_chi_21.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "文言文启蒙",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:06:23",
+    "fact_checked": false
+  },
+  "gen_ele_chi_22.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "看图写话",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:06:48",
+    "fact_checked": false
+  },
+  "gen_ele_chi_23.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "日记的写作",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:07:04",
+    "fact_checked": false
+  },
+  "gen_ele_chi_24.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "记叙文写作",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:07:24",
+    "fact_checked": false
+  },
+  "gen_ele_chi_25.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "应用文写作（书信通知）",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:07:38",
+    "fact_checked": false
+  },
+  "gen_ele_chi_27.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "口语交际：演讲与辩论",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:09:53",
+    "fact_checked": false
+  },
+  "gen_ele_chi_28.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "综合性学习",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:11:22",
+    "fact_checked": false
+  },
+  "gen_ele_chi_29.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "课外阅读指导",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:11:36",
+    "fact_checked": false
+  },
+  "gen_ele_eng_01.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "26个英文字母",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:12:39",
+    "fact_checked": false
+  },
+  "gen_ele_eng_02.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "字母的发音与书写",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:13:16",
+    "fact_checked": false
+  },
+  "gen_ele_eng_03.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "日常问候用语",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:13:34",
+    "fact_checked": false
+  },
+  "gen_ele_eng_04.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "自我介绍用语",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:13:51",
+    "fact_checked": false
+  },
+  "gen_ele_eng_05.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "颜色词汇",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:14:14",
+    "fact_checked": false
+  },
+  "gen_ele_eng_06.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "数字1-100",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:14:38",
+    "fact_checked": false
+  },
+  "gen_ele_eng_07.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "家庭成员词汇",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:15:01",
+    "fact_checked": false
+  },
+  "gen_ele_eng_08.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "动物词汇",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:15:26",
+    "fact_checked": false
+  },
+  "gen_ele_eng_09.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "食物与饮料词汇",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:15:46",
+    "fact_checked": false
+  },
+  "gen_ele_eng_10.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "学校用品词汇",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:15:59",
+    "fact_checked": false
+  },
+  "gen_ele_eng_11.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "身体部位词汇",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:16:17",
+    "fact_checked": false
+  },
+  "gen_ele_eng_12.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "天气与季节词汇",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:16:35",
+    "fact_checked": false
+  },
+  "gen_ele_eng_13.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "be动词的用法",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:17:24",
+    "fact_checked": false
+  },
+  "gen_ele_eng_14.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "名词的单复数",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:17:48",
+    "fact_checked": false
+  },
+  "gen_ele_eng_15.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "一般现在时",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:18:09",
+    "fact_checked": false
+  },
+  "gen_ele_eng_16.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "现在进行时",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:18:29",
+    "fact_checked": false
+  },
+  "gen_ele_eng_17.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "情态动词can的用法",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:18:54",
+    "fact_checked": false
+  },
+  "gen_ele_eng_18.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "there be句型",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:19:07",
+    "fact_checked": false
+  },
+  "gen_ele_eng_19.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "特殊疑问句",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:19:25",
+    "fact_checked": false
+  },
+  "gen_ele_eng_20.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "阅读理解：简单短文",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:19:41",
+    "fact_checked": false
+  },
+  "gen_ele_eng_21.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "阅读理解：小故事",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:20:09",
+    "fact_checked": false
+  },
+  "gen_ele_eng_22.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "英语歌曲与童谣",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:21:33",
+    "fact_checked": false
+  },
+  "gen_ele_eng_23.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "英语书写规范",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:21:57",
+    "fact_checked": false
+  },
+  "gen_ele_eng_24.txt": {
+    "stage": "小学",
+    "subject": "英语",
+    "topic": "英语文化常识",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:22:15",
+    "fact_checked": false
+  },
+  "gen_ele_sci_01.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "植物的生长与繁殖",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:23:54",
+    "fact_checked": true
+  },
+  "gen_ele_sci_02.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "动物的特征与分类",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:25:04",
+    "fact_checked": true
+  },
+  "gen_ele_sci_03.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "人体的结构与功能",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:25:34",
+    "fact_checked": true
+  },
+  "gen_ele_sci_04.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "微生物与卫生",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:25:56",
+    "fact_checked": true
+  },
+  "gen_ele_sci_05.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "声音的产生与传播",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:26:22",
+    "fact_checked": true
+  },
+  "gen_ele_sci_06.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "光的传播与反射",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:26:44",
+    "fact_checked": true
+  },
+  "gen_ele_sci_07.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "电与电路基础",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:27:51",
+    "fact_checked": true
+  },
+  "gen_ele_sci_10.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "物质的状态与变化",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:32:20",
+    "fact_checked": true
+  },
+  "gen_ele_sci_11.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "溶解与溶液",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:32:50",
+    "fact_checked": true
+  },
+  "gen_ele_sci_12.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "常见的酸碱物质",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:33:55",
+    "fact_checked": true
+  },
+  "gen_ele_sci_13.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "地球的结构与运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:34:25",
+    "fact_checked": true
+  },
+  "gen_ele_sci_14.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "天气与气候观测",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:34:48",
+    "fact_checked": true
+  },
+  "gen_ele_sci_15.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "四季变化与成因",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:35:21",
+    "fact_checked": true
+  },
+  "gen_ele_sci_16.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "环境保护与可持续发展",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:35:54",
+    "fact_checked": true
+  },
+  "gen_ele_oly_02.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "和倍问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:37:13",
+    "fact_checked": true
+  },
+  "gen_ele_oly_03.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "差倍问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:37:36",
+    "fact_checked": true
+  },
+  "gen_ele_oly_04.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "和差问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:38:22",
+    "fact_checked": true
+  },
+  "gen_ele_oly_05.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "追及问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:39:50",
+    "fact_checked": true
+  },
+  "gen_ele_oly_06.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "相遇问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:40:12",
+    "fact_checked": true
+  },
+  "gen_ele_oly_07.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "盈亏问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:40:38",
+    "fact_checked": true
+  },
+  "gen_ele_oly_08.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "植树问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:41:01",
+    "fact_checked": true
+  },
+  "gen_ele_oly_09.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "年龄问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:41:25",
+    "fact_checked": true
+  },
+  "gen_ele_oly_10.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "牛吃草问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:41:50",
+    "fact_checked": true
+  },
+  "gen_ele_oly_11.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "归一问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:42:13",
+    "fact_checked": true
+  },
+  "gen_ele_oly_12.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "还原问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:43:15",
+    "fact_checked": true
+  },
+  "gen_ele_oly_13.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "工程问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:44:31",
+    "fact_checked": true
+  },
+  "gen_ele_oly_14.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "流水行船问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:45:19",
+    "fact_checked": true
+  },
+  "gen_ele_oly_15.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "火车过桥问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:45:42",
+    "fact_checked": true
+  },
+  "gen_ele_oly_16.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "浓度问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:46:38",
+    "fact_checked": true
+  },
+  "gen_ele_oly_17.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "经济利润问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:47:02",
+    "fact_checked": true
+  },
+  "gen_ele_oly_18.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "平均数问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:47:36",
+    "fact_checked": true
+  },
+  "gen_ele_oly_19.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "周期问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:48:00",
+    "fact_checked": true
+  },
+  "gen_ele_oly_20.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "方阵问题",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:48:26",
+    "fact_checked": true
+  },
+  "gen_ele_oly_21.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "抽屉原理",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:49:16",
+    "fact_checked": true
+  },
+  "gen_ele_oly_22.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "容斥原理",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:49:40",
+    "fact_checked": true
+  },
+  "gen_ele_oly_23.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "加法原理与乘法原理",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:50:44",
+    "fact_checked": true
+  },
+  "gen_ele_oly_24.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "等差数列与高斯求和",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:51:01",
+    "fact_checked": true
+  },
+  "gen_ele_oly_25.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "数字谜",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:52:42",
+    "fact_checked": true
+  },
+  "gen_ele_oly_26.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "幻方与数阵图",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:53:18",
+    "fact_checked": true
+  },
+  "gen_ele_oly_27.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "逻辑推理",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:53:50",
+    "fact_checked": true
+  },
+  "gen_ele_oly_28.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "统筹与最优化",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:54:52",
+    "fact_checked": true
+  },
+  "gen_ele_oly_29.txt": {
+    "stage": "小学",
+    "subject": "奥数",
+    "topic": "定义新运算",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:55:28",
+    "fact_checked": true
+  },
+  "gen_mid_mat_01.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "有理数的混合运算",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:55:48",
+    "fact_checked": true
+  },
+  "gen_mid_mat_02.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "整式的加减",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:56:07",
+    "fact_checked": true
+  },
+  "gen_mid_mat_04.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "二元一次方程组",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:57:02",
+    "fact_checked": true
+  },
+  "gen_mid_mat_05.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "不等式与不等式组",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:57:25",
+    "fact_checked": true
+  },
+  "gen_mid_mat_08.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "实数与二次根式",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:58:39",
+    "fact_checked": true
+  },
+  "gen_mid_mat_09.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "平面直角坐标系",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T08:59:23",
+    "fact_checked": true
+  },
+  "gen_mid_mat_14.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "勾股定理及其应用",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:01:03",
+    "fact_checked": true
+  },
+  "gen_mid_mat_19.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "数据的集中趋势",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:03:39",
+    "fact_checked": true
+  },
+  "gen_mid_mat_20.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "数据的波动程度",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:04:11",
+    "fact_checked": true
+  },
+  "gen_mid_phy_01.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "机械运动与参照物",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:04:49",
+    "fact_checked": true
+  },
+  "gen_mid_phy_02.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "速度与匀速直线运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:05:09",
+    "fact_checked": true
+  },
+  "gen_mid_phy_05.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "二力平衡与牛顿第一定律",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:07:26",
+    "fact_checked": true
+  },
+  "gen_mid_phy_06.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "固体压强与液体压强",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:07:57",
+    "fact_checked": true
+  },
+  "gen_mid_phy_08.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "浮力与阿基米德原理",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:08:26",
+    "fact_checked": true
+  },
+  "gen_mid_phy_09.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "浮沉条件与应用",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:08:43",
+    "fact_checked": true
+  },
+  "gen_mid_phy_11.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "功与功率",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:10:05",
+    "fact_checked": true
+  },
+  "gen_mid_phy_12.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "机械效率",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:10:26",
+    "fact_checked": true
+  },
+  "gen_mid_phy_14.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "分子热运动与内能",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:11:16",
+    "fact_checked": true
+  },
+  "gen_mid_phy_16.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "热机与热机效率",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:13:17",
+    "fact_checked": true
+  },
+  "gen_mid_phy_17.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "电荷与电路",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:13:39",
+    "fact_checked": true
+  },
+  "gen_mid_phy_18.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "电流与电压",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:14:29",
+    "fact_checked": true
+  },
+  "gen_mid_phy_20.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "欧姆定律及其应用",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:16:18",
+    "fact_checked": true
+  },
+  "gen_mid_phy_22.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "焦耳定律与电热",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:17:59",
+    "fact_checked": true
+  },
+  "gen_mid_phy_23.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "家庭电路与安全用电",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:19:33",
+    "fact_checked": true
+  },
+  "gen_mid_phy_25.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "电生磁与电磁铁",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:21:00",
+    "fact_checked": true
+  },
+  "gen_mid_phy_26.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "电动机与发电机",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:21:14",
+    "fact_checked": true
+  },
+  "gen_mid_che_03.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "氧气的性质与制备",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:23:15",
+    "fact_checked": true
+  },
+  "gen_mid_che_09.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "金属资源的利用与保护",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:28:00",
+    "fact_checked": true
+  },
+  "gen_mid_che_10.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "溶液的形成与溶解度",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:29:19",
+    "fact_checked": true
+  },
+  "gen_mid_che_11.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "溶质的质量分数",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:29:43",
+    "fact_checked": true
+  },
+  "gen_mid_che_13.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "常见的碱及其性质",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:32:27",
+    "fact_checked": true
+  },
+  "gen_mid_che_14.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "中和反应与pH",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:32:50",
+    "fact_checked": true
+  },
+  "gen_mid_bio_01.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "生物的特征与环境",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:34:56",
+    "fact_checked": true
+  },
+  "gen_mid_bio_02.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "生态系统的组成",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:35:27",
+    "fact_checked": true
+  },
+  "gen_mid_bio_03.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "细胞的结构与功能",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:35:47",
+    "fact_checked": true
+  },
+  "gen_mid_bio_04.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "细胞分裂与分化",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:36:13",
+    "fact_checked": true
+  },
+  "gen_mid_bio_06.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "呼吸作用",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:36:41",
+    "fact_checked": true
+  },
+  "gen_mid_bio_07.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "人体的消化与吸收",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:37:13",
+    "fact_checked": true
+  },
+  "gen_mid_bio_08.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "人体的呼吸",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:38:43",
+    "fact_checked": true
+  },
+  "gen_mid_bio_12.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "激素调节",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:40:51",
+    "fact_checked": true
+  },
+  "gen_mid_bio_15.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "病毒",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:43:31",
+    "fact_checked": true
+  },
+  "gen_mid_bio_16.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "传染病与免疫",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:43:58",
+    "fact_checked": true
+  },
+  "gen_mid_geo_02.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "地球的运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:45:54",
+    "fact_checked": false
+  },
+  "gen_mid_geo_03.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "地图的阅读",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:46:24",
+    "fact_checked": false
+  },
+  "gen_mid_geo_04.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "海陆分布",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:46:49",
+    "fact_checked": false
+  },
+  "gen_mid_geo_05.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "天气与气候",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:47:05",
+    "fact_checked": false
+  },
+  "gen_mid_geo_06.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "气温与降水",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:47:30",
+    "fact_checked": false
+  },
+  "gen_mid_geo_08.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "人口与人种",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:48:16",
+    "fact_checked": false
+  },
+  "gen_mid_geo_09.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "语言与宗教",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:48:40",
+    "fact_checked": false
+  },
+  "gen_mid_geo_10.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "亚洲",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:49:50",
+    "fact_checked": false
+  },
+  "gen_mid_geo_13.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "欧洲西部",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:50:27",
+    "fact_checked": false
+  },
+  "gen_mid_geo_14.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "中国的疆域",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:50:51",
+    "fact_checked": false
+  },
+  "gen_mid_geo_15.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "中国的地形",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:51:14",
+    "fact_checked": false
+  },
+  "gen_mid_geo_17.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "中国的河流",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:52:11",
+    "fact_checked": false
+  },
+  "gen_mid_geo_18.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "自然资源",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:52:45",
+    "fact_checked": false
+  },
+  "gen_mid_his_01.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "中国早期人类",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:55:00",
+    "fact_checked": false
+  },
+  "gen_mid_his_02.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "夏商周",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:55:16",
+    "fact_checked": false
+  },
+  "gen_mid_his_03.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "百家争鸣",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:55:33",
+    "fact_checked": false
+  },
+  "gen_mid_his_04.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "秦统一中国",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:56:39",
+    "fact_checked": false
+  },
+  "gen_mid_his_06.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "丝绸之路",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:58:48",
+    "fact_checked": false
+  },
+  "gen_mid_his_07.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "三国鼎立",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T09:59:04",
+    "fact_checked": false
+  },
+  "gen_mid_his_13.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "洋务运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:05:12",
+    "fact_checked": false
+  },
+  "gen_mid_his_14.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "甲午战争",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:06:16",
+    "fact_checked": false
+  },
+  "gen_mid_his_15.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "戊戌变法",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:07:56",
+    "fact_checked": false
+  },
+  "gen_mid_his_16.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "辛亥革命",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:08:22",
+    "fact_checked": false
+  },
+  "gen_mid_his_18.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "五四运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:10:01",
+    "fact_checked": false
+  },
+  "gen_mid_his_19.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "中共成立",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:10:52",
+    "fact_checked": false
+  },
+  "gen_mid_his_20.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "红军长征",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:11:28",
+    "fact_checked": false
+  },
+  "gen_mid_his_21.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "抗日战争",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:11:45",
+    "fact_checked": false
+  },
+  "gen_mid_his_22.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "解放战争",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:12:10",
+    "fact_checked": false
+  },
+  "gen_mid_his_24.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "改革开放",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:13:38",
+    "fact_checked": false
+  },
+  "gen_mid_pol_02.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "家庭美德与亲情",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:16:00",
+    "fact_checked": false
+  },
+  "gen_mid_pol_03.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "社会公德与规则",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:16:56",
+    "fact_checked": false
+  },
+  "gen_mid_pol_04.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "法律基础知识",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:17:50",
+    "fact_checked": false
+  },
+  "gen_mid_pol_06.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "公民的权利与义务",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:20:49",
+    "fact_checked": false
+  },
+  "gen_mid_pol_08.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "改革开放与成就",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:23:09",
+    "fact_checked": false
+  },
+  "gen_mid_pol_09.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "中国特色社会主义",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:24:15",
+    "fact_checked": false
+  },
+  "gen_mid_pol_10.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "共同富裕与共享发展",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:26:16",
+    "fact_checked": false
+  },
+  "gen_mid_pol_12.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "国际视野与全球观念",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:29:28",
+    "fact_checked": false
+  },
+  "gen_hig_mat_01.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "集合的概念与运算",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:30:19",
+    "fact_checked": true
+  },
+  "gen_hig_mat_02.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "充分条件与必要条件",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:30:38",
+    "fact_checked": true
+  },
+  "gen_hig_mat_04.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "二次函数与不等式",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:32:28",
+    "fact_checked": true
+  },
+  "gen_hig_mat_05.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "函数的单调性与奇偶性",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:32:56",
+    "fact_checked": true
+  },
+  "gen_hig_mat_06.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "指数函数与对数函数",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:34:24",
+    "fact_checked": true
+  },
+  "gen_hig_mat_07.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "幂函数",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:34:42",
+    "fact_checked": true
+  },
+  "gen_hig_mat_08.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "任意角与弧度制",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:35:07",
+    "fact_checked": true
+  },
+  "gen_hig_mat_09.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "三角函数定义与诱导公式",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:36:00",
+    "fact_checked": true
+  },
+  "gen_hig_mat_10.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "三角函数图像与性质",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:36:26",
+    "fact_checked": true
+  },
+  "gen_hig_mat_11.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "三角恒等变换",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:37:15",
+    "fact_checked": true
+  },
+  "gen_hig_mat_12.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "解三角形",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:38:34",
+    "fact_checked": true
+  },
+  "gen_hig_mat_14.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "复数",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:39:59",
+    "fact_checked": true
+  },
+  "gen_hig_mat_15.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "等差数列",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:40:23",
+    "fact_checked": true
+  },
+  "gen_hig_mat_16.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "等比数列",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:41:13",
+    "fact_checked": true
+  },
+  "gen_hig_mat_17.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "导数的概念与运算",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:41:43",
+    "fact_checked": true
+  },
+  "gen_hig_mat_18.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "导数与单调性",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:42:04",
+    "fact_checked": true
+  },
+  "gen_hig_mat_19.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "导数与极值最值",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:43:27",
+    "fact_checked": true
+  },
+  "gen_hig_mat_20.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "空间几何体",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:43:53",
+    "fact_checked": true
+  },
+  "gen_hig_mat_21.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "点线面位置关系",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:44:30",
+    "fact_checked": true
+  },
+  "gen_hig_mat_22.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "空间向量",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:44:57",
+    "fact_checked": true
+  },
+  "gen_hig_mat_23.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "直线方程",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:45:23",
+    "fact_checked": true
+  },
+  "gen_hig_mat_24.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "圆的方程",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:45:55",
+    "fact_checked": true
+  },
+  "gen_hig_mat_26.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "双曲线",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:46:22",
+    "fact_checked": true
+  },
+  "gen_hig_mat_27.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "抛物线",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:46:52",
+    "fact_checked": true
+  },
+  "gen_hig_mat_31.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "离散型随机变量",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:48:21",
+    "fact_checked": true
+  },
+  "gen_hig_mat_33.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "统计与回归分析",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:48:54",
+    "fact_checked": true
+  },
+  "gen_hig_phy_01.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "匀变速直线运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:49:20",
+    "fact_checked": true
+  },
+  "gen_hig_phy_03.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "力的合成与分解",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:49:48",
+    "fact_checked": true
+  },
+  "gen_hig_phy_06.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "平抛运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:51:47",
+    "fact_checked": true
+  },
+  "gen_hig_phy_08.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "万有引力",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:52:39",
+    "fact_checked": true
+  },
+  "gen_hig_phy_09.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "动能定理",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:53:09",
+    "fact_checked": true
+  },
+  "gen_hig_phy_10.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "机械能守恒",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:54:53",
+    "fact_checked": true
+  },
+  "gen_hig_phy_12.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "简谐运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:57:33",
+    "fact_checked": true
+  },
+  "gen_hig_phy_13.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "机械波",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:58:10",
+    "fact_checked": true
+  },
+  "gen_hig_phy_14.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "库仑定律",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T10:58:37",
+    "fact_checked": true
+  },
+  "gen_hig_phy_16.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "电势与电势能",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:01:31",
+    "fact_checked": true
+  },
+  "gen_hig_phy_17.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "带电粒子在电场中",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:03:19",
+    "fact_checked": true
+  },
+  "gen_hig_phy_18.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "闭合电路欧姆定律",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:03:46",
+    "fact_checked": true
+  },
+  "gen_hig_phy_19.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "安培力与洛伦兹力",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:04:19",
+    "fact_checked": true
+  },
+  "gen_hig_phy_20.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "电磁感应",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:05:50",
+    "fact_checked": true
+  },
+  "gen_hig_phy_21.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "交变电流",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:06:16",
+    "fact_checked": true
+  },
+  "gen_hig_phy_22.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "光的折射与全反射",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:07:26",
+    "fact_checked": true
+  },
+  "gen_hig_phy_24.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "光电效应",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:09:39",
+    "fact_checked": true
+  },
+  "gen_hig_che_02.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "离子反应",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:10:31",
+    "fact_checked": true
+  },
+  "gen_hig_che_03.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "氧化还原反应",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:10:55",
+    "fact_checked": true
+  },
+  "gen_hig_che_04.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "钠及其化合物",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:11:15",
+    "fact_checked": true
+  },
+  "gen_hig_che_05.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "铝及其化合物",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:12:18",
+    "fact_checked": true
+  },
+  "gen_hig_che_07.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "氯及其化合物",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:15:07",
+    "fact_checked": true
+  },
+  "gen_hig_che_09.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "氮及其化合物",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:17:39",
+    "fact_checked": true
+  },
+  "gen_hig_che_10.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "原子结构与周期律",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:18:36",
+    "fact_checked": true
+  },
+  "gen_hig_che_12.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "化学反应与能量",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:21:28",
+    "fact_checked": true
+  },
+  "gen_hig_che_16.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "醛与酮",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:26:58",
+    "fact_checked": true
+  },
+  "gen_hig_che_20.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "合成高分子",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:31:59",
+    "fact_checked": true
+  },
+  "gen_hig_bio_03.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "细胞代谢与酶",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:37:01",
+    "fact_checked": true
+  },
+  "gen_hig_bio_04.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "细胞呼吸",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:38:24",
+    "fact_checked": true
+  },
+  "gen_hig_bio_05.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "光合作用",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:38:53",
+    "fact_checked": true
+  },
+  "gen_hig_bio_06.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "细胞的生命历程",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:39:53",
+    "fact_checked": true
+  },
+  "gen_hig_bio_08.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "减数分裂",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:41:44",
+    "fact_checked": true
+  },
+  "gen_hig_bio_12.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "基因突变",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:46:58",
+    "fact_checked": true
+  },
+  "gen_hig_bio_13.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "染色体变异",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:47:53",
+    "fact_checked": true
+  },
+  "gen_hig_bio_14.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "人类遗传病",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:48:48",
+    "fact_checked": true
+  },
+  "gen_hig_bio_15.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "杂交育种",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:49:15",
+    "fact_checked": true
+  },
+  "gen_hig_bio_16.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "基因工程",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:49:48",
+    "fact_checked": true
+  },
+  "gen_hig_bio_17.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "现代生物进化理论",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:51:19",
+    "fact_checked": true
+  },
+  "gen_hig_bio_18.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "内环境与稳态",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:51:44",
+    "fact_checked": true
+  },
+  "gen_hig_bio_19.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "神经调节",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:52:06",
+    "fact_checked": true
+  },
+  "gen_hig_bio_21.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "免疫调节",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:52:59",
+    "fact_checked": true
+  },
+  "gen_hig_bio_23.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "种群的特征",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:55:14",
+    "fact_checked": true
+  },
+  "gen_hig_bio_24.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "群落的结构",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:56:51",
+    "fact_checked": true
+  },
+  "gen_hig_bio_25.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "生态系统的结构",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:57:23",
+    "fact_checked": true
+  },
+  "gen_hig_bio_26.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "能量流动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:59:03",
+    "fact_checked": true
+  },
+  "gen_hig_bio_27.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "物质循环",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T11:59:30",
+    "fact_checked": true
+  },
+  "gen_hig_bio_28.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "生态系统稳定性",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:01:01",
+    "fact_checked": true
+  },
+  "gen_hig_geo_01.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "地球的宇宙环境",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:02:11",
+    "fact_checked": false
+  },
+  "gen_hig_geo_02.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "地球的运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:02:24",
+    "fact_checked": false
+  },
+  "gen_hig_geo_06.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "常见天气系统",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:05:33",
+    "fact_checked": false
+  },
+  "gen_hig_geo_07.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "水循环",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:05:53",
+    "fact_checked": false
+  },
+  "gen_hig_geo_09.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "自然地理整体性与差异性",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:07:38",
+    "fact_checked": false
+  },
+  "gen_hig_geo_11.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "城市化",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:07:53",
+    "fact_checked": false
+  },
+  "gen_hig_geo_12.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "农业区位因素",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:08:07",
+    "fact_checked": false
+  },
+  "gen_hig_geo_13.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "工业区位因素",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:08:58",
+    "fact_checked": false
+  },
+  "gen_hig_geo_15.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "人地关系与可持续发展",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:09:44",
+    "fact_checked": false
+  },
+  "gen_hig_geo_16.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "区域生态环境",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:10:16",
+    "fact_checked": false
+  },
+  "gen_hig_geo_17.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "区域自然资源",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:10:43",
+    "fact_checked": false
+  },
+  "gen_hig_geo_18.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "区域经济发展",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:11:40",
+    "fact_checked": false
+  },
+  "gen_hig_geo_19.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "地理信息技术",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:12:42",
+    "fact_checked": false
+  },
+  "gen_hig_his_01.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "夏商周政治制度",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:13:40",
+    "fact_checked": false
+  },
+  "gen_hig_his_04.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "明清君主专制",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:17:18",
+    "fact_checked": false
+  },
+  "gen_hig_his_05.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "古代希腊罗马",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:18:26",
+    "fact_checked": false
+  },
+  "gen_hig_his_07.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "美国联邦政府",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:18:44",
+    "fact_checked": false
+  },
+  "gen_hig_his_08.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "资本主义制度扩展",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:19:10",
+    "fact_checked": false
+  },
+  "gen_hig_his_09.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "两次鸦片战争",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:20:11",
+    "fact_checked": false
+  },
+  "gen_hig_his_10.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "太平天国与洋务运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:21:08",
+    "fact_checked": false
+  },
+  "gen_hig_his_11.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "甲午战争与八国联军",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:21:37",
+    "fact_checked": false
+  },
+  "gen_hig_his_13.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "新民主主义革命",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:23:51",
+    "fact_checked": false
+  },
+  "gen_hig_his_14.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "国共对峙",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:24:25",
+    "fact_checked": false
+  },
+  "gen_hig_his_15.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "抗日战争",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:26:08",
+    "fact_checked": false
+  },
+  "gen_hig_his_16.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "解放战争",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:26:31",
+    "fact_checked": false
+  },
+  "gen_hig_his_17.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "新中国民主政治",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:28:08",
+    "fact_checked": false
+  },
+  "gen_hig_his_19.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "改革开放",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:29:53",
+    "fact_checked": false
+  },
+  "gen_hig_his_21.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "新中国外交",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:31:54",
+    "fact_checked": false
+  },
+  "gen_hig_his_23.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "世界多极化",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:34:42",
+    "fact_checked": false
+  },
+  "gen_hig_his_24.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "经济全球化",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:35:52",
+    "fact_checked": false
+  },
+  "gen_hig_pol_01.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "商品与货币",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:36:48",
+    "fact_checked": false
+  },
+  "gen_hig_pol_02.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "价格与价值规律",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:38:21",
+    "fact_checked": false
+  },
+  "gen_hig_pol_09.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "我国的政党制度",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:48:47",
+    "fact_checked": false
+  },
+  "gen_hig_pol_10.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "民族区域自治制度",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:50:15",
+    "fact_checked": false
+  },
+  "gen_hig_pol_14.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "文化对人的影响",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:55:47",
+    "fact_checked": false
+  },
+  "gen_hig_pol_15.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "文化的多样性与传播",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:56:56",
+    "fact_checked": false
+  },
+  "gen_hig_pol_16.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "文化的继承与发展",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:57:26",
+    "fact_checked": false
+  },
+  "gen_hig_pol_17.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "中华文化与民族精神",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T12:57:48",
+    "fact_checked": false
+  },
+  "gen_hig_pol_19.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "世界的物质性",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:00:02",
+    "fact_checked": false
+  },
+  "gen_hig_pol_20.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "意识的能动作用",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:00:59",
+    "fact_checked": false
+  },
+  "gen_hig_pol_21.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "实践与认识",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:01:52",
+    "fact_checked": false
+  },
+  "gen_hig_pol_22.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "真理与价值",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:03:00",
+    "fact_checked": false
+  },
+  "gen_ele_sci_08.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "磁现象与磁铁",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:14:31",
+    "fact_checked": true
+  },
+  "gen_ele_sci_09.txt": {
+    "stage": "小学",
+    "subject": "科学",
+    "topic": "简单机械（杠杆滑轮）",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:16:01",
+    "fact_checked": true
+  },
+  "gen_mid_phy_04.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "力的作用效果与重力弹力摩擦力",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:20:19",
+    "fact_checked": true
+  },
+  "gen_mid_phy_15.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "比热容与热量计算",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:20:48",
+    "fact_checked": true
+  },
+  "gen_mid_phy_19.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "电阻与变阻器",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:21:42",
+    "fact_checked": true
+  },
+  "gen_mid_phy_27.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "电磁波与信息传递",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:23:31",
+    "fact_checked": true
+  },
+  "gen_mid_che_06.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "一氧化碳的性质",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:25:53",
+    "fact_checked": true
+  },
+  "gen_mid_che_16.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "化学肥料",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:29:09",
+    "fact_checked": true
+  },
+  "gen_mid_bio_10.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "尿的形成与排出",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:30:17",
+    "fact_checked": true
+  },
+  "gen_mid_bio_13.txt": {
+    "stage": "初中",
+    "subject": "生物",
+    "topic": "动物的运动",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:31:24",
+    "fact_checked": true
+  },
+  "gen_mid_his_10.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "明朝统治",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:39:02",
+    "fact_checked": false
+  },
+  "gen_mid_his_12.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "鸦片战争",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:39:31",
+    "fact_checked": false
+  },
+  "gen_mid_pol_05.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "宪法与公民权利",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:41:46",
+    "fact_checked": false
+  },
+  "gen_hig_che_06.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "铁及其化合物",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:52:47",
+    "fact_checked": true
+  },
+  "gen_hig_che_13.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "原电池",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T13:56:45",
+    "fact_checked": true
+  },
+  "gen_hig_che_17.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "羧酸与酯",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T14:00:44",
+    "fact_checked": true
+  },
+  "gen_hig_che_18.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "糖类",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T14:01:40",
+    "fact_checked": true
+  },
+  "gen_hig_bio_02.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "细胞的结构与功能",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T14:03:52",
+    "fact_checked": true
+  },
+  "gen_hig_bio_10.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "DNA的结构与复制",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T14:08:25",
+    "fact_checked": true
+  },
+  "gen_hig_bio_11.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "基因的表达",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T14:08:48",
+    "fact_checked": true
+  },
+  "gen_hig_his_02.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "秦中央集权",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T14:58:38",
+    "fact_checked": false
+  },
+  "gen_hig_pol_06.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "财政与税收",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T15:13:48",
+    "fact_checked": false
+  },
+  "gen_hig_pol_12.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "依法治国与法治国家",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T15:19:47",
+    "fact_checked": false
+  },
+  "gen_hig_pol_23.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "唯物辩证法",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T15:23:36",
+    "fact_checked": false
+  },
+  "gen_ele_mat_35.txt": {
+    "stage": "小学",
+    "subject": "数学",
+    "topic": "观察物体",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:27:15",
+    "fact_checked": true
+  },
+  "gen_ele_chi_26.txt": {
+    "stage": "小学",
+    "subject": "语文",
+    "topic": "口语交际：听说训练",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:28:12",
+    "fact_checked": false
+  },
+  "gen_mid_mat_10.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "正比例函数与一次函数",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:28:37",
+    "fact_checked": true
+  },
+  "gen_mid_mat_15.txt": {
+    "stage": "初中",
+    "subject": "数学",
+    "topic": "平行四边形与特殊四边形",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:29:18",
+    "fact_checked": true
+  },
+  "gen_mid_phy_21.txt": {
+    "stage": "初中",
+    "subject": "物理",
+    "topic": "电功与电功率",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:30:07",
+    "fact_checked": true
+  },
+  "gen_mid_che_05.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "碳的单质与二氧化碳",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:30:47",
+    "fact_checked": true
+  },
+  "gen_mid_che_08.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "金属的化学性质",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:31:40",
+    "fact_checked": true
+  },
+  "gen_mid_che_12.txt": {
+    "stage": "初中",
+    "subject": "化学",
+    "topic": "常见的酸及其性质",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:33:58",
+    "fact_checked": true
+  },
+  "gen_mid_geo_01.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "地球与地球仪",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:34:54",
+    "fact_checked": false
+  },
+  "gen_mid_geo_20.txt": {
+    "stage": "初中",
+    "subject": "地理",
+    "topic": "交通",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:35:28",
+    "fact_checked": false
+  },
+  "gen_mid_his_05.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "汉武帝",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:36:27",
+    "fact_checked": false
+  },
+  "gen_mid_his_09.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "宋元经济",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:37:06",
+    "fact_checked": false
+  },
+  "gen_mid_his_23.txt": {
+    "stage": "初中",
+    "subject": "历史",
+    "topic": "新中国成立",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:37:41",
+    "fact_checked": false
+  },
+  "gen_mid_pol_01.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "个人品德与修养",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:38:20",
+    "fact_checked": false
+  },
+  "gen_mid_pol_07.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "基本国情与国策",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:39:06",
+    "fact_checked": false
+  },
+  "gen_mid_pol_11.txt": {
+    "stage": "初中",
+    "subject": "政治",
+    "topic": "民族团结与祖国统一",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:39:45",
+    "fact_checked": false
+  },
+  "gen_hig_mat_03.txt": {
+    "stage": "高中",
+    "subject": "数学",
+    "topic": "基本不等式",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:40:12",
+    "fact_checked": true
+  },
+  "gen_hig_phy_05.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "超重与失重",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:42:00",
+    "fact_checked": true
+  },
+  "gen_hig_phy_11.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "动量守恒",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:42:35",
+    "fact_checked": true
+  },
+  "gen_hig_phy_15.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "电场强度",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:43:04",
+    "fact_checked": true
+  },
+  "gen_hig_phy_23.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "光的干涉与衍射",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:44:05",
+    "fact_checked": true
+  },
+  "gen_hig_phy_25.txt": {
+    "stage": "高中",
+    "subject": "物理",
+    "topic": "原子结构",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T20:44:45",
+    "fact_checked": true
+  },
+  "gen_hig_che_11.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "化学键与分子结构",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:00:42",
+    "fact_checked": true
+  },
+  "gen_hig_che_14.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "电解池",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:01:33",
+    "fact_checked": true
+  },
+  "gen_hig_che_15.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "醇与酚",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:02:28",
+    "fact_checked": true
+  },
+  "gen_hig_che_19.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "油脂与蛋白质",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:03:41",
+    "fact_checked": true
+  },
+  "gen_hig_bio_07.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "孟德尔遗传实验",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:04:45",
+    "fact_checked": true
+  },
+  "gen_hig_bio_09.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "基因在染色体上",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:07:12",
+    "fact_checked": true
+  },
+  "gen_hig_bio_22.txt": {
+    "stage": "高中",
+    "subject": "生物",
+    "topic": "植物激素",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:08:31",
+    "fact_checked": true
+  },
+  "gen_hig_geo_03.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "大气的组成与分层",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:09:36",
+    "fact_checked": false
+  },
+  "gen_hig_geo_04.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "大气的受热过程",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:10:28",
+    "fact_checked": false
+  },
+  "gen_hig_geo_05.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "气压带与风带",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:12:25",
+    "fact_checked": false
+  },
+  "gen_hig_geo_08.txt": {
+    "stage": "高中",
+    "subject": "地理",
+    "topic": "地表形态的塑造",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:13:20",
+    "fact_checked": false
+  },
+  "gen_hig_his_03.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "汉至元政治演变",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:14:32",
+    "fact_checked": false
+  },
+  "gen_hig_his_12.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "辛亥革命",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:17:25",
+    "fact_checked": false
+  },
+  "gen_hig_his_20.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "祖国统一大业",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:19:23",
+    "fact_checked": false
+  },
+  "gen_hig_his_22.txt": {
+    "stage": "高中",
+    "subject": "历史",
+    "topic": "两极世界",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:20:22",
+    "fact_checked": false
+  },
+  "gen_hig_pol_03.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "消费与消费观",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:21:31",
+    "fact_checked": false
+  },
+  "gen_hig_pol_04.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "企业与劳动者",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:24:05",
+    "fact_checked": false
+  },
+  "gen_hig_pol_05.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "投资与理财",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:26:15",
+    "fact_checked": false
+  },
+  "gen_hig_pol_07.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "社会主义市场经济",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:27:36",
+    "fact_checked": false
+  },
+  "gen_hig_pol_08.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "经济全球化与对外开放",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:28:46",
+    "fact_checked": false
+  },
+  "gen_hig_pol_11.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "基层群众自治制度",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:29:52",
+    "fact_checked": false
+  },
+  "gen_hig_pol_13.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "文化与社会",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:30:38",
+    "fact_checked": false
+  },
+  "gen_hig_pol_18.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "哲学与时代精神",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:31:31",
+    "fact_checked": false
+  },
+  "gen_hig_pol_24.txt": {
+    "stage": "高中",
+    "subject": "政治",
+    "topic": "历史唯物主义",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-26T21:32:35",
+    "fact_checked": false
+  },
+  "gen_hig_che_08.txt": {
+    "stage": "高中",
+    "subject": "化学",
+    "topic": "硫及其化合物",
+    "model": "deepseek-v4-pro",
+    "generated_at": "2026-07-27T01:02:45",
+    "fact_checked": true
+  }
+}

@@ -1,0 +1,34 @@
+小学英语 - 特殊疑问句
+
+一、什么是特殊疑问句
+同学们，当我们想知道“是什么”“在哪里”“什么时候”这些具体信息时，就要请出特殊疑问句来帮忙啦。它和我们学过的“是不是”问句不一样——“是不是”问句用Yes或No就能回答，而特殊疑问句一定要说出具体内容。比如，别人问你“Do you like apples?”，你只要回答“Yes.”就行；但如果问“What fruit do you like?”，你就必须说出“I like apples.”这样的完整信息。因此，特殊疑问句就是用来询问具体人、事物、时间、地点、原因或方式等的句子。它的开头总是一个“疑问词”，比如what（什么）、who（谁）、where（哪里）等，所以很多老师也叫它“Wh-问句”。
+
+二、特殊疑问句的公式
+特殊疑问句虽然变化多，但有一个统一的建造公式，就像搭积木一样：
+$$ \text{特殊疑问词} + \text{一般疑问句} $$
+上面公式里的“一般疑问句”部分，就是我们已经学过的把be动词、情态动词或助动词提到主语前面的那种语序。我们用几个例子把这个公式变成看得见的句子：
+
+例1 用be动词：他在哪里？ $\rightarrow$ Where is he? （Where + is he?）
+例2 用情态动词：你会做什么？ $\rightarrow$ What can you do? （What + can you do?）
+例3 用助动词：你喜欢什么颜色？ $\rightarrow$ What colour do you like? （What colour + do you like?）
+
+三、常见疑问词及更多示例
+想要用好特殊疑问句，先要认识这些“领头词”。我把它们分成几个小组，方便大家记忆：
+问东西或事情：what（什么）——What is this?
+问时间：when（什么时候）/ what time（几点）——When do you get up?
+问地点：where（哪里）——Where is the library?
+问人：who（谁）——Who is your friend?
+问原因：why（为什么）——Why are you late?
+问方式或程度：how（怎么样）——How do you go to school?
+问年龄：how old（多大）——How old is she?
+问数量：how many（多少，跟可数名词）——How many books do you have?
+
+来看三个完整示例：
+示例A：What does your mother do? （你妈妈是做什么工作的？）这句话里，what是疑问词，后面跟一般疑问句does your mother do。
+示例B：Where did they go yesterday? （他们昨天去哪里了？）疑问词where加上一般疑问句did they go yesterday。
+示例C：Why is the cat under the bed? （为什么猫在床底下？）疑问词why加上一般疑问句is the cat under the bed。
+
+四、常见错误及纠正方法
+错误1：疑问词和一般疑问句语序没有配合好。有的小朋友会把句子说成“What you like?”，这可不是正确的特殊疑问句。一定要记住公式里是疑问词加“一般疑问句”，所以需要把助动词放主语前，正确说法是“What do you like?”。纠正办法很简单：每次写完特殊疑问句，用手盖住疑问词，看一看剩下部分是不是一个标准的一般疑问句，如果不是，就要补上do、does、did等帮手。
+
+错误2：用错疑问词。比如想问“他什么时候生日”，却说成“What is his birthday?”，这就把意思变成“他的生日是什么了”。正确的疑问词应当是when，应该问“When is his birthday?”。纠正时，先想清楚自己想知道的是“时间”“地点”还是“原因”，再选择对应的疑问词。平时可以把when（什么时候）和what time（几点）专门写在小卡片上，多读多用，慢慢就习惯啦。

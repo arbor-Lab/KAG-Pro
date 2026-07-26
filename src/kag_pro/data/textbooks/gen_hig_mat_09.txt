@@ -1,0 +1,54 @@
+高中数学 - 三角函数定义与诱导公式
+
+一、任意角的三角函数定义
+
+在平面直角坐标系中，设角 $\alpha$ 的顶点与原点重合，始边与 $x$ 轴正半轴重合。在角 $\alpha$ 的终边上任取一点 $P(x,y)$（$P$ 不与原点重合），记 $r=|OP|=\sqrt{x^{2}+y^{2}}$。我们定义角 $\alpha$ 的三角函数如下：
+
+正弦 $\sin\alpha=\frac{y}{r}$，余弦 $\cos\alpha=\frac{x}{r}$，正切 $\tan\alpha=\frac{y}{x}\;(x\neq 0)$。
+
+由定义可知，终边相同的角，三角函数值对应相等，即
+
+$$\sin(\alpha+2k\pi)=\sin\alpha,\quad \cos(\alpha+2k\pi)=\cos\alpha,\quad \tan(\alpha+k\pi)=\tan\alpha\;(k\in\mathbb{Z})$$
+
+这组公式反映了三角函数的周期性，也是诱导公式的基础。当 $r=1$ 时（单位圆），$\sin\alpha$ 与 $\cos\alpha$ 直接对应终边与单位圆交点的纵坐标与横坐标，直观好用。
+
+二、诱导公式
+
+诱导公式的作用是把任意角的三角函数化为锐角三角函数求值。其本质是圆的对称性，可以概括为“奇变偶不变，符号看象限”。
+
+设 $k\in\mathbb{Z}$，公式分为以下几组：
+
+公式一（终边相同角）：
+$$\sin(\alpha+2k\pi)=\sin\alpha,\quad \cos(\alpha+2k\pi)=\cos\alpha,\quad \tan(\alpha+k\pi)=\tan\alpha$$
+
+公式二（角 $\pi+\alpha$）：
+$$\sin(\pi+\alpha)=-\sin\alpha,\quad \cos(\pi+\alpha)=-\cos\alpha,\quad \tan(\pi+\alpha)=\tan\alpha$$
+
+公式三（角 $-\alpha$）：
+$$\sin(-\alpha)=-\sin\alpha,\quad \cos(-\alpha)=\cos\alpha,\quad \tan(-\alpha)=-\tan\alpha$$
+
+公式四（角 $\pi-\alpha$）：
+$$\sin(\pi-\alpha)=\sin\alpha,\quad \cos(\pi-\alpha)=-\cos\alpha,\quad \tan(\pi-\alpha)=-\tan\alpha$$
+
+公式五（角 $\frac{\pi}{2}-\alpha$）：
+$$\sin\left(\frac{\pi}{2}-\alpha\right)=\cos\alpha,\quad \cos\left(\frac{\pi}{2}-\alpha\right)=\sin\alpha$$
+
+公式六（角 $\frac{\pi}{2}+\alpha$）：
+$$\sin\left(\frac{\pi}{2}+\alpha\right)=\cos\alpha,\quad \cos\left(\frac{\pi}{2}+\alpha\right)=-\sin\alpha$$
+
+记忆口诀“奇变偶不变，符号看象限”中，“奇偶”指 $\frac{\pi}{2}$ 的倍数 $k$ 的奇偶性：若 $k$ 为奇数，正弦与余弦互变（正切变余切）；若 $k$ 为偶数，函数名不变。符号由将 $\alpha$ 视为锐角时原函数在相应象限的符号决定。
+
+三、典型例题与常见误区
+
+例1 求 $\sin150^{\circ}$ 的值。  
+解：$\sin150^{\circ}=\sin(180^{\circ}-30^{\circ})=\sin30^{\circ}=\frac{1}{2}$，运用公式四。
+
+例2 化简 $\cos\left(\frac{3\pi}{2}+\alpha\right)$。  
+解：$\frac{3\pi}{2}$ 是 $\frac{\pi}{2}$ 的3倍（奇数），余弦变正弦；将 $\alpha$ 视为锐角，$\frac{3\pi}{2}+\alpha$ 在第四象限，余弦为正，故 $\cos\left(\frac{3\pi}{2}+\alpha\right)=\sin\alpha$。也可用公式六两次得到。
+
+例3 证明 $\sin(\pi+\alpha)\cos\left(\frac{\pi}{2}-\alpha\right)+\tan(-\alpha)\cos(\pi-\alpha)= -\sin\alpha\cos\alpha+\tan\alpha\cos\alpha$，并化简。  
+解：逐一使用诱导公式，$\sin(\pi+\alpha)=-\sin\alpha$，$\cos(\frac{\pi}{2}-\alpha)=\sin\alpha$，$\tan(-\alpha)=-\tan\alpha$，$\cos(\pi-\alpha)=-\cos\alpha$，代入，整理可得 $-\sin^{2}\alpha+\sin\alpha$。
+
+常见错误一：符号定错。有的学生直接将 $\cos(\pi-\alpha)$ 记为 $\cos\alpha$，忽略了“符号看象限”的原则。纠正方法：把 $\alpha$ 想象成第一象限角，$\pi-\alpha$ 在第二象限，余弦为负，因此 $\cos(\pi-\alpha)=-\cos\alpha$，不可丢失负号。
+
+常见错误二：函数名变化混乱。例如误以为 $\sin(\pi+\alpha)=\cos\alpha$。纠正方法：明确 $\pi$ 是 $\frac{\pi}{2}$ 的2倍（偶数），函数名不变，再配合象限符号得 $\sin(\pi+\alpha)=-\sin\alpha$。平时多结合单位圆对称性画图验证，能有效减少此类错误。

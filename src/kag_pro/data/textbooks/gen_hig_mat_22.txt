@@ -1,0 +1,49 @@
+高中数学 - 空间向量
+
+一、空间向量的概念与坐标表示
+
+在空间中，既有大小又有方向的量叫做空间向量。向量的大小称为模或长度。空间向量可以用有向线段表示，例如 $\overrightarrow{AB}$ 的模记作 $|\overrightarrow{AB}|$。与平面向量类似，长度为0的向量为零向量；长度为1的向量为单位向量；模相等且方向相同的向量为相等向量；模相等且方向相反的向量为相反向量。
+
+如果我们建立一个空间直角坐标系，并取与 $x$ 轴、$y$ 轴、$z$ 轴同向的单位向量 $\vec{i},\vec{j},\vec{k}$ 作为基底，那么任一空间向量 $\vec{a}$ 可以唯一地表示为 $\vec{a}=x\vec{i}+y\vec{j}+z\vec{k}$，此时有序数组 $(x,y,z)$ 称为向量 $\vec{a}$ 的坐标，记作 $\vec{a}=(x,y,z)$。若已知点 $A(x_1,y_1,z_1)$ 和 $B(x_2,y_2,z_2)$，则 $\overrightarrow{AB} = (x_2-x_1, y_2-y_1, z_2-z_1)$。
+
+二、空间向量的运算与数量积
+
+空间向量的加减法与数乘运算在坐标形式下非常简单：设 $\vec{a}=(x_1,y_1,z_1)$，$\vec{b}=(x_2,y_2,z_2)$，则
+$$\vec{a}+\vec{b}=(x_1+x_2, y_1+y_2, z_1+z_2)$$
+$$\vec{a}-\vec{b}=(x_1-x_2, y_1-y_2, z_1-z_2)$$
+$$\lambda\vec{a}=(\lambda x_1, \lambda y_1, \lambda z_1),\quad \lambda\in\mathbb{R}$$
+
+空间向量的数量积（点积）是核心运算。定义：$\vec{a}\cdot\vec{b}=|\vec{a}||\vec{b}|\cos\langle\vec{a},\vec{b}\rangle$。坐标表示为：
+$$\vec{a}\cdot\vec{b}=x_1x_2+y_1y_2+z_1z_2$$
+由此可得向量的模长公式：
+$$|\vec{a}|=\sqrt{x_1^2+y_1^2+z_1^2}$$
+两点 $A(x_1,y_1,z_1)$ 和 $B(x_2,y_2,z_2)$ 间的距离为：
+$$|\overrightarrow{AB}|=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2+(z_2-z_1)^2}$$
+向量夹角的余弦公式为：
+$$\cos\langle\vec{a},\vec{b}\rangle=\frac{\vec{a}\cdot\vec{b}}{|\vec{a}||\vec{b}|}= \frac{x_1x_2+y_1y_2+z_1z_2}{\sqrt{x_1^2+y_1^2+z_1^2}\sqrt{x_2^2+y_2^2+z_2^2}}$$
+
+向量平行与垂直的坐标判定尤为重要。若 $\vec{a}\neq\vec{0}$，$\vec{b}\neq\vec{0}$，则：
+$\vec{a}\parallel\vec{b}$ $\Leftrightarrow$ 存在实数 $\lambda$ 使 $\vec{b}=\lambda\vec{a}$ $\Leftrightarrow$ $\frac{x_1}{x_2}=\frac{y_1}{y_2}=\frac{z_1}{z_2}$（当分母不为零时）；
+$\vec{a}\perp\vec{b}$ $\Leftrightarrow$ $\vec{a}\cdot\vec{b}=0$ $\Leftrightarrow$ $x_1x_2+y_1y_2+z_1z_2=0$。
+
+三、典型例题与常见错误辨析
+
+例1 已知 $A(1,0,2)$，$B(3,-1,1)$，$C(4,2,-1)$，求 $\overrightarrow{AB}\cdot\overrightarrow{AC}$ 及 $\triangle ABC$ 的边长。
+
+解：$\overrightarrow{AB}=(3-1, -1-0, 1-2)=(2,-1,-1)$，
+$\overrightarrow{AC}=(4-1, 2-0, -1-2)=(3,2,-3)$，
+则 $\overrightarrow{AB}\cdot\overrightarrow{AC}=2\times3+(-1)\times2+(-1)\times(-3)=6-2+3=7$。
+边长 $AB=|\overrightarrow{AB}|=\sqrt{4+1+1}=\sqrt{6}$，类似可得 $AC=\sqrt{9+4+9}=\sqrt{22}$，$BC$ 边由 $\overrightarrow{BC}=(1,3,-2)$ 得 $BC=\sqrt{1+9+4}=\sqrt{14}$。
+
+例2 设 $\vec{a}=(1,2,-2)$，$\vec{b}=(-2,m,4)$，若 $\vec{a}\perp\vec{b}$，求 $m$；若 $\vec{a}\parallel\vec{b}$，求 $m$。
+
+解：（1）由 $\vec{a}\perp\vec{b}$ 得 $1\times(-2)+2\times m+(-2)\times4=0$，即 $-2+2m-8=0$，解得 $m=5$。
+（2）若 $\vec{a}\parallel\vec{b}$，则对应坐标成比例：$\frac{1}{-2}=\frac{2}{m}=\frac{-2}{4}$，由 $\frac{1}{-2}=\frac{-2}{4}$ 成立，再令 $\frac{2}{m}=-\frac{1}{2}$，得 $m=-4$。注意检验，当 $m=-4$ 时，三组比例均等于 $-\frac{1}{2}$，符合题意。
+
+例3 求向量 $\vec{a}=(2,-1,2)$ 与 $\vec{b}=(4,0,-3)$ 的夹角 $\theta$。
+
+解：$\vec{a}\cdot\vec{b}=8+0-6=2$，$|\vec{a}|=\sqrt{4+1+4}=3$，$|\vec{b}|=\sqrt{16+0+9}=5$，则 $\cos\theta=\frac{2}{3\times5}=\frac{2}{15}$，所以夹角 $\theta=\arccos\frac{2}{15}$。
+
+常见错误一：混淆向量的夹角与直线的夹角。部分学生会直接用向量夹角公式算出 $\cos\theta=\frac{2}{15}$ 后回答线线角是 $\arccos\frac{2}{15}$。须纠正：两条直线的夹角取锐角或直角，范围是 $[0,\frac{\pi}{2}]$，因此线线角的余弦应为 $|\cos\theta|$，若计算出的 $\cos\theta$ 为负值，需取绝对值后再求角。例如当两向量点积为负时，直接得出的角是钝角，这不能作为两直线夹角。
+
+常见错误二：平行条件中忽视分母为零的情况。书写比例式 $\frac{x_1}{x_2}=\frac{y_1}{y_2}=\frac{z_1}{z_2}$ 时，必须注意当某个坐标为零时，对应的另一向量坐标也必须为零，否则无法直接写成比例形式。正确的处理方式是回到定义：存在实数 $\lambda$ 使坐标全部成比例。例如判断 $\vec{a}=(2,0,3)$ 与 $\vec{b}=(4,0,6)$ 是否平行时，不能直接写 $\frac{2}{4}=\frac{0}{0}=\frac{3}{6}$，而应说明存在 $\lambda=\frac{1}{2}$ 使 $\vec{b}=2\vec{a}$。

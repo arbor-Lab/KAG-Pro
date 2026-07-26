@@ -1,0 +1,40 @@
+小学英语 - 阅读理解：小故事
+
+一、认识阅读理解小故事
+阅读理解小故事，就是请你先读一段简短的英语小故事，然后根据故事内容回答几个问题。它就像在故事里寻宝，问题的答案都藏在文字里，只有仔细读、认真想，才能找到。
+
+二、阅读理解的小公式
+做阅读理解小故事，可以用一个简单又好记的公式来帮忙：
+$$ 正确答案 = 读懂题目 + 找准线索 + 排除干扰 $$
+公式告诉我们，成功找到答案需要做三件事。
+第一，读懂题目。先看问题，圈出题目里的关键词，比如询问“谁（who）”“什么颜色（what color）”“什么时间（when）”，这样你就知道自己要寻什么宝。
+第二，找准线索。带着关键词回到故事里，找到跟问题有关的句子，这就是“线索句”。有时候线索句和问题里的词长得一样，有时候会是同义词，要细心比对。
+第三，排除干扰。看一看选项，把那些文中没提到、与线索相反或只沾一点边却不是问题所问的选项划掉，剩下的往往就是正确答案。
+
+三、一起看几个例子
+例题1：小故事My Friend
+I have a good friend. Her name is Lily. She is nine years old. She has big eyes and long hair. She can draw very well.
+问题：How old is Lily?
+选项：A. She is eight. B. She is nine. C. She is ten.
+解题圈出关键词“how old”。故事里线索句“She is nine years old.”直接告诉我们年龄。对比选项，B是nine，与线索一致，所以选B。
+
+例题2：小故事A Rainy Day
+It is rainy today. Amy stays at home. In the morning, she reads a storybook. After lunch, she listens to music. Then she draws a picture. She has a nice day.
+问题：What does Amy do in the morning?
+选项：A. She listens to music. B. She draws a picture. C. She reads a storybook.
+题目关键词是“in the morning”。故事里上午的部分是“In the morning, she reads a storybook.”。线索句很明确，上午做的事是读故事书，选C。有的同学看到“listen to music”和“draw a picture”也是Amy做的事，没注意时间就选了，这就掉进干扰项里了。
+
+例题3：小故事At the Farm
+I visit my grandpa’s farm. There are hens, ducks and a dog. The hens are yellow. They can lay eggs. The ducks are white. They can swim. I feed the hens every morning. I like the hens very much.
+问题：What is the writer’s favourite animal on the farm?
+选项：A. Ducks. B. Hens. C. The dog.
+关键词是“favourite animal”。故事最后一句“I like the hens very much.”表达出最喜欢的是母鸡，线索句里没有直接写出favourite，但意思一样。所以选B。
+
+四、常见的两个小错误和解决办法
+错误一：只看选项里出现过的词，不看问题到底问什么。
+比如例题3里，故事中出现了ducks和dog，有的同学看到选项里有就随手选，但问题问的是“最喜欢的动物”，关键词是favourite，凭相同词就选很容易错。
+纠正办法：每次都先标出问题的关键词，并用自己的话问一遍：“这个问题想让我找什么？”然后再去文中找答案。
+
+错误二：读到一半发现一个眼熟的句子，就立刻选答案，没把故事读完。
+比如例题2，上午做的事和下午做的事都出现了，如果不把表示时间的词读完，就可能选成下午的活动。
+纠正办法：用铅笔指着文字，一句一句读完与问题相关的那一整段，别急着抢答。找到线索句后，再读前后一两句，确保时间、人物等细节都匹配。

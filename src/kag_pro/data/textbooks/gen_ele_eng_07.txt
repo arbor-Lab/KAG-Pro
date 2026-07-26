@@ -1,0 +1,34 @@
+小学英语 - 家庭成员词汇
+
+一、家庭成员词汇的定义与关系公式
+在英语中，家庭成员是我们每天都会用到的词。家庭成员词汇就像一棵家族树上结的果子，每一个词都代表一位亲人。学习这些词，不仅要会读会认，还要明白他们之间的关系。我们可以用简单的“关系公式”来记，就像数学里的等式一样，左边是某个人，右边是另一种叫法。例如：
+
+$$father's\ father = grandfather$$
+$$mother's\ mother = grandmother$$
+$$father's\ brother = uncle$$
+$$mother's\ sister = aunt$$
+$$uncle's\ son = cousin$$
+
+这些公式告诉我们，同一个亲人可以有不同的称呼方式，但它们之间的关系是固定的。有了这些公式，就算遇到没学过的组合，也能自己推出来。
+
+二、词汇用法示例
+示例一：介绍自己的家人
+用英语介绍全家福照片。可以这样说：
+This is my father. He is tall. This is my mother. She is kind. They are my parents. The old man is my grandfather. The old woman is my grandmother. I love my family.
+这段话里，father、mother、parents、grandfather、grandmother都是家庭成员词汇。parents是father和mother的合称，意思是父母。
+
+示例二：询问与回答亲属关系
+同学指着照片问你：“Who is that boy?” 你回答：“He is my brother.” 如果问的是女孩，“Who is that girl?” 回答：“She is my sister.” 如果对方问的是两个大人，“Who are they?” 你可以说：“They are my uncle and aunt.” uncle是叔叔或舅舅，aunt是阿姨或姑姑。在英语里，父系和母系的有些称呼是一样的，不像中文分得那么细。
+
+示例三：家庭树填空
+画一棵家庭树，中间是自己（me）。往上一格是father和mother，再往上一格是grandfather和grandmother。往下如果有弟弟妹妹，就是brother和sister。横向看，父亲的兄弟是uncle，母亲的姐妹是aunt，他们的孩子是cousin。根据家庭树完成填空：My father's son is me or my . 答案是brother。这类练习能让我们把词汇和真正的位置关系对上号。
+
+三、学生常见错误及纠正方法
+错误一：混淆“parents”和“parent”
+很多同学习惯在中文里说“我爸妈”，于是把父母说成“my parent”，漏掉了s。实际上，parent指父亲或母亲中的一人，而父母两人必须用复数parents。纠正方法：记住口决“单亲parent，双亲parents”。可以造句对比：My parent is at home.（我的一位家长在家。）和 My parents are at home.（我的爸爸妈妈都在家。）一看be动词是is还是are，就能提醒自己加不加s。
+
+错误二：把“cousin”说成“brother”或“sister”
+在中国家庭里关系好的表兄妹常常直接叫哥哥、妹妹，但英语里cousin不会因为年龄而变成brother或sister。brother和sister只指亲兄弟姐妹。纠正方法：编个小故事——自己的爸爸妈妈生的孩子才叫brother或sister，别的家庭的同龄孩子都是cousin。做练习时，遇到“表哥”就要立刻反应cousin，而不是brother。
+
+错误三：分不清“uncle”和“aunt”的性别
+uncle是男性长辈，aunt是女性长辈。有些学生看到“阿姨”就说出uncle。纠正方法：将单词拆开联想，aunt里有个“au”，读起来像“啊”，可以想到“阿姨”的“阿”，aunt就是阿姨、姑姑。uncle读音里有个“安”，想到“俺”，但更好的方法是看形状：uncle以u开头，像个杯子口，而叔叔爱喝茶，记得uncle是男的。这种方法虽然可爱，但很管用。

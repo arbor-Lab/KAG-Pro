@@ -1,0 +1,51 @@
+小学英语 - 天气与季节词汇
+
+一、天气与季节的核心词语  
+天气是我们每天感受到的冷、热、晴、雨等变化，季节是一年里四个有明显气候特点的时段。我们要掌握十二个基础词语。  
+春天：spring（温暖，万物生长）  
+夏天：summer（炎热，阳光强）  
+秋天：autumn / fall（凉爽，叶落）  
+冬天：winter（寒冷，可能下雪）  
+晴朗的：sunny  
+下雨的：rainy  
+多云的：cloudy  
+有风的：windy  
+下雪的：snowy  
+热的：hot  
+冷的：cold  
+温暖的：warm  
+凉爽的：cool  
+
+这十二个词中，季节是名词，天气词是形容词。描述天气时，天气形容词要放在be动词后面。
+
+二、描述天气与季节的句型公式  
+最常用的句型可以看作一个公式：  
+$$ \text{It is} + \text{天气形容词}. $$
+它表示“天气是……的”。例如It is sunny. 就是“天晴”。  
+询问天气的公式是：  
+$$ \text{What’s the weather like?} $$  
+或者  
+$$ \text{How is the weather?} $$  
+回答时我们可以接着用第一个公式。要表达某个季节的天气，我们加上in再加季节，如：  
+$$ \text{It is + 天气形容词 + in + 季节}. $$  
+例：It is hot in summer. 夏天天气炎热。
+
+三、例题示范  
+例1：看图写句子。图上阳光灿烂。  
+正确答案：It is sunny.  
+思路：先找到天气词sunny，再用句型It is …写出完整句子。
+
+例2：根据问句写出答语。问句：What’s the weather like in winter?  
+正确答案：It is cold and snowy in winter.  
+思路：先想冬天的主要天气特征冷和下雪，用cold和snowy，套公式It is … in winter.
+
+例3：选择合适的词填空：In , it is warm and windy. (A. winter  B. spring  C. summer)  
+正确答案：B。  
+思路：温暖多风是春天的典型天气，winter冷，summer热，所以选spring。
+
+四、常见错误与纠正  
+错误1：把天气词当名词用，写出It is sun. 或It is rain.  
+纠正方法：记住sun是太阳，rain是雨水，它们是名词。表示天气必须用形容词sunny和rainy。可以这样记：名词结尾没有y，形容词结尾常常有y。看到太阳图说It is sunny.，看到雨景说It is rainy.。每次练习前先问自己：我要说的是“有什么东西”还是“天气怎么样”？天气怎么样必须用形容词。
+
+错误2：漏掉in，写成It is cold winter.  
+纠正方法：冬天是一个时间段，要用in表示“在……里”。可以想象冬天是一个大盒子，天气要在盒子里面，所以必须说It is cold in winter. 把in想象成“盒子”就不会忘。我们可以边拍手边读：It is cold, in winter, It is cold in winter. 用节奏帮助记忆。

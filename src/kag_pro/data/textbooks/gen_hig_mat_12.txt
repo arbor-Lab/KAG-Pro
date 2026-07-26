@@ -1,14 +1,35 @@
 高中数学 - 解三角形
 
-解三角形是高中数学的核心内容，主要依据两个基本定理：**正弦定理**和**余弦定理**，将已知的边角关系转化为未知的边角关系。
+一、正弦定理与余弦定理
+解三角形，就是在已知三角形的一些边和角的情况下，求出它的其余边和角。核心工具是正弦定理和余弦定理。设 $\triangle ABC$ 中，角 $A,B,C$ 所对的边分别为 $a,b,c$，外接圆半径为 $R$。
+正弦定理：
+$$\frac{a}{\sin A}=\frac{b}{\sin B}=\frac{c}{\sin C}=2R$$
+余弦定理：
+$$a^2=b^2+c^2-2bc\cos A$$
+$$b^2=c^2+a^2-2ca\cos B$$
+$$c^2=a^2+b^2-2ab\cos C$$
+余弦定理的变形也常用于求角，比如 $\cos A=\frac{b^2+c^2-a^2}{2bc}$。此外，面积公式 $S=\frac12bc\sin A=\frac12ca\sin B=\frac12ab\sin C$ 也常配合使用。
 
-**一、核心工具**
-在$\triangle ABC$中，角$A,B,C$所对的边分别为$a,b,c$，外接圆半径为$R$。
-1. **正弦定理**：$\frac{a}{\sin A} = \frac{b}{\sin B} = \frac{c}{\sin C} = 2R$，适用于已知两角及任一边，或已知两边及其中一边的对角。
-2. **余弦定理**：$a^2 = b^2 + c^2 - 2bc\cos A$ （余下两式轮换），适用于已知两边及夹角，或已知三边。
+二、常见的解三角形类型与示例
+根据已知条件，解三角形主要有四类情况。
+示例1（已知两角一边）：在 $\triangle ABC$ 中，$A=60^\circ,B=45^\circ,c=2$，解三角形。
+由三角形内角和得 $C=180^\circ-A-B=75^\circ$。由正弦定理 $a=\frac{c\sin A}{\sin C}=\frac{2\sin60^\circ}{\sin75^\circ}=\frac{\sqrt3}{\sin75^\circ}$，$\sin75^\circ=\frac{\sqrt6+\sqrt2}{4}$，可算出 $a$ 和 $b$ 的值。此时解是唯一的。
 
-**二、经典剖析**
+示例2（已知两边及其夹角）：在 $\triangle ABC$ 中，$b=3,c=2,A=60^\circ$，求 $a$ 和面积。
+由余弦定理 $a^2=b^2+c^2-2bc\cos A=9+4-12\times\frac12=7$，所以 $a=\sqrt7$。面积 $S=\frac12bc\sin A=\frac12\times3\times2\times\frac{\sqrt3}{2}=\frac{3\sqrt3}{2}$。解唯一。
 
-**例1（已知两角及一边）** 在$\triangle ABC$中，已知$A = 60^\circ$，$B = 75^\circ$，$c = 4$，求$a$和$b$。
-**解**：$C = 180^\circ - 60^\circ - 75^\circ = 45^\circ$。由正弦定理，
-$a = \frac{c \cdot \sin A}{\sin C} = \frac{4 \times \sin 60^\circ}{\sin 45^\circ} = \frac{4 \times \frac{\sqrt{3}}{2}}{\frac{\sqrt{2}}{2}} = 
+示例3（已知三边）：在 $\triangle ABC$ 中，$a=7,b=5,c=3$，求最大角。
+大边对大角，最大角为 $A$。用余弦定理 $\cos A=\frac{b^2+c^2-a^2}{2bc}=\frac{25+9-49}{2\times5\times3}=-\frac{15}{30}=-\frac12$，所以 $A=120^\circ$。
+
+示例4（已知两边及其中一边的对角——需警惕多解）：在 $\triangle ABC$ 中，$a=2,b=\sqrt2,A=45^\circ$，求 $B$。
+由正弦定理 $\sin B=\frac{b\sin A}{a}=\frac{\sqrt2\times\frac{\sqrt2}{2}}{2}=\frac12$。因为 $b<a$，所以 $B$ 只能是锐角，$B=30^\circ$。若 $a=1,b=\sqrt2,A=45^\circ$，则 $\sin B=\frac{\sqrt2\times\frac{\sqrt2}{2}}{1}=1$，$B=90^\circ$；若 $a=0.8$ 则 $\sin B>1$ 无解。这个类型最容易漏解或错判。
+
+三、常见错误及纠正
+错误1：用正弦定理时边与角不对应。
+有些学生会写成 $\frac{a}{\sin B}=\frac{b}{\sin A}$。纠正方法：始终记住正弦定理中的“边角相对”，即边 $a$ 对着 $\sin A$，可画出三角形，标清对应关系。
+
+错误2：忽略已知两边及一对角时的解的个数。
+已知 $a,b,A$ 时，求出 $\sin B$ 后，要比较 $a$ 与 $b$ 的大小以及 $\sin B$ 的值范围。常见错误是直接取锐角解，漏掉 $B$ 可能为钝角的情况。纠正方法：牢记“大边对大角”，若 $a\geq b$，则 $A\geq B$，$B$ 只能为锐角；若 $a<b$，则 $A<B$，$B$ 可为锐角或钝角，需分情况讨论并检验内角和是否超过 $180^\circ$。
+
+错误3：余弦定理套用错误。
+比如求 $a$ 时误用 $a^2=b^2+c^2+2bc\cos A$。纠正方法：余弦定理的符号与一般余弦定理一致，夹角余弦项前是“减号”，可联想勾股定理是 $\cos90^\circ=0$ 的特例来记忆。

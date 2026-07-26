@@ -1,0 +1,35 @@
+高中化学 - 钠及其化合物
+
+一、钠单质的性质  
+钠是银白色金属，质地柔软，密度 $0.97\ \text{g·cm}^{-3}$，熔点 $97.8\ ^\circ\text{C}$。原子结构为 $1s^2 2s^2 2p^6 3s^1$，最外层只有一个电子，极易失去，表现出强还原性。常温下钠与氧气反应生成氧化钠：  
+$$4\text{Na} + \text{O}_2 \xrightarrow{\text{常温}} 2\text{Na}_2\text{O}$$  
+加热时生成淡黄色的过氧化钠：  
+$$2\text{Na} + \text{O}_2 \xrightarrow{\Delta} \text{Na}_2\text{O}_2$$  
+钠与水剧烈反应，浮在水面、熔成闪亮小球、四处游动、发出嘶嘶声，滴入酚酞后溶液变红：  
+$$2\text{Na} + 2\text{H}_2\text{O} \longrightarrow 2\text{NaOH} + \text{H}_2 \uparrow$$  
+保存时需隔绝空气和水，通常浸在煤油中。
+
+二、钠的重要化合物  
+氧化钠（$\text{Na}_2\text{O}$）是白色粉末，属碱性氧化物，与水化合生成氢氧化钠：  
+$$\text{Na}_2\text{O} + \text{H}_2\text{O} \longrightarrow 2\text{NaOH}$$  
+过氧化钠（$\text{Na}_2\text{O}_2$）呈淡黄色，具有强氧化性，与水和二氧化碳反应均生成氧气，常用于呼吸面具和潜水艇作供氧剂：  
+$$2\text{Na}_2\text{O}_2 + 2\text{H}_2\text{O} \longrightarrow 4\text{NaOH} + \text{O}_2 \uparrow$$  
+$$2\text{Na}_2\text{O}_2 + 2\text{CO}_2 \longrightarrow 2\text{Na}_2\text{CO}_3 + \text{O}_2$$  
+碳酸钠（$\text{Na}_2\text{CO}_3$）俗称纯碱，白色粉末，溶于水放热，水溶液呈碱性。碳酸氢钠（$\text{NaHCO}_3$）俗称小苏打，溶解度比碳酸钠小，溶液碱性较弱。两者热稳定性差异显著：碳酸氢钠受热易分解，碳酸钠受热不分解。  
+$$2\text{NaHCO}_3 \xrightarrow{\Delta} \text{Na}_2\text{CO}_3 + \text{H}_2\text{O} + \text{CO}_2 \uparrow$$  
+此反应常用于鉴别碳酸钠和碳酸氢钠。
+
+三、常见误区与例题解析  
+常见错误1：认为钠与氧气常温下生成过氧化钠。纠正：常温生成氧化钠（$\text{Na}_2\text{O}$），加热或点燃时才生成过氧化钠（$\text{Na}_2\text{O}_2$）。  
+常见错误2：将过氧化钠与水的反应简单理解为碱性氧化物与水的反应，忽视氧气生成。纠正：过氧化钠不是碱性氧化物，它与水发生氧化还原反应，除生成$\text{NaOH}$外还放出$\text{O}_2$。  
+
+例题1：将一小块钠投入盛有硫酸铜溶液的烧杯中，预测现象并写出化学方程式。  
+解析：钠遇水先与水反应生成$\text{NaOH}$和$\text{H}_2$，$\text{NaOH}$再与$\text{CuSO}_4$反应生成蓝色$\text{Cu(OH)}_2$沉淀。不会置换出铜。现象：钠浮游、熔成小球、嘶嘶声，同时产生蓝色沉淀。  
+反应：$2\text{Na} + 2\text{H}_2\text{O} \longrightarrow 2\text{NaOH} + \text{H}_2 \uparrow$  
+$2\text{NaOH} + \text{CuSO}_4 \longrightarrow \text{Cu(OH)}_2 \downarrow + \text{Na}_2\text{SO}_4$  
+
+例题2：鉴别碳酸钠与碳酸氢钠固体可用的方法有哪些？  
+解析：加热法，加热后产生使澄清石灰水变浑浊气体的是碳酸氢钠；加等浓度盐酸，反应更剧烈、产生气泡更快的是碳酸氢钠；滴加氯化钡溶液，产生白色沉淀的是碳酸钠（碳酸氢钠与氯化钡不反应）。  
+
+例题3：计算 $7.8\ \text{g}$ 过氧化钠与水完全反应，生成标准状况下氧气的体积。  
+解析：$2\text{Na}_2\text{O}_2 + 2\text{H}_2\text{O} \longrightarrow 4\text{NaOH} + \text{O}_2 \uparrow$，$n(\text{Na}_2\text{O}_2)=7.8/78=0.1\ \text{mol}$，由方程得 $n(\text{O}_2)=0.05\ \text{mol}$，体积 $V=0.05 \times 22.4 = 1.12\ \text{L}$。

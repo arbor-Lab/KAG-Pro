@@ -1,0 +1,47 @@
+小学英语 - 名词的单复数
+
+一、什么是名词的单复数
+名词是用来表示人、事物、地点等的词。在英语中，我们可以用名词的单数形式表示“一个”，用复数形式表示“两个或两个以上”。比如，桌子上有一个苹果，说 an apple；如果有三个苹果，就要说 three apples。单数变复数是有规律的，简单来说，大部分名词只要在词尾加上字母 s 就行了。我们可以把这个变化记成：
+
+单数名词 $+ s$ → 复数名词
+
+但并不是所有名词都只加 s，接下来我们会学到几种重要的变化规则。
+
+二、名词单数变复数的规则和示例
+1. 一般情况直接加 s
+大部分名词变成复数时，直接在词尾加上 s 就可以。比如：
+book（书）→ books，desk（书桌）→ desks，teacher（老师）→ teachers。
+
+2. 以 s, x, ch, sh 结尾的名词，加 es
+这些词尾发出的音很像“嘶嘶”声，如果只加 s 会不好读，所以要加 es。例如：
+bus（公共汽车）→ buses，box（盒子）→ boxes，watch（手表）→ watches，dish（盘子）→ dishes。
+
+3. 以辅音字母加 y 结尾的名词，要先把 y 改成 i，再加 es
+这里要特别注意，只有 y 前面是辅音字母时才这样变。例如：
+baby（婴儿）→ babies，city（城市）→ cities，story（故事）→ stories。
+如果 y 前面是元音字母（a, e, i, o, u），直接加 s 就行了。例如：
+boy（男孩）→ boys，day（日子）→ days。
+
+4. 以 f 或 fe 结尾的名词，通常要把 f 或 fe 改成 v，再加 es
+例如：leaf（叶子）→ leaves，knife（小刀）→ knives，wife（妻子）→ wives。
+少数词直接加 s，如 roof（屋顶）→ roofs，需要单独记忆。
+
+5. 不规则变化和单复数同形
+有些名词的变化完全没有上面的规律，需要一个个记住。比如：
+man（男人）→ men，woman（女人）→ women，child（孩子）→ children，foot（脚）→ feet，tooth（牙齿）→ teeth，mouse（老鼠）→ mice。
+还有一些名词单数和复数长得一模一样：sheep（绵羊），deer（鹿），fish（表示几条鱼时常用 fish），Chinese（中国人）等。
+
+三、常见错误及纠正方法
+错误1：把需要加 es 的词只加了 s。比如把 watches 写成 watchs，把 boxes 写成 boxs。
+纠正方法：记住一个小口诀——“s, x, ch, sh 真特别，尾巴加 es 不省略。”遇到这些结尾的词，要立刻想到加 es。
+
+错误2：把辅音字母加 y 结尾的名词直接加 s。比如把 families 写成 familys，把 parties 写成 partys。
+纠正方法：看到 y 结尾的词，先看它前面的字母。如果是辅音字母，就要让 y 变成 i，再说一声“记住加上 es”。如果前面是元音字母，就可以放心直接加 s，就像 boy 变成 boys 那样。
+
+例题尝试：
+（1）请写出下列名词的复数形式：cat ，bus ，baby 。
+答案：cats, buses, babies。
+（2）下面这句话有一处错误，请找出来并改正：There are three childs in the room.
+错误是 childs，应该改为 children。
+（3）选择正确的单词填空：I can see ten  (sheep / sheeps) on the farm.
+正确答案是 sheep，因为 sheep 是单复数同形的词，不需要加 s。

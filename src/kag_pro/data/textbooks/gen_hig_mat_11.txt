@@ -1,21 +1,44 @@
 高中数学 - 三角恒等变换
 
-**三角恒等变换**
+一、三角恒等变换的含义与核心公式
 
-三角恒等变换是三角函数运算与化简的核心工具，主要包括和差角公式、倍角公式与辅助角公式等。它们揭示了不同角度三角函数间的内在联系，是解决求值、证明、化简问题的关键。
+三角恒等变换是指利用三角函数值之间的恒等关系，将三角式进行等价变形的过程。它的基础是同角三角函数的基本关系、诱导公式，以及两角和与差的三角函数公式。熟练运用这些公式，可以化简复杂的三角式、证明等式、求解三角方程等。
 
-**一、基本公式**
+常用的核心公式包括：
 
-1. **两角和与差的正弦、余弦、正切公式**
-   - \(\sin(\alpha \pm \beta) = \sin\alpha\cos\beta \pm \cos\alpha\sin\beta\)
-   - \(\cos(\alpha \pm \beta) = \cos\alpha\cos\beta \mp \sin\alpha\sin\beta\)
-   - \(\tan(\alpha \pm \beta) = \frac{\tan\alpha \pm \tan\beta}{1 \mp \tan\alpha\tan\beta}\)
+两角和与差公式
+$$\sin(\alpha \pm \beta) = \sin\alpha\cos\beta \pm \cos\alpha\sin\beta$$
+$$\cos(\alpha \pm \beta) = \cos\alpha\cos\beta \mp \sin\alpha\sin\beta$$
+$$\tan(\alpha \pm \beta) = \frac{\tan\alpha \pm \tan\beta}{1 \mp \tan\alpha\tan\beta}$$
 
-2. **二倍角公式与降幂公式**
-   - \(\sin 2\alpha = 2\sin\alpha\cos\alpha\)
-   - \(\cos 2\alpha = \cos^2\alpha - \sin^2\alpha = 2\cos^2\alpha - 1 = 1 - 2\sin^2\alpha\)
-   - \(\tan 2\alpha = \frac{2\tan\alpha}{1 - \tan^2\alpha}\)
-   - 降幂公式：\(\sin^2\alpha = \frac{1-\cos2\alpha}{2}\)，\(\cos^2\alpha = \frac{1+\cos2\alpha}{2}\)
+由和角公式令 $\beta=\alpha$，可直接得到二倍角公式
+$$\sin 2\alpha = 2\sin\alpha\cos\alpha$$
+$$\cos 2\alpha = \cos^2\alpha - \sin^2\alpha = 2\cos^2\alpha - 1 = 1 - 2\sin^2\alpha$$
+$$\tan 2\alpha = \frac{2\tan\alpha}{1 - \tan^2\alpha}$$
 
-3. **辅助角公式**
-   - \(a\sin x + b\cos x = \sqrt{a^2+b^2}\
+降幂公式由二倍角公式逆用得到，在化简中对降低次数十分有用
+$$\sin^2\alpha = \frac{1 - \cos 2\alpha}{2}, \quad \cos^2\alpha = \frac{1 + \cos 2\alpha}{2}$$
+
+使用时，要特别注意公式中的结构特征和正负号，不能随意拆分或合并。
+
+二、典型例题解析
+
+例题1：化简 $\displaystyle \frac{1 + \sin 2\theta - \cos 2\theta}{1 + \sin 2\theta + \cos 2\theta}$。
+
+解：利用二倍角公式和降幂思想，先将分子和分母统一为同一种形式。分子 $1 + \sin 2\theta - \cos 2\theta = (1 - \cos 2\theta) + \sin 2\theta = 2\sin^2\theta + 2\sin\theta\cos\theta$。分母 $1 + \sin 2\theta + \cos 2\theta = (1 + \cos 2\theta) + \sin 2\theta = 2\cos^2\theta + 2\sin\theta\cos\theta$。于是原式化为 $\frac{2\sin\theta(\sin\theta + \cos\theta)}{2\cos\theta(\sin\theta + \cos\theta)}$。当 $\sin\theta + \cos\theta \neq 0$ 时，约去公因式得 $\tan\theta$。若分母为零需单独讨论，本题一般情形下结果为 $\tan\theta$。
+
+例题2：已知 $\sin\alpha = \frac{3}{5}$，$\alpha$ 是第二象限角，求 $\sin 2\alpha$ 和 $\cos 2\alpha$ 的值。
+
+解：由 $\sin\alpha = \frac{3}{5}$ 且 $\alpha$ 在第二象限，得 $\cos\alpha = -\sqrt{1 - \sin^2\alpha} = -\frac{4}{5}$。于是 $\sin 2\alpha = 2\sin\alpha\cos\alpha = 2 \cdot \frac{3}{5} \cdot \left(-\frac{4}{5}\right) = -\frac{24}{25}$。$\cos 2\alpha = 1 - 2\sin^2\alpha = 1 - 2 \cdot \frac{9}{25} = \frac{7}{25}$。在计算二倍角时，可依据已知直接代入公式，不必先求 $\alpha$ 的具体角度。
+
+例题3：求 $\sin 75^\circ \cos 75^\circ$ 的值。
+
+解：设 $\alpha = 75^\circ$，则原式为 $\sin\alpha\cos\alpha = \frac{1}{2}\sin 2\alpha = \frac{1}{2}\sin 150^\circ = \frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$。这里的变形实质上是逆用了正弦的二倍角公式，即 $2\sin\alpha\cos\alpha = \sin 2\alpha$。
+
+三、常见错误辨析与纠正
+
+错误一：把和角的三角函数错误地理解为三角函数的和。例如学生容易写出 $\sin(\alpha+\beta) = \sin\alpha + \sin\beta$，这显然不成立。用具体数值验证：取 $\alpha=30^\circ, \beta=60^\circ$，$\sin(30^\circ+60^\circ)=\sin90^\circ=1$，而 $\sin30^\circ+\sin60^\circ = \frac{1}{2}+\frac{\sqrt{3}}{2} \neq 1$。纠正方法是牢记公式结构：$\sin(\alpha+\beta)$ 需要展开为 $\sin\alpha\cos\beta + \cos\alpha\sin\beta$，不可直接拆括号。
+
+错误二：使用降幂公式时弄错系数和符号。有的学生在写 $\sin^2\alpha$ 的降幂式时会误记为 $\frac{1+\cos 2\alpha}{2}$。纠正方法：可以由二倍角公式 $\cos 2\alpha = 1 - 2\sin^2\alpha$ 移项得到 $\sin^2\alpha = \frac{1 - \cos 2\alpha}{2}$；而 $\cos^2\alpha = \frac{1 + \cos 2\alpha}{2}$。可以记忆为“正弦降幂用减号，余弦降幂用加号”，并且均为除以二。反复从基本公式推导，比死记更有效。
+
+以上错误提醒我们，学习恒等变换不能机械套公式，而应理解每个公式的来源和变形的合理性。平时多动手推导、多举例验证，才能建立正确的直觉。
