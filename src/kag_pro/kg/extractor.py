@@ -160,4 +160,170 @@ class EntityExtractor:
         kg.add_relation("elem_profit_loss", "contains", "elem_drawing_method")
         kg.add_relation("elem_tree_planting", "common_mistake", "elem_tree_planting_error")
 
+        # === Middle school math entities ===
+        for eid, name, etype in [
+            ("mid_rational_numbers", "有理数", "concept"),
+            ("mid_algebraic_expressions", "整式", "concept"),
+            ("mid_linear_equations", "一元一次方程", "concept"),
+            ("mid_systems_equations", "二元一次方程组", "concept"),
+            ("mid_inequalities", "不等式", "concept"),
+            ("mid_quadratic_functions", "二次函数", "concept"),
+            ("mid_congruent_triangles", "全等三角形", "concept"),
+            ("mid_pythagorean_theorem", "勾股定理", "concept"),
+            ("mid_parallelograms", "平行四边形", "concept"),
+            ("mid_probability", "概率初步", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("mid_rational_numbers", "prerequisite", "mid_algebraic_expressions")
+        kg.add_relation("mid_algebraic_expressions", "prerequisite", "mid_linear_equations")
+        kg.add_relation("mid_linear_equations", "prerequisite", "mid_systems_equations")
+        kg.add_relation("mid_algebraic_expressions", "prerequisite", "mid_quadratic_functions")
+        kg.add_relation("mid_congruent_triangles", "prerequisite", "mid_parallelograms")
+        kg.add_relation("mid_pythagorean_theorem", "related_to", "mid_congruent_triangles")
+
+        # === Middle school physics entities ===
+        for eid, name, etype in [
+            ("mid_force", "力", "concept"),
+            ("mid_pressure", "压强", "concept"),
+            ("mid_buoyancy", "浮力", "concept"),
+            ("mid_simple_machines", "简单机械", "concept"),
+            ("mid_work_power", "功与功率", "concept"),
+            ("mid_internal_energy", "内能", "concept"),
+            ("mid_ohm_law", "欧姆定律", "law"),
+            ("mid_electric_power", "电功率", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("mid_force", "prerequisite", "mid_pressure")
+        kg.add_relation("mid_pressure", "prerequisite", "mid_buoyancy")
+        kg.add_relation("mid_force", "prerequisite", "mid_simple_machines")
+        kg.add_relation("mid_simple_machines", "prerequisite", "mid_work_power")
+        kg.add_relation("mid_internal_energy", "related_to", "mid_work_power")
+        kg.add_relation("mid_ohm_law", "contains", "mid_electric_power")
+
+        # === Middle school chemistry entities ===
+        for eid, name, etype in [
+            ("mid_chemical_change", "化学变化", "concept"),
+            ("mid_oxygen", "氧气", "concept"),
+            ("mid_water", "水", "concept"),
+            ("mid_carbon", "碳", "concept"),
+            ("mid_metals", "金属", "concept"),
+            ("mid_acids_bases_salts", "酸碱盐", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("mid_chemical_change", "prerequisite", "mid_oxygen")
+        kg.add_relation("mid_chemical_change", "prerequisite", "mid_water")
+        kg.add_relation("mid_carbon", "related_to", "mid_oxygen")
+        kg.add_relation("mid_metals", "related_to", "mid_acids_bases_salts")
+
+        # === Middle school biology entities ===
+        for eid, name, etype in [
+            ("mid_cells", "细胞", "concept"),
+            ("mid_photosynthesis", "光合作用", "concept"),
+            ("mid_respiration", "呼吸作用", "concept"),
+            ("mid_digestion", "消化", "concept"),
+            ("mid_circulation", "血液循环", "concept"),
+            ("mid_nervous_regulation", "神经调节", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("mid_cells", "prerequisite", "mid_photosynthesis")
+        kg.add_relation("mid_cells", "prerequisite", "mid_respiration")
+        kg.add_relation("mid_digestion", "related_to", "mid_circulation")
+        kg.add_relation("mid_nervous_regulation", "related_to", "mid_circulation")
+
+        # === Middle school geography entities ===
+        for eid, name, etype in [
+            ("mid_earth", "地球", "concept"),
+            ("mid_climate", "气候", "concept"),
+            ("mid_china_topography", "中国地形", "concept"),
+            ("mid_china_climate", "中国气候", "concept"),
+            ("mid_china_agriculture", "中国农业", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("mid_earth", "prerequisite", "mid_climate")
+        kg.add_relation("mid_china_topography", "related_to", "mid_china_climate")
+        kg.add_relation("mid_china_climate", "prerequisite", "mid_china_agriculture")
+
+        # === Middle school history entities ===
+        for eid, name, etype in [
+            ("mid_xia_shang_zhou", "夏商周", "concept"),
+            ("mid_qin_han", "秦汉", "concept"),
+            ("mid_sui_tang", "隋唐", "concept"),
+            ("mid_song_yuan", "宋元", "concept"),
+            ("mid_ming_qing", "明清", "concept"),
+            ("mid_modern_history", "近代史", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("mid_xia_shang_zhou", "prerequisite", "mid_qin_han")
+        kg.add_relation("mid_qin_han", "prerequisite", "mid_sui_tang")
+        kg.add_relation("mid_sui_tang", "prerequisite", "mid_song_yuan")
+        kg.add_relation("mid_song_yuan", "prerequisite", "mid_ming_qing")
+        kg.add_relation("mid_ming_qing", "prerequisite", "mid_modern_history")
+
+        # === Middle school politics entities ===
+        for eid, name, etype in [
+            ("mid_morality", "道德", "concept"),
+            ("mid_rule_of_law", "法治", "concept"),
+            ("mid_national_conditions", "国情", "concept"),
+            ("mid_reform_opening", "改革开放", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("mid_morality", "related_to", "mid_rule_of_law")
+        kg.add_relation("mid_national_conditions", "prerequisite", "mid_reform_opening")
+
+        # === Elementary Chinese entities ===
+        for eid, name, etype in [
+            ("elem_pinyin", "拼音", "concept"),
+            ("elem_literacy", "识字", "concept"),
+            ("elem_reading", "阅读", "concept"),
+            ("elem_writing", "写作", "concept"),
+            ("elem_ancient_poetry", "古诗词", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("elem_pinyin", "prerequisite", "elem_literacy")
+        kg.add_relation("elem_literacy", "prerequisite", "elem_reading")
+        kg.add_relation("elem_reading", "prerequisite", "elem_writing")
+        kg.add_relation("elem_ancient_poetry", "related_to", "elem_reading")
+
+        # === Elementary English entities ===
+        for eid, name, etype in [
+            ("elem_alphabet", "字母", "concept"),
+            ("elem_vocabulary", "单词", "concept"),
+            ("elem_dialogue", "对话", "concept"),
+            ("elem_english_reading", "阅读", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("elem_alphabet", "prerequisite", "elem_vocabulary")
+        kg.add_relation("elem_vocabulary", "prerequisite", "elem_dialogue")
+        kg.add_relation("elem_dialogue", "prerequisite", "elem_english_reading")
+
+        # === Elementary science entities ===
+        for eid, name, etype in [
+            ("elem_biology", "生物", "concept"),
+            ("elem_physics", "物理", "concept"),
+            ("elem_chemistry", "化学", "concept"),
+            ("elem_geography", "地理", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        # === High school politics entities ===
+        for eid, name, etype in [
+            ("high_economy", "经济生活", "concept"),
+            ("high_politics", "政治生活", "concept"),
+            ("high_culture", "文化生活", "concept"),
+            ("high_philosophy", "生活与哲学", "concept"),
+        ]:
+            kg.add_entity(eid, name, etype)
+
+        kg.add_relation("high_economy", "related_to", "high_politics")
+        kg.add_relation("high_culture", "related_to", "high_philosophy")
+
         return kg
