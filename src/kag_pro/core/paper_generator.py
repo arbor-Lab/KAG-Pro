@@ -81,8 +81,11 @@ class KnowledgeTreeExtractor:
                     in_category = False
                     continue
 
-                if current_subject and (stripped.endswith(":") or stripped.endswith(":")) and ("错误" in stripped or "易错" in stripped):
-                    in_category = True
+                # 以冒号结尾的行是分类头（如"数与代数:"），属于组织节点而非知识点。
+                # 其中"常见错误类型:"类开启块跳过模式（其下为易错描述，非知识点）；
+                # 普通分类头仅跳过自身，其后的缩进行是有效知识点，不受影响。
+                if current_subject and stripped.endswith((":", "：")):
+                    in_category = "错误" in stripped or "易错" in stripped
                     continue
 
                 if current_subject and in_category:
