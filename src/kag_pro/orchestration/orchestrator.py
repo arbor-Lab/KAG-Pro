@@ -702,6 +702,7 @@ class EducationOrchestrator:
         self, stage: str, subject: str, topics: list[str],
         count: int = 5, difficulty: str = "中等",
         question_types: list[dict] | None = None,
+        allocations: list[dict] | None = None,
     ) -> dict:
         """Generate an exam paper."""
         gen = self._registry.resolve("paper-generator")
@@ -709,6 +710,7 @@ class EducationOrchestrator:
             stage=stage, subject=subject, topics=topics,
             count=count, difficulty=difficulty,
             question_types=question_types,
+            allocations=allocations,
         )
         self._bus.publish(Events.PAPER_GENERATED, {
             "stage": stage, "subject": subject, "count": count,

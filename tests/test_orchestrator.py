@@ -157,7 +157,7 @@ class FakeSplitter:
 
 
 class FakePaperGenerator:
-    def generate(self, stage, subject, topics, count=5, difficulty="中等", question_types=None):
+    def generate(self, stage, subject, topics, count=5, difficulty="中等", question_types=None, allocations=None):
         return {"title": "测验", "stage": stage, "subject": subject, "count": count,
                 "questions": [{"id": i + 1} for i in range(count)]}
 

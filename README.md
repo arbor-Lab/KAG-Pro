@@ -107,3 +107,64 @@ KAG-Pro/
 ## 许可
 
 MIT
+
+## CI/CD 与分支保护
+
+### 当前状态
+
+- ✅ GitHub Actions 已部署：`.github/workflows/ci.yml`（PR + main 推送触发）
+- ✅ 测试覆盖：ruff lint + pytest（多 Python 版本矩阵：3.11 / 3.12）
+- ✅ CODEOWNERS 已启用：核心模块变更自动分配 Reviewer (@Arbor-Z)
+- ⏳ 分支保护待配置：需仓库管理员在 GitHub → Settings → Branches 手动启用
+
+### 推荐配置（仓库管理员）
+
+1. **启用分支保护规则**（Settings → Branch protection rules）
+   - Protected branch: `main`
+   - ☑️ Require a pull request before merging
+     - ☑️ Require approvals: **1**
+     - ☑️ Dismiss stale reviews on push
+   - ☑️ Require status checks to pass before merging
+     - Select: **CI** (lint-and-test job)
+   - ☑️ Include administrators（可选，强制所有人遵守 PR 流程）
+
+2. **可选增强**
+   - ☑️ Restrict who can dismiss pull request reviews
+     - 指定核心维护者团队
+   - ☑️ Require linear history（避免 merge commit）
+   - ☑️ Delete branch on merge（自动清理已合入分支）
+
+### Git Flow 本地规范
+
+```bash
+# 开发新功能前创建独立分支
+git checkout -b feature/my-new-feature
+
+# 开发完成并提交前执行质量门控
+make check  # 等价于 make lint && make test
+
+# 推送到远程并发起 Pull Request
+git push origin feature/my-new-feature
+
+# 合并请求前确保：
+#   ✓ 至少 1 名 Reviewer 审批（CODEOWNERS 自动分配）
+#   ✓ CI workflow 全部通过
+```
+
+### 安装 gh CLI 便捷配置（可选）
+
+```bash
+# macOS 用户
+brew install gh
+
+# Linux (Debian/Ubuntu)
+sudo apt-get install gh
+
+# 认证后一键配置分支保护（需管理员权限）
+gh auth login
+gh repo edit arbor-Lab/KAG-Pro --add-protected-branch main \
+  --required-status-checks ci \
+  --strict-required-status-checks \
+  --required-linear-history \
+  --enforce-admins
+```

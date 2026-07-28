@@ -1,0 +1,27 @@
+# Code Owners for KAG-Pro
+#
+# This file designates required reviewers for changes in specific areas.
+# Per GitHub CODEOWNERS behavior, these users will be requested as reviewers
+# on pull requests affecting the specified paths.
+#
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+* @Arbor-Z
+
+# Core RAG Engine (high-impact logic)
+src/kag_pro/core/*.py @Arbor-Z
+
+# Diagnosis & Recommendation (critical pedagogy logic)
+src/kag_pro/diagnosis/*.py @Arbor-Z
+
+# Knowledge Graph (KG modeling and retrieval)
+src/kag_pro/kg/*.py @Arbor-Z
+
+# Frontend Server (API routes and SSE streams)
+frontend/server.py @Arbor-Z
+
+# Tests (test coverage integrity)
+tests/*.py @Arbor-Z
+
+# Build & CI Configuration (release gate and automation)
+Makefile pyproject.toml .github/workflows/* @Arbor-Z

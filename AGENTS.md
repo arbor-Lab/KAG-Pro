@@ -86,7 +86,7 @@ make test → 退出码 1（N failed, M passed）
 |------|------|------|
 | **向量库状态** | `data/chroma_db/` 是可变二进制状态，已在 `.gitignore` 但历史提交可能仍跟踪 | 勿手动提交 `chroma.sqlite3`；若已跟踪执行 `git rm --cached` |
 | **API 密钥** | `.env` 含 `OPENAI_API_KEY` / `DASHSCOPE_API_KEY`，已在 `.gitignore` | 勿将密钥硬编码或提交；仅引用环境变量 |
-| **直接提交 main** | 无 CI / 分支保护，工作直接落在 `main` | 优先在分支上工作；提交前执行 `make check` |
+| **直接提交 main** | 无 CI / 分支保护，工作直接落在 `main` | 严格遵循 Git Flow：先创建功能分支 (git checkout -b feature/xxx)；在分支上开发与测试；合并前执行 `make check`；PR 必选至少 1 名 Reviewer（自动触发 CODEOWNERS） |
 | **教材语料** | `src/kag_pro/data/textbooks/` 为只读语料 | 勿修改已有教材文件；新教材通过 `textbook_generator.py` 生成 |
 | **外部数据集** | `src/kag_pro/data/external/` 含 SC-Ques、Math23K 等 | 大文件已在 `.gitignore`；勿提交原始数据集 |
 
