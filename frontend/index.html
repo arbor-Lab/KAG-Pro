@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KAG-Pro</title>
-<link rel="icon" href="data:,">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect width='128' height='128' rx='28' fill='%23000'/><path d='M64 34 L104 52 L64 70 L24 52 Z' fill='%23fff'/><text x='64' y='112' text-anchor='middle' font-family='Arial,sans-serif' font-size='20' font-weight='700' fill='%23fff'>KAG</text></svg>">
 <link rel="stylesheet" href="/static/katex/katex.min.css">
 <style>
 :root {
@@ -35,6 +35,7 @@ body {
 #sidebar { width: 260px; background: var(--bg-sidebar); display: flex; flex-direction: column; flex-shrink: 0; transition: width .2s ease; overflow: hidden; padding: 12px; }
 #sidebar.folded { width: 60px; padding: 12px 8px; }
 #sidebar.folded .sb-label, #sidebar.folded .sb-user-text { display: none; }
+#sidebar.folded .sb-hist-header, #sidebar.folded .sb-hist-list { display: none !important; }
 #sidebar.folded .sb-nav-item { justify-content: center; padding: 12px; }
 #sidebar.folded .sb-nav-item svg { margin: 0; }
 
@@ -376,7 +377,7 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
     <span class="sb-brand-text">KAG-PRO</span>
     <span class="sb-brand-icon" onclick="toggleSb()" title="展开侧边栏">
       <svg class="icon-default" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="32" height="32" rx="8" fill="#10a37f"/>
+        <rect width="32" height="32" rx="8" fill="#000000"/>
         <text x="16" y="22" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="-apple-system,BlinkMacSystemFont,sans-serif">K</text>
       </svg>
       <svg class="icon-hover" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -417,12 +418,6 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
         <div class="welcome" id="welc">
           <h2>KAG-Pro</h2>
           <p>智能学习助手，基于教材知识库精准回答</p>
-          <div class="chips">
-            <button onclick="qa('分数的通分和约分是什么？')">分数的通分和约分</button>
-            <button onclick="qa('一元二次方程的求根公式')">一元二次方程求根</button>
-            <button onclick="qa('牛顿第二定律 F=ma 的含义')">牛顿第二定律</button>
-            <button onclick="qa('什么是氧化还原反应？')">氧化还原反应</button>
-          </div>
         </div>
       </div>
     </div>
@@ -444,7 +439,7 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
         </div>
       </div>
 <div class="composer-inner">
-        <textarea id="input" rows="1" placeholder="给"KAG-Pro"发送消息" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="upBtn()"></textarea>
+        <textarea id="input" rows="1" placeholder="给&quot;KAG-Pro&quot;发送消息" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="upBtn()"></textarea>
         <!-- Image upload button -->
         <label for="imgInput" class="img-upload-btn" title="上传图片">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1239,7 +1234,6 @@ function removeSelectedImage() {
   document.getElementById('imgInput').value = '';
   document.getElementById('imgPreviewArea').classList.remove('show');
 }
-};
 
 // Override clearMessages  
 function clearMessages(){_sessionMsgs=[];saveSession();document.getElementById("msgs").innerHTML="";}
