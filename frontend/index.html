@@ -119,6 +119,40 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
   max-width: 48rem; margin: 0 auto; display: flex; align-items: flex-end; gap: 12px;
   background: var(--bg-input); border-radius: 26px; padding: 12px 14px 12px 20px; 
 }
+/* Image upload button and preview */
+.img-upload-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  background: transparent; color: var(--text-secondary);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .15s;
+}
+.img-upload-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.img-upload-btn svg { width: 18px; height: 18px; }
+.img-preview-area {
+  max-width: 48rem; margin: 0 auto; padding: 8px 16px 0;
+  display: none;
+}
+.img-preview-area.show { display: block; }
+.img-preview-container {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 8px 12px; background: var(--bg-sidebar);
+  border: 1px solid var(--border-subtle); border-radius: 12px;
+}
+.img-preview-thumb {
+  width: 60px; height: 60px; border-radius: 8px; object-fit: cover;
+  border: 1px solid var(--border-subtle);
+}
+.img-preview-info { display: flex; flex-direction: column; gap: 4px; }
+.img-preview-name { font-size: 13px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+.img-preview-actions { display: flex; gap: 8px; }
+.img-remove-btn {
+  width: 24px; height: 24px; border-radius: 6px; border: none;
+  background: var(--bg-main); color: #ef4444;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.img-remove-btn:hover { background: #fef2f2; }
+.img-remove-btn svg { width: 14px; height: 14px; }
 .composer-inner textarea {
   flex: 1; border: none; background: transparent; color: var(--text-primary);
   font-size: 15px; resize: none; outline: none; font-family: inherit;
@@ -245,6 +279,7 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
 .q-head:hover { background: var(--bg-hover); }
 .q-num { font-weight: 600; color: var(--text-primary); width: 24px; flex-shrink: 0; }
 .q-typ { font-size: 11px; padding: 3px 8px; border-radius: 6px; background: var(--bg-input); color: var(--text-secondary); flex-shrink: 0; }
+.q-kp { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; flex-shrink: 0; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
 .q-prev { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-primary); font-weight: 500; }
 .q-diff { font-size: 11px; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; }
 .q-chev { font-size: 14px; color: var(--text-secondary); flex-shrink: 0; transition: transform .2s; }
@@ -392,8 +427,33 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
       </div>
     </div>
     <div class="composer">
-      <div class="composer-inner">
-        <textarea id="input" rows="1" placeholder="给“KAG-Pro”发送消息" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="upBtn()"></textarea>
+      <!-- Image preview area -->
+      <div class="img-preview-area" id="imgPreviewArea">
+        <div class="img-preview-container">
+          <img id="imgPreviewThumb" class="img-preview-thumb" src="" alt="">
+          <div class="img-preview-info">
+            <span id="imgPreviewName" class="img-preview-name"></span>
+            <div class="img-preview-actions">
+              <button class="img-remove-btn" onclick="removeSelectedImage()" title="移除图片">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+<div class="composer-inner">
+        <textarea id="input" rows="1" placeholder="给"KAG-Pro"发送消息" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" oninput="upBtn()"></textarea>
+        <!-- Image upload button -->
+        <label for="imgInput" class="img-upload-btn" title="上传图片">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23 19.29C23 19.7821 22.8033 20.2547 22.4464 20.6104C22.0895 20.966 21.6191 21.1581 21.1281 21.1581H3.87191C3.3809 21.1581 2.91051 20.966 2.55362 20.6104C2.19673 20.2547 2 19.7821 2 19.29V6.29004C2 5.79902 2.19673 5.3264 2.55362 4.97073C2.91051 4.61506 3.3809 4.42294 3.87191 4.42294H10.5L13 7.42294H21.1281C21.6191 7.42294 22.0895 7.61506 22.4464 7.97073C22.8033 8.3264 23 8.79902 23 9.29004V19.29Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 16L16.25 11.25L11.5 16L7.75 12.25L3 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="9" r="2" fill="currentColor"/>
+          </svg>
+        </label>
+        <input type="file" id="imgInput" accept="image/png,image/jpeg,image/jpg" style="display:none;" onchange="handleImageSelect(event)">
         <button class="send-btn" id="sbtn" onclick="send()" disabled>
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 21L12 3M12 3L19 10M12 3L5 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -449,7 +509,7 @@ select:disabled, input:disabled { opacity: .5; background: var(--bg-sidebar); cu
             <button onclick="cancelAlloc()" style="padding:11px 20px;background:transparent;border:1px solid var(--border-subtle);border-radius:10px;color:var(--text-secondary);cursor:pointer;font-size:14px;font-family:inherit;">取消</button>
           </div>
         </div>
-        <div class="load-row" id="gl" style="display:none;justify-content:center;padding:16px 0;"><div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div></div>
+        <div class="load-row" id="gl" style="display:none;justify-content:center;padding:16px 0;align-items:center;"><div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div><span style="margin-left:10px;font-size:13px;color:var(--text-tertiary);">正在生成题目，通常需要20-60秒（理科含答案审校，可能更久），请耐心等待</span></div>
       </div>
       <div class="hist-banner" id="hb" style="display:none">有未保存的出题记录 <button onclick="rh()">恢复草稿</button></div>
       <div id="pr" style="display:none"></div>
@@ -618,7 +678,7 @@ async function doGen(){
 
 function rp(p){
   const dc={'基础':'d-basic','中等':'d-mid','提高':'d-hard'},qs=p.questions||[];
-  const h=qs.map((q,i)=>`<div class="q" id="qi${i}"><div class="q-head" onclick="tq(${i})"><span class="q-num">${i+1}</span><span class="q-typ">${e(q.type||'')}</span><span class="q-prev">${e(String(q.question||'').substring(0,60))}</span><span class="q-diff ${dc[q.difficulty]||'d-mid'}">${e(q.difficulty||'')}</span><span class="q-chev">▾</span></div><div class="q-body" id="qb${i}"><div class="q-text">${e(String(q.question||''))}</div><div class="ans" id="qa${i}"><div class="lbl">答案</div><div class="txt">${e(String(q.answer||''))}</div></div><div class="anal" id="qx${i}"><div class="lbl">解析</div><div class="txt">${e(String(q.analysis||''))}</div></div><div class="q-btns"><button onclick="event.stopPropagation();ta(${i})" id="bta${i}">查看答案</button><button onclick="event.stopPropagation();tx(${i})" id="btx${i}">查看解析</button><button onclick="event.stopPropagation();aq(${i})">追问</button></div></div></div>`).join('');
+  const h=qs.map((q,i)=>`<div class="q" id="qi${i}"><div class="q-head" onclick="tq(${i})"><span class="q-num">${i+1}</span><span class="q-typ">${e(q.type||'')}</span><span class="q-kp">${e(q.knowledge_point||'')}</span><span class="q-prev">${e(String(q.question||'').substring(0,60))}</span><span class="q-diff ${dc[q.difficulty]||'d-mid'}">${e(q.difficulty||'')}</span><span class="q-chev">▾</span></div><div class="q-body" id="qb${i}"><div class="q-text">${e(String(q.question||''))}</div><div class="ans" id="qa${i}"><div class="lbl">答案</div><div class="txt">${e(String(q.answer||''))}</div></div><div class="anal" id="qx${i}"><div class="lbl">解析</div><div class="txt">${e(String(q.analysis||''))}</div></div><div class="q-btns"><button onclick="event.stopPropagation();ta(${i})" id="bta${i}">查看答案</button><button onclick="event.stopPropagation();tx(${i})" id="btx${i}">查看解析</button><button onclick="event.stopPropagation();aq(${i})">追问</button></div></div></div>`).join('');
   document.getElementById('pr').innerHTML=`<div class="paper-card"><h4>${e(p.title||'练习卷')}</h4><div class="paper-meta"><span>${e(p.stage||'')}</span><span>${e(p.subject||'')}</span><span>${e(p.difficulty||'')}</span><span>${p.count||0}题</span><span>${(p.created_at||'').substring(0,10)}</span></div><div class="paper-actions"><button onclick="prt()">打印试卷</button><button onclick="saa()">全部答案</button><button onclick="sax()">全部解析</button><button class="btn-s" onclick="sv()">保存试卷</button> <button class="btn-s" onclick="fp()" style="background:#f59e0b;" title="收藏试卷">★ 收藏</button>${p.id?`<button class="btn-d" onclick="dp('${p.id}')">删除试卷</button>`:''}</div>${h}</div>`;
   document.getElementById('pr').style.display='block';document.getElementById('sp').style.display='none'
   renderMath(document.getElementById('pr'));
@@ -670,6 +730,7 @@ function renderTC(tc){
 }
 
 // Chat
+let _currentImage = null; // Store selected image
 function upBtn(){const b=document.getElementById('sbtn'),v=document.getElementById('input').value.trim();b.classList.toggle('active',!!v);b.disabled=!v}
 let _lm={}; // last message metadata per element
 function am(rl,ct,mt){
@@ -694,6 +755,48 @@ function sl(){const inn=document.getElementById('msgs'),w=document.getElementByI
 function hl(){const e=document.getElementById('ld');if(e)e.remove()}
 async function send(){
   const i=document.getElementById('input'),q=i.value.trim();if(!q)return;
+  
+  // Check if there's a selected image, upload it first
+  let imageId = null;
+  let questionText = q;
+  
+  if (_currentImage) {
+    try {
+      // Upload the image first
+      am('bot', '正在上传图片...');
+      
+      const formData = new FormData();
+      formData.append('file', _currentImage.file);
+      formData.append('description', '');
+      
+      const uploadResp = await fetch('/api/upload-image', {method: 'POST', body: formData});
+      if (!uploadResp.ok) throw new Error(await uploadResp.text() || 'Upload failed');
+      
+      const uploadResult = await uploadResp.json();
+      if (!uploadResult.success) throw new Error(uploadResult.message || 'Upload failed');
+      
+      imageId = uploadResult.image_id;
+      hl(); // Remove loading message
+      
+      // If user provided text question, use VQA endpoint; otherwise just return image analysis
+      if (q) {
+        questionText = q;
+        // For VQA with text question, we'd need to call /api/vqa instead
+        // For now, we'll handle simple image upload without text question
+      }
+      
+      // Reset image selection
+      _currentImage = null;
+      document.getElementById('imgInput').value = '';
+      document.getElementById('imgPreviewArea').classList.remove('show');
+      
+    } catch (err) {
+      console.error('Image upload error:', err);
+      alert('图片上传失败：' + err.message);
+      return;
+    }
+  }
+  
   i.style.height='auto';i.value='';upBtn();am('user',q);
   // Create streaming bot message container
   const cs=createStreamBotMessage();
@@ -1095,6 +1198,47 @@ am=function(rl,ct,mt){
   _sessionMsgs.push({role:rl,content:ct,meta:mt});
   saveSession();refreshHist();
   return _origAm(rl,ct,mt);
+}
+
+// ========== Image Upload Functions ==========
+function handleImageSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  // Validate file type
+  const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+  if (!validTypes.includes(file.type)) {
+    alert('请选择有效的图片文件（PNG/JPG/JPEG）');
+    return;
+  }
+  
+  // Validate file size (max 10MB)
+  if (file.size > 10 * 1024 * 1024) {
+    alert('图片大小不能超过 10MB');
+    return;
+  }
+  
+  _currentImage = {
+    file: file,
+    name: file.name,
+    size: file.size,
+  };
+  
+  // Show preview
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('imgPreviewThumb').src = e.target.result;
+    document.getElementById('imgPreviewName').textContent = file.name;
+    document.getElementById('imgPreviewArea').classList.add('show');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeSelectedImage() {
+  _currentImage = null;
+  document.getElementById('imgInput').value = '';
+  document.getElementById('imgPreviewArea').classList.remove('show');
+}
 };
 
 // Override clearMessages  

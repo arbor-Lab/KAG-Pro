@@ -15,6 +15,7 @@ class VectorStore:
 
     COLLECTION_NAME = "kagpro_education"
     QA_COLLECTION_NAME = "kagpro_qa_cache"
+    IMAGE_COLLECTION_NAME = "kagpro_images"
 
     def __init__(self, persist_dir: str | None = None):
         config = get_config()
@@ -34,6 +35,11 @@ class VectorStore:
         # Semantic answer cache: verified Q→A pairs, hit by query similarity
         self._qa_collection = self._client.get_or_create_collection(
             name=self.QA_COLLECTION_NAME,
+            metadata={"hnsw:space": "cosine"},
+        )
+        # Image embeddings collection
+        self._image_collection = self._client.get_or_create_collection(
+            name=self.IMAGE_COLLECTION_NAME,
             metadata={"hnsw:space": "cosine"},
         )
 
@@ -150,3 +156,89 @@ class VectorStore:
             name=self.QA_COLLECTION_NAME,
             metadata={"hnsw:space": "cosine"},
         )
+        # Also clear image collection
+        self._client.delete_collection(name=self.IMAGE_COLLECTION_NAME)
+        self._image_collection = self._client.get_or_create_collection(
+            name=self.IMAGE_COLLECTION_NAME,
+            metadata={"hnsw:space": "cosine"},
+        )
+
+    def get_image_collection(self):
+        """获取图像向量集合。"""
+        return self._image_collection
+
+    def add_images(self, image_data: list[dict]) -> None:
+        """
+        批量添加图像到向量数据库。
+
+        Args:
+            image_data: 图像数据列表，每个元素包含：
+                - image_path: 图像文件路径
+                - embeddings: 图像向量（list[float]）
+                - metadata: 元数据（可选）
+                - description: 图像描述文本（可选）
+        """
+        if not image_data:
+            return
+
+        paths = [item["image_path"] for item in image_data]
+        embeddings = [item["embeddings"] for item in image_data]
+        metadatas = [item.get("metadata", {"type": "image"}) for item in image_data]
+
+        # Ensure all have type field
+        for meta in metadatas:
+            if "type" not in meta:
+                meta["type"] = "image"
+
+        self._image_collection.upsert(
+            ids=[Path(p).stem for p in paths],
+            embeddings=embeddings,
+            metadatas=metadatas,
+        )
+
+    def search_images(
+        self,
+        query_embedding: list[float],
+        top_k: int = 5,
+        threshold: float = 0.3,
+    ) -> list[dict]:
+        """
+        根据查询向量搜索相似图像。
+
+        Args:
+            query_embedding: 查询向量（来自图像或文本嵌入器）
+            top_k: 返回结果数量
+            threshold: 相似度阈值
+
+        Returns:
+            搜索结果列表
+        """
+        results = self._image_collection.query(
+            query_embeddings=[query_embedding],
+            n_results=top_k,
+            include=["documents", "metadatas", "distances"],
+        )
+
+        hits = []
+        if not results["ids"] or not results["ids"][0]:
+            return hits
+
+        for i in range(len(results["ids"][0])):
+            distance = results["distances"][0][i]
+            similarity = 1.0 - distance
+            if similarity < threshold:
+                continue
+
+            metadata = results["metadatas"][0][i] if results["metadatas"][0] else {}
+
+            hits.append({
+                "id": results["ids"][0][i],
+                "image_path": metadata.get("image_path", ""),
+                "description": metadata.get("description", ""),
+                "score": round(similarity, 4),
+                "distance": round(distance, 4),
+                "metadata": metadata,
+            })
+
+        hits.sort(key=lambda h: h["score"], reverse=True)
+        return hits

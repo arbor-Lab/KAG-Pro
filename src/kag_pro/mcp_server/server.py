@@ -161,6 +161,91 @@ TOOLS = [
         "description": "健康检查：返回系统状态和已索引文档数量。",
         "inputSchema": {"type": "object", "properties": {}},
     },
+    # === Multimodal VQA Tools ===
+    {
+        "name": "kag_pro_upload_image",
+        "description": (
+            "上传教育相关图像（数学图表、物理示意图、化学分子结构、生物细胞图等）"
+            "到知识库，支持后续的多模态检索和视觉问答。"
+            "支持格式：PNG、JPG、JPEG。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "image_path": {
+                    "type": "string",
+                    "description": "本地图像文件路径",
+                },
+                "description": {
+                    "type": "string",
+                    "default": "",
+                    "description": "图像描述（可选）",
+                },
+                "metadata": {
+                    "type": "object",
+                    "description": "元数据（可选），如学科、学段、知识点等",
+                },
+            },
+            "required": ["image_path"],
+        },
+    },
+    {
+        "name": "kag_pro_vqa",
+        "description": (
+            "视觉问答（VQA）：基于已上传图像进行多模态问答。"
+            "自动分析图像内容（OCR文字、公式、图表），结合用户问题生成解答。"
+            "适用于数学函数图像分析、物理受力图解读、化学结构识别等场景。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "image_id": {
+                    "type": "string",
+                    "description": "图像 ID（由 upload_image 返回）",
+                },
+                "question": {
+                    "type": "string",
+                    "description": "针对图像的问题",
+                },
+                "generate_answer": {
+                    "type": "boolean",
+                    "default": True,
+                    "description": "是否调用 LLM 生成完整答案",
+                },
+            },
+            "required": ["image_id", "question"],
+        },
+    },
+    {
+        "name": "kag_pro_search_similar_images",
+        "description": (
+            "搜索与指定图像相似的图像资源。使用 CLIP 模型的图像嵌入进行相似度匹配。"
+            "可用于查找相关的教学图片、历史题目等视觉资源。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "image_path": {
+                    "type": "string",
+                    "description": "参考图像路径",
+                },
+                "top_k": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "返回相似图像数量",
+                },
+            },
+            "required": ["image_path"],
+        },
+    },
+    {
+        "name": "kag_pro_list_images",
+        "description": (
+            "列出所有已上传到知识库的图像及其元数据。"
+            "返回图像 ID、文件名、上传时间等信息。"
+        ),
+        "inputSchema": {"type": "object", "properties": {}},
+    },
 ]
 
 
@@ -172,6 +257,22 @@ class KAGProMCPServer:
         bus = EventBus()
         self._orchestrator = EducationOrchestrator(registry, bus)
         self._indexed = False
+        self._multimodal_pipeline = None  # Lazy-loaded
+
+    def _get_multimodal_pipeline(self):
+        """Get or create multimodal pipeline."""
+        if self._multimodal_pipeline is None:
+            try:
+                from kag_pro.core.multimodal_pipeline import create_multimodal_pipeline
+                self._multimodal_pipeline = create_multimodal_pipeline(
+                    use_clip=True,
+                    clip_model="ViT-B/32",
+                )
+                print("Multimodal pipeline initialized")
+            except ImportError as e:
+                print(f"Multimodal dependencies not available: {e}")
+                self._multimodal_pipeline = None
+        return self._multimodal_pipeline
 
     def list_tools(self) -> list[dict]:
         """Return the list of available MCP tools."""
@@ -259,6 +360,69 @@ class KAGProMCPServer:
                 "document_count": self._orchestrator.document_count,
                 "services": self._orchestrator.registry.list_services(),
                 "error_history_count": len(self._orchestrator.error_history),
+            }
+
+        # === Multimodal VQA Tools ===
+        elif tool_name == "kag_pro_upload_image":
+            pipeline = self._get_multimodal_pipeline()
+            if pipeline is None:
+                return {
+                    "error": "Multimodal dependencies not available. Install with: pip install kag-pro[multimodal]"
+                }
+
+            try:
+                image_id = pipeline.upload_image(
+                    image_path=arguments["image_path"],
+                    description=arguments.get("description", ""),
+                    metadata=arguments.get("metadata"),
+                )
+                return {
+                    "success": True,
+                    "image_id": image_id,
+                    "message": f"Image uploaded: {image_id}",
+                }
+            except Exception as e:
+                return {"error": f"Failed to upload image: {str(e)}"}
+
+        elif tool_name == "kag_pro_vqa":
+            pipeline = self._get_multimodal_pipeline()
+            if pipeline is None:
+                return {
+                    "error": "Multimodal dependencies not available"
+                }
+
+            try:
+                result = pipeline.visual_question_answering(
+                    image_path=arguments["image_path"],
+                    question=arguments["question"],
+                    generate_answer=arguments.get("generate_answer", True),
+                )
+                return result.__dict__ if hasattr(result, '__dict__') else str(result)
+            except Exception as e:
+                return {"error": f"VQA failed: {str(e)}"}
+
+        elif tool_name == "kag_pro_search_similar_images":
+            pipeline = self._get_multimodal_pipeline()
+            if pipeline is None:
+                return {
+                    "error": "Multimodal dependencies not available"
+                }
+
+            try:
+                results = pipeline.search_similar_images(
+                    reference_image=arguments["image_path"],
+                    top_k=arguments.get("top_k", 5),
+                )
+                return {"images": results}
+            except Exception as e:
+                return {"error": f"Image search failed: {str(e)}"}
+
+        elif tool_name == "kag_pro_list_images":
+            # For now, return a placeholder since we'd need to access the uploads directory
+            # In a full implementation, we'd query the vector store for all image IDs
+            return {
+                "images": [],
+                "message": "Image listing not yet fully implemented in MCP server"
             }
 
         else:

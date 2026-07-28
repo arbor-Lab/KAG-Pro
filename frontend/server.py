@@ -2,12 +2,20 @@
 
 Uses the new plugin architecture: PluginRegistry + EventBus + EducationOrchestrator.
 Replaces the old RAGPipeline-based server with a cleaner, event-driven design.
+
+Supports multimodal visual question answering (VQA) with image upload and analysis.
 """
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
+from typing import Annotated
+from fastapi import UploadFile, File, Form, HTTPException
+from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
@@ -20,6 +28,7 @@ from pydantic import BaseModel
 from kag_pro.core.bootstrap import create_default_registry
 from kag_pro.core.event_bus import EventBus
 from kag_pro.core.favorite_store import FavoriteStore
+from kag_pro.core.multimodal_pipeline import MultimodalRAGPipeline, create_multimodal_pipeline
 from kag_pro.core.paper_generator import KnowledgeTreeExtractor
 from kag_pro.core.paper_store import PaperStore
 from kag_pro.orchestration.orchestrator import EducationOrchestrator
@@ -38,6 +47,7 @@ _orchestrator: EducationOrchestrator | None = None
 _knowledge_tree: KnowledgeTreeExtractor | None = None
 _paper_store: PaperStore | None = None
 _favorite_store: FavoriteStore | None = None
+_multimodal_pipeline: MultimodalRAGPipeline | None = None
 
 
 def get_orchestrator() -> EducationOrchestrator:
@@ -50,6 +60,24 @@ def get_orchestrator() -> EducationOrchestrator:
         _orchestrator.clear_index()
         _orchestrator.index_documents(str(data_dir))
     return _orchestrator
+
+
+def get_multimodal_pipeline():
+    """获取或创建多模态 VQA 管线。"""
+    global _multimodal_pipeline
+    if _multimodal_pipeline is None:
+        # 检查是否启用了多模态依赖
+        try:
+            _multimodal_pipeline = create_multimodal_pipeline(
+                use_clip=True,
+                clip_model="ViT-B/32",
+                persist_dir=str(Path(__file__).resolve().parent.parent / "data/chroma_db"),
+            )
+            print("Multimodal pipeline initialized with CLIP")
+        except ImportError as e:
+            print(f"Warning: Could not initialize multimodal pipeline: {e}")
+            _multimodal_pipeline = None
+    return _multimodal_pipeline
 
 
 def get_knowledge_tree() -> KnowledgeTreeExtractor:
@@ -92,6 +120,34 @@ class VerificationInfo(BaseModel):
     details: str = ""
 
 
+# === Multimodal VQA models ===
+
+class ImageUploadRequest(BaseModel):
+    """图像上传请求模型。"""
+    description: str = ""
+    metadata: dict = {}
+
+
+class ImageUploadResponse(BaseModel):
+    """图像上传响应模型。"""
+    success: bool
+    image_id: str
+    message: str
+    analysis: dict | None = None
+
+
+class VisualQueryRequest(BaseModel):
+    """视觉查询请求模型。"""
+    image_id: str  # 已上传图像的 ID
+    question: str  # 针对图像的问题
+    top_k: int = 5
+
+
+class SimilarImageResponse(BaseModel):
+    """相似图像搜索结果。"""
+    images: list[dict] = []  # 包含 image_path, score, metadata
+
+
 class QueryResponse(BaseModel):
     question: str
     answer: str
@@ -102,6 +158,13 @@ class QueryResponse(BaseModel):
     kg_enrichment: dict = {}
     is_diagnosis: bool = False
     diagnosis_info: dict | None = None
+
+
+class VisualQueryResponse(QueryResponse):
+    """视觉查询响应模型（扩展 QueryResponse）。"""
+    related_images: list[dict] = []
+    image_analysis: dict = {}
+    is_visual_query: bool = True
 
 
 # ---- Paper models ----
@@ -243,6 +306,224 @@ def _try_diagnose(
         return None
 
 
+# === Multimodal VQA endpoints ===
+
+@app.post("/api/upload-image")
+async def upload_image(
+    file: Annotated[UploadFile, File(description="要上传的图像文件（PNG/JPG/JPEG）")],
+    description: Annotated[str, Form(description="图像描述")] = "",
+    metadata_json: Annotated[str | None, Form(description="元数据 JSON 字符串")] = None,
+):
+    """
+    上传图像到知识库，支持后续的多模态检索和视觉问答。
+    
+    支持的格式：PNG, JPG, JPEG
+    最大文件大小：10MB
+    
+    Returns:
+        - success: 上传是否成功
+        - image_id: 图像 ID
+        - message: 状态消息
+        - analysis: 可选的图像分析结果（如果启用了 Qwen-VL）
+    """
+    try:
+        pipeline = get_multimodal_pipeline()
+        
+        if pipeline is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Multimodal support not available. Install with: pip install kag-pro[multimodal]",
+            )
+        
+        # 验证文件类型
+        if not file.filename or not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+            raise HTTPException(status_code=400, detail="Invalid file type. Only PNG/JPG/JPEG allowed")
+        
+        # 检查文件大小（最大 10MB）
+        file.seek(0, 2)  # Move to end
+        file_size = file.tell()
+        file.seek(0)  # Reset to beginning
+        
+        if file_size > 10 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="File too large. Max size: 10MB")
+        
+        # 保存上传的图像
+        uploads_dir = Path(__file__).resolve().parent.parent / "uploads"
+        uploads_dir.mkdir(exist_ok=True)
+        
+        image_path = uploads_dir / file.filename
+        with open(image_path, "wb") as f:
+            content = await file.read()
+            f.write(content)
+        
+        # 解析元数据
+        metadata = {}
+        if metadata_json:
+            try:
+                metadata = json.loads(metadata_json)
+            except json.JSONDecodeError:
+                pass
+        
+        # 上传到多模态管线
+        image_id = pipeline.upload_image(
+            image_path=str(image_path),
+            description=description,
+            metadata=metadata,
+        )
+        
+        # 可选：自动分析图像内容
+        analysis = None
+        try:
+            analysis_result = pipeline.analyze_image(str(image_path))
+            if "error" not in analysis_result:
+                analysis = analysis_result
+        except Exception as e:
+            print(f"Image analysis skipped: {e}")
+        
+        return ImageUploadResponse(
+            success=True,
+            image_id=image_id,
+            message=f"Image uploaded: {image_path.name}",
+            analysis=analysis,
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.post("/api/vqa", response_model=VisualQueryResponse)
+def visual_question_answering(req: VisualQueryRequest):
+    """
+    视觉问答（VQA）：基于已上传图像进行问答。
+    
+    Args:
+        req: 包含图像 ID 和问题
+    
+    Returns:
+        多模态查询结果，包括答案和相关图像
+    """
+    try:
+        pipeline = get_multimodal_pipeline()
+        
+        if pipeline is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Multimodal support not available",
+            )
+        
+        # 查找图像路径
+        uploads_dir = Path(__file__).resolve().parent.parent / "uploads"
+        image_path = uploads_dir / f"{req.image_id}.png"
+        
+        if not image_path.exists():
+            image_path = uploads_dir / f"{req.image_id}.jpg"
+        
+        if not image_path.exists():
+            raise HTTPException(status_code=404, detail=f"Image not found: {req.image_id}")
+        
+        # 执行视觉问答
+        result = pipeline.visual_question_answering(
+            image_path=str(image_path),
+            question=req.question,
+            generate_answer=True,
+        )
+        
+        # 转换为标准响应格式
+        sources = []
+        for img in result.related_images[:3]:
+            sources.append(SourceItem(
+                text=img.get("description", ""),
+                source=img.get("image_path", ""),
+                score=img.get("score", 0),
+            ))
+        
+        return VisualQueryResponse(
+            question=result.question,
+            answer=result.answer,
+            stage=result.stage,
+            sources=sources,
+            verification=None,
+            analysis=result.analysis,
+            kg_enrichment={},
+            related_images=result.related_images,
+            image_analysis=result.image_analysis,
+            is_visual_query=True,
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.post("/api/search-similar-images")
+def search_similar_images(req: VisualQueryRequest):
+    """
+    搜索与指定图像相似的图像。
+    
+    使用 CLIP 模型的图像嵌入进行相似度匹配。
+    """
+    try:
+        pipeline = get_multimodal_pipeline()
+        
+        if pipeline is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Multimodal support not available",
+            )
+        
+        # 查找图像路径
+        uploads_dir = Path(__file__).resolve().parent.parent / "uploads"
+        image_path = uploads_dir / f"{req.image_id}.png"
+        
+        if not image_path.exists():
+            image_path = uploads_dir / f"{req.image_id}.jpg"
+        
+        if not image_path.exists():
+            raise HTTPException(status_code=404, detail=f"Image not found: {req.image_id}")
+        
+        # 搜索相似图像
+        similar = pipeline.search_similar_images(
+            reference_image=str(image_path),
+            top_k=req.top_k,
+        )
+        
+        return SimilarImageResponse(images=similar)
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.get("/api/images")
+def list_uploaded_images():
+    """列出所有已上传的图像。"""
+    try:
+        uploads_dir = Path(__file__).resolve().parent.parent / "uploads"
+        
+        if not uploads_dir.exists():
+            return {"images": []}
+        
+        images = []
+        for file in uploads_dir.iterdir():
+            if file.suffix.lower() in ['.png', '.jpg', '.jpeg']:
+                images.append({
+                    "id": file.stem,
+                    "filename": file.name,
+                    "size": file.stat().st_size,
+                    "created_at": file.stat().st_ctime,
+                    "modified_at": file.stat().st_mtime,
+                })
+        
+        return {"images": sorted(images, key=lambda x: x["modified_at"], reverse=True)}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
 # === Query endpoints ===
 
 @app.post("/api/query", response_model=QueryResponse)
@@ -360,6 +641,7 @@ def generate_paper(req: GeneratePaperRequest):
             count=req.count,
             difficulty=req.difficulty,
             question_types=qtypes,
+            allocations=req.allocations or None,
         )
         return paper
     except Exception as e:
